@@ -14,6 +14,8 @@ export default function LootTablePage({ items, configs, onCopy, onCopyText }) {
   const [codeView, setCodeView] = useState(false);
 
   const json = useMemo(() => (current ? configToJson(current) : ''), [current]);
+  // Dans un tiers on ne mine que des BLOCS ; les items sont réservés aux coffres.
+  const blockItems = useMemo(() => items.filter((it) => it.category !== 'item'), [items]);
 
   return (
     <>
@@ -45,6 +47,7 @@ export default function LootTablePage({ items, configs, onCopy, onCopyText }) {
               tier={tier}
               prevUnlock={i > 0 ? current.tiers[i - 1].unlockAt : 0}
               items={items}
+              blockItems={blockItems}
               onCopy={onCopy}
               onAddItem={(item) => configs.addItem(tier.id, item)}
               onAddChest={() => configs.addChest(tier.id)}

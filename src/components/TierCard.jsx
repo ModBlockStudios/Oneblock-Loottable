@@ -10,6 +10,7 @@ export default function TierCard({
   tier,
   prevUnlock,
   items,
+  blockItems,
   onCopy,
   onAddItem,
   onAddChest,
@@ -59,11 +60,17 @@ export default function TierCard({
         )}
       </div>
 
-      <ItemPicker items={items} onAdd={onAddItem} has={has} />
+      <ItemPicker
+        items={blockItems}
+        onAdd={onAddItem}
+        has={has}
+        placeholder="Ajouter un bloc…  nom, #tag (ex #bois) ou !catégorie (ex !full)"
+      />
 
       {tier.entries.length === 0 ? (
         <div className="tier__empty">
-          Aucune entrée. Ajoute des items via la recherche, ou un chest avec « 📦 Ajouter un Chest ».
+          Aucune entrée. Ajoute des blocs à miner via la recherche, ou un coffre
+          (items) avec « 📦 Ajouter un Chest ».
         </div>
       ) : (
         <div className="table-wrap">

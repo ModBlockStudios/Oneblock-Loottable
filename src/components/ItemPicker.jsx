@@ -9,7 +9,12 @@ const MAX_RESULTS = 40;
  * et on ajoute à la config courante, sans changer de page.
  * Supporte la même syntaxe que la Table : #tag, !catégorie, ou texte libre.
  */
-export default function ItemPicker({ items, onAdd, has }) {
+export default function ItemPicker({
+  items,
+  onAdd,
+  has,
+  placeholder = 'Ajouter un item…  nom, #tag (ex #bois) ou !catégorie (ex !item)',
+}) {
   const [query, setQuery] = useState('');
 
   const results = useMemo(() => {
@@ -27,12 +32,7 @@ export default function ItemPicker({ items, onAdd, has }) {
 
   return (
     <div className="picker">
-      <SearchField
-        value={query}
-        onChange={setQuery}
-        placeholder="Ajouter un item…  nom, #tag (ex #bois) ou !catégorie (ex !item)"
-        items={items}
-      />
+      <SearchField value={query} onChange={setQuery} placeholder={placeholder} items={items} />
 
       {query.trim() && (
         <div className="picker__results">

@@ -7,6 +7,14 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.11.0] — 2026-06-30
+
+### Changé
+- Dans un **tiers**, on ne peut ajouter que des **blocs** (Full Block /
+  Decoration Block) — logique OneBlock (on mine des blocs, pas des items).
+- Les **items** restent disponibles uniquement dans les **coffres**.
+- Le sélecteur du tiers est filtré sur les blocs ; celui des coffres garde tout.
+
 ## [3.10.0] — 2026-06-30
 
 ### Ajouté

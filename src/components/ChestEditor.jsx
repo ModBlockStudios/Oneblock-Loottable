@@ -8,7 +8,12 @@ export default function ChestEditor({ chest, items, onAddItem, onRemoveItem, onS
 
   return (
     <div className="chest-editor">
-      <ItemPicker items={items} onAdd={onAddItem} has={has} />
+      <ItemPicker
+        items={items}
+        onAdd={onAddItem}
+        has={has}
+        placeholder="Ajouter au coffre…  item ou bloc (nom, #tag, !catégorie)"
+      />
 
       {chest.contents.length === 0 ? (
         <div className="tier__empty">Chest vide. Ajoute des items / blocs ci-dessus.</div>
