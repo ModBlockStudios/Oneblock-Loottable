@@ -175,7 +175,7 @@ export default function VisualisationPage({ items, configs }) {
           </div>
 
           {currentBlock ? (
-            <MiningStage block={currentBlock} mineMs={mineMs} onBreak={handleBreak} />
+            <MiningStage block={currentBlock} blockId={blocksMined} mineMs={mineMs} onBreak={handleBreak} />
           ) : (
             <div className="loot-empty">
               <p className="loot-empty__title">Ce tiers n'a aucun bloc.</p>

@@ -4,10 +4,16 @@ import { useEffect, useRef, useState } from 'react';
  * Scène de minage : on maintient le clic sur le bloc pour le miner. La barre
  * progresse selon `mineMs` ; au bout, on appelle onBreak() (et on enchaîne
  * sur le bloc suivant si le clic est toujours maintenu).
+ *
+ * `blockId` change à chaque nouveau bloc : c'est lui qui (ré)arme le chrono.
+ * Sans ce garde-fou, la boucle continuait avec le `mineMs` du bloc précédent
+ * (ref pas encore rafraîchie) et cassait le bloc suivant trop vite, sans
+ * animation de cassage.
  */
-export default function MiningStage({ block, mineMs, onBreak }) {
+export default function MiningStage({ block, blockId, mineMs, onBreak }) {
   const [progress, setProgress] = useState(0);
   const holding = useRef(false);
+  const armed = useRef(false); // le chrono compte-t-il pour le bloc courant ?
   const startT = useRef(0);
   const raf = useRef(0);
   const mineRef = useRef(mineMs);
@@ -17,17 +23,31 @@ export default function MiningStage({ block, mineMs, onBreak }) {
 
   useEffect(() => () => cancelAnimationFrame(raf.current), []);
 
+  // Nouveau bloc arrivé : si le clic est maintenu, on redémarre le chrono avec
+  // le `mineMs` du nouveau bloc (désormais à jour après le re-render).
+  useEffect(() => {
+    if (holding.current) {
+      startT.current = performance.now();
+      armed.current = true;
+      setProgress(0);
+    }
+  }, [blockId]);
+
   const loop = () => {
     if (!holding.current) return;
-    const ms = mineRef.current;
-    const elapsed = performance.now() - startT.current;
-    const p = ms <= 0 ? 1 : elapsed / ms;
-    if (p >= 1) {
-      onBreakRef.current();
-      startT.current = performance.now(); // enchaîne le bloc suivant
-      setProgress(0);
-    } else {
-      setProgress(p);
+    if (armed.current) {
+      const ms = mineRef.current;
+      const elapsed = performance.now() - startT.current;
+      const p = ms <= 0 ? 1 : elapsed / ms;
+      if (p >= 1) {
+        // On désarme : on attend le prochain bloc (blockId) avant de recompter,
+        // pour ne pas réutiliser le temps de minage du bloc qui vient de casser.
+        armed.current = false;
+        setProgress(0);
+        onBreakRef.current();
+      } else {
+        setProgress(p);
+      }
     }
     raf.current = requestAnimationFrame(loop);
   };
@@ -36,6 +56,7 @@ export default function MiningStage({ block, mineMs, onBreak }) {
     e.preventDefault();
     if (holding.current || !block) return;
     holding.current = true;
+    armed.current = true;
     startT.current = performance.now();
     raf.current = requestAnimationFrame(loop);
   };
@@ -43,6 +64,7 @@ export default function MiningStage({ block, mineMs, onBreak }) {
   const stop = () => {
     if (!holding.current) return;
     holding.current = false;
+    armed.current = false;
     cancelAnimationFrame(raf.current);
     setProgress(0);
   };

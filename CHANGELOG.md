@@ -7,6 +7,15 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.15.1] — 2026-06-30
+
+### Corrigé
+- **Minage en chaîne** : en gardant le clic maintenu entre deux blocs, le bloc
+  suivant cassait trop vite et sans animation, car la boucle réutilisait le
+  temps de minage du bloc précédent (ref pas encore rafraîchie). Le chrono est
+  désormais **réarmé à l'arrivée du nouveau bloc** (via `blockId`), avec son
+  propre temps de minage et l'animation de cassage qui repart de zéro.
+
 ## [3.15.0] — 2026-06-30
 
 ### Ajouté
