@@ -1,4 +1,4 @@
-import { TIER_ORDER, TIER_LABEL } from './mining.js';
+import { TIER_ORDER, TIER_LABEL, TOOL_LEVEL } from './mining.js';
 
 /*
  * Craft d'outils à partir des ressources minées (l'inventaire = les drops).
@@ -27,6 +27,9 @@ function unitsFor(name, group) {
     case 'copper':
       if (/^(copper_block|raw_copper_block)$/.test(name)) return 9;
       return /^(copper_ingot|raw_copper|copper_ore|deepslate_copper_ore)$/.test(name) ? 1 : 0;
+    case 'gold':
+      if (/^(gold_block|raw_gold_block)$/.test(name)) return 9;
+      return /^(gold_ingot|raw_gold|gold_ore|deepslate_gold_ore|nether_gold_ore)$/.test(name) ? 1 : 0;
     case 'iron':
       if (/^(iron_block|raw_iron_block)$/.test(name)) return 9;
       return /^(iron_ingot|raw_iron|iron_ore|deepslate_iron_ore)$/.test(name) ? 1 : 0;
@@ -61,8 +64,12 @@ export function canCraft(recipe, inventory) {
 
 // Meilleur palier qu'on peut crafter au-dessus du palier actuel ; sinon le
 // palier suivant (objectif) marqué non abordable. null si déjà au max.
+// L'or (hors chaîne) équivaut au bois pour la progression : on vise la pierre+.
 export function proposalFor(currentTier, inventory) {
-  const cur = currentTier ? TIER_ORDER.indexOf(currentTier) : -1;
+  let cur;
+  if (!currentTier) cur = -1;
+  else if (currentTier === 'gold') cur = TIER_ORDER.indexOf('wood');
+  else cur = TIER_ORDER.indexOf(currentTier);
   for (let i = TIER_ORDER.length - 1; i > cur; i--) {
     const tier = TIER_ORDER[i];
     if (canCraft(recipeFor(tier), inventory)) return { tier, affordable: true, recipe: recipeFor(tier) };
@@ -74,6 +81,17 @@ export function proposalFor(currentTier, inventory) {
   return null;
 }
 
+// Proposition d'outil en or (sidegrade « rapide ») : uniquement quand l'outil
+// actuel est encore de niveau de récolte 0 (main ou bois). Au-delà (pierre+),
+// passer à l'or ferait perdre en récolte : on ne le propose pas. null sinon.
+export function goldProposalFor(currentTier, inventory) {
+  if (currentTier === 'gold') return null; // déjà en or
+  const level = currentTier ? TOOL_LEVEL[currentTier] : 0;
+  if (level > TOOL_LEVEL.gold) return null;
+  const recipe = recipeFor('gold');
+  return { tier: 'gold', affordable: canCraft(recipe, inventory), recipe };
+}
+
 export function recipeText(recipe) {
   return recipe.map((r) => `${r.amount} ${TIER_LABEL[r.group]}`).join(' + ');
 }
@@ -83,6 +101,7 @@ export const BASE_ITEM = {
   wood: 'oak_planks',
   stone: 'cobblestone',
   copper: 'copper_ingot',
+  gold: 'gold_ingot',
   iron: 'iron_ingot',
   diamond: 'diamond',
   netherite: 'netherite_ingot',

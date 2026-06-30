@@ -7,6 +7,17 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.17.0] — 2026-06-30
+
+### Ajouté
+- **Outils en or** (sidegrade « rapide », fidèle au jeu) dans le simulateur :
+  - **très rapides** (vitesse 12) mais **niveau de récolte 0** (comme le bois) :
+    ne minent pas le fer/diamant.
+  - **hors de la progression linéaire** : proposés seulement comme option rapide
+    quand l'outil actuel est encore niveau 0 (à la main ou en bois), jamais
+    au-dessus de pierre/fer. Recette : 2 planches + 3 or (lingot/or brut/minerai,
+    `gold_block` = 9). Bouton distinct « Crafter Or (rapide) ».
+
 ## [3.16.1] — 2026-06-30
 
 ### Corrigé

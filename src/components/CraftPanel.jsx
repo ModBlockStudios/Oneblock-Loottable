@@ -1,4 +1,4 @@
-import { TOOL_TYPES, proposalFor, recipeText, availableUnits } from '../lib/crafting.js';
+import { TOOL_TYPES, proposalFor, goldProposalFor, recipeText, availableUnits } from '../lib/crafting.js';
 import { TIER_LABEL } from '../lib/mining.js';
 
 /*
@@ -16,6 +16,8 @@ export default function CraftPanel({ tools, inventory, onCraft }) {
         {TOOL_TYPES.map(({ key, label }) => {
           const current = tools[key];
           const prop = proposalFor(current, inventory);
+          // Or : sidegrade rapide, proposé seulement s'il est réalisable maintenant.
+          const gold = goldProposalFor(current, inventory);
           return (
             <li key={key} className="craft__row">
               <div className="craft__info">
@@ -24,6 +26,17 @@ export default function CraftPanel({ tools, inventory, onCraft }) {
                   {current ? TIER_LABEL[current] : 'à la main'}
                 </span>
               </div>
+
+              {gold && gold.affordable && (
+                <button
+                  type="button"
+                  className="btn-ghost craft__btn craft__btn--gold"
+                  onClick={() => onCraft(key, 'gold')}
+                  title={'Rapide mais ne mine pas le fer/diamant. Recette : ' + recipeText(gold.recipe)}
+                >
+                  Crafter Or (rapide)
+                </button>
+              )}
 
               {prop ? (
                 prop.affordable ? (

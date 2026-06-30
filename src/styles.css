@@ -1160,7 +1160,8 @@ th.col-stack {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
   padding: 8px;
   border-radius: 8px;
 }
@@ -1192,6 +1193,12 @@ th.col-stack {
   padding: 7px 12px;
   font-size: 0.82rem;
   white-space: nowrap;
+}
+
+/* Or : sidegrade rapide, distingué visuellement du palier principal. */
+.craft__btn--gold {
+  border-color: #c9a227;
+  color: #8a6d0b;
 }
 
 .craft__goal {
