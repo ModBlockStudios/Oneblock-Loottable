@@ -5,7 +5,7 @@ import Toast from './components/Toast.jsx';
 import CatalogPage from './pages/CatalogPage.jsx';
 import LootTablePage from './pages/LootTablePage.jsx';
 import { useCatalog } from './lib/useCatalog.js';
-import { useLootTable } from './lib/useLootTable.js';
+import { useLootConfigs } from './lib/useLootConfigs.js';
 import { useHashRoute } from './lib/useHashRoute.js';
 import { useToast } from './lib/useToast.js';
 import { copyText } from './lib/copy.js';
@@ -13,7 +13,7 @@ import { copyText } from './lib/copy.js';
 export default function App() {
   const { loading, error, items, edition, version } = useCatalog();
   const [route, navigate] = useHashRoute('table');
-  const loot = useLootTable();
+  const configs = useLootConfigs();
   const { toast, showToast } = useToast();
 
   const handleCopy = useCallback(
@@ -25,22 +25,18 @@ export default function App() {
     [showToast]
   );
 
+  const lootCount = configs.current ? configs.current.entries.length : 0;
+
   return (
     <>
       <Header edition={edition} dataVersion={version} />
-      <Tabs route={route} onNavigate={navigate} lootCount={loot.entries.length} />
+      <Tabs route={route} onNavigate={navigate} lootCount={lootCount} />
 
       <main className="container">
         {route === 'lootable' ? (
-          <LootTablePage loot={loot} onCopy={handleCopy} onNavigate={navigate} />
+          <LootTablePage items={items} configs={configs} onCopy={handleCopy} />
         ) : (
-          <CatalogPage
-            loading={loading}
-            error={error}
-            items={items}
-            loot={loot}
-            onCopy={handleCopy}
-          />
+          <CatalogPage loading={loading} error={error} items={items} onCopy={handleCopy} />
         )}
       </main>
 

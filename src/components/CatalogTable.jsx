@@ -7,7 +7,7 @@ const BATCH = 150; // lignes ajoutées par lot (scroll infini)
  * Tableau du catalogue avec rendu incrémental : on n'affiche qu'un sous-ensemble
  * des lignes, étendu quand la sentinelle entre dans le viewport.
  */
-export default function CatalogTable({ items, onCopy, onTagClick, loot }) {
+export default function CatalogTable({ items, onCopy, onTagClick }) {
   const [visible, setVisible] = useState(BATCH);
   const sentinelRef = useRef(null);
 
@@ -41,7 +41,6 @@ export default function CatalogTable({ items, onCopy, onTagClick, loot }) {
         <table className="catalog">
           <thead>
             <tr>
-              <th className="col-add" />
               <th className="col-icon" />
               <th className="col-name">Nom</th>
               <th className="col-id">Identifiant</th>
@@ -57,8 +56,6 @@ export default function CatalogTable({ items, onCopy, onTagClick, loot }) {
                 item={it}
                 onCopy={onCopy}
                 onTagClick={onTagClick}
-                inLoot={loot.has(it)}
-                onToggleLoot={loot.toggle}
               />
             ))}
           </tbody>

@@ -3,8 +3,8 @@ import Toolbar from '../components/Toolbar.jsx';
 import CatalogTable from '../components/CatalogTable.jsx';
 import { tagsPresent } from '../lib/tags.js';
 
-/* Page « Table » : catalogue filtrable + ajout à la lootable. */
-export default function CatalogPage({ loading, error, items, loot, onCopy }) {
+/* Page « Table » : catalogue filtrable (référence). */
+export default function CatalogPage({ loading, error, items, onCopy }) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('all');
   const [tag, setTag] = useState('all');
@@ -39,7 +39,7 @@ export default function CatalogPage({ loading, error, items, loot, onCopy }) {
       {loading && <div className="loading">Chargement du catalogue…</div>}
       {error && <div className="loading">Impossible de charger les données ({error}).</div>}
       {!loading && !error && (
-        <CatalogTable items={filtered} onCopy={onCopy} onTagClick={setTag} loot={loot} />
+        <CatalogTable items={filtered} onCopy={onCopy} onTagClick={setTag} />
       )}
     </>
   );

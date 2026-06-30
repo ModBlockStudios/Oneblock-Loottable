@@ -7,6 +7,21 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.3.0] — 2026-06-30
+
+### Changé
+- **Sélection inversée** : on ajoute les items **depuis la page Lootable**
+  (sélecteur de recherche intégré), sans aller-retour avec la page Table.
+  La page Table redevient un catalogue de référence (bouton + retiré).
+
+### Ajouté
+- **Configs nommées** : créer plusieurs loot tables, leur donner un nom et
+  basculer de l'une à l'autre (menu déroulant). Suppression d'une config.
+- **Colonne « Weight »** : champ nombre éditable (entier ≥ 1) pour chaque entrée.
+- Persistance de toutes les configs + de la config courante (localStorage).
+- Composants : `ConfigBar`, `ItemPicker`, `WeightInput` ; hook `useLootConfigs`
+  (remplace `useLootTable`).
+
 ## [3.2.0] — 2026-06-30
 
 ### Ajouté

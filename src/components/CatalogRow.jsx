@@ -8,26 +8,12 @@ const CATEGORY_LABEL = {
 };
 
 /* Une ligne du catalogue. Clic sur la ligne = copie de l'identifiant Bedrock. */
-function CatalogRow({ item, onCopy, onTagClick, inLoot, onToggleLoot }) {
+function CatalogRow({ item, onCopy, onTagClick }) {
   const [broken, setBroken] = useState(false);
   const iconSrc = item.icon ? import.meta.env.BASE_URL + 'assets/' + item.icon : null;
 
   return (
     <tr title={'Cliquer pour copier : minecraft:' + item.name} onClick={() => onCopy(item.name)}>
-      <td className="col-add">
-        <button
-          type="button"
-          className={'add-btn' + (inLoot ? ' add-btn--on' : '')}
-          title={inLoot ? 'Retirer de la lootable' : 'Ajouter à la lootable'}
-          aria-pressed={inLoot}
-          onClick={(e) => {
-            e.stopPropagation(); // ne pas déclencher la copie
-            onToggleLoot(item);
-          }}
-        >
-          {inLoot ? '✓' : '+'}
-        </button>
-      </td>
       <td className="col-icon">
         {iconSrc && !broken ? (
           <img
