@@ -3,6 +3,7 @@ export default function Tabs({ route, onNavigate, lootCount }) {
   const tabs = [
     { key: 'table', label: 'Table' },
     { key: 'lootable', label: 'Lootable', badge: lootCount },
+    { key: 'visualisation', label: 'Visualisation' },
   ];
 
   return (

@@ -7,6 +7,21 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.13.0] — 2026-06-30
+
+### Ajouté
+- **Page « Visualisation »** (3ᵉ onglet) — simulateur OneBlock (étapes 2-3) :
+  - on choisit une config ; un bloc s'affiche au centre.
+  - **clic maintenu** pour le miner, avec barre de progression au **temps de
+    minage Minecraft à la main** (`mining.time`).
+  - au cassage : drop ajouté au journal, **bloc suivant tiré** selon les weights
+    du tiers ; le compteur de blocs minés fait **avancer de tiers** via
+    `blockstobreak`.
+  - **journal des drops** (cumulé) ; bouton Réinitialiser.
+  - un **coffre** tiré → ouvre son contenu inline (quantités min–max) — version
+    de base (les vraies loot tables externes = étape 4).
+- Composants `MiningStage`, `DropsList` ; lib `sim.js`.
+
 ## [3.12.0] — 2026-06-30
 
 ### Ajouté

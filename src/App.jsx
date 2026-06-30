@@ -4,6 +4,7 @@ import Tabs from './components/Tabs.jsx';
 import Toast from './components/Toast.jsx';
 import CatalogPage from './pages/CatalogPage.jsx';
 import LootTablePage from './pages/LootTablePage.jsx';
+import VisualisationPage from './pages/VisualisationPage.jsx';
 import { useCatalog } from './lib/useCatalog.js';
 import { useLootConfigs } from './lib/useLootConfigs.js';
 import { useHashRoute } from './lib/useHashRoute.js';
@@ -50,6 +51,8 @@ export default function App() {
             onCopy={handleCopy}
             onCopyText={handleCopyText}
           />
+        ) : route === 'visualisation' ? (
+          <VisualisationPage items={items} configs={configs} />
         ) : (
           <CatalogPage loading={loading} error={error} items={items} onCopy={handleCopy} />
         )}

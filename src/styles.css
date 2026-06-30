@@ -989,6 +989,217 @@ th.col-stack {
   tab-size: 2;
 }
 
+/* ---------- Simulateur (Visualisation) ---------- */
+.viz__bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.viz__main {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  align-items: start;
+}
+
+.viz__center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 40px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+}
+
+.viz__stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 16px;
+  margin-bottom: 24px;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.viz__tier {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* Scène de minage */
+.stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  user-select: none;
+}
+
+.stage__block {
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  border: 2px solid var(--line-strong);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: transform 0.05s, box-shadow 0.1s;
+  touch-action: none;
+}
+
+.stage__block:hover {
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.08);
+}
+
+.stage__block--mining {
+  transform: scale(0.95);
+  animation: stage-shake 0.18s infinite;
+}
+
+.stage__block:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+@keyframes stage-shake {
+  0%, 100% { transform: scale(0.95) translate(0, 0); }
+  25% { transform: scale(0.95) translate(-1.5px, 1px); }
+  75% { transform: scale(0.95) translate(1.5px, -1px); }
+}
+
+.stage__icon {
+  width: 110px;
+  height: 110px;
+  image-rendering: pixelated;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.stage__emoji {
+  font-size: 90px;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.stage__progress {
+  width: 200px;
+  height: 10px;
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.stage__progress-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 0.05s linear;
+}
+
+.stage__label {
+  font-weight: 550;
+  color: var(--ink);
+}
+
+.stage__hint {
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+
+/* Journal des drops */
+.viz__side {
+  position: sticky;
+  top: 16px;
+}
+
+.drops {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.drops__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.drops__title {
+  font-weight: 600;
+}
+
+.drops__total {
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+}
+
+.drops__empty {
+  padding: 20px 14px;
+  color: var(--ink-faint);
+  font-size: 0.88rem;
+}
+
+.drops__list {
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.drops__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+.drops__item:hover {
+  background: var(--hover);
+}
+
+.drops__icon {
+  width: 28px;
+  height: 28px;
+  image-rendering: pixelated;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.drops__icon--missing {
+  border: 1.5px dashed var(--line-strong);
+  border-radius: 5px;
+}
+
+.drops__name {
+  flex: 1 1 auto;
+  font-size: 0.88rem;
+  color: var(--ink);
+}
+
+.drops__count {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+@media (max-width: 760px) {
+  .viz__main {
+    grid-template-columns: 1fr;
+  }
+  .viz__side {
+    position: static;
+  }
+}
+
 /* ---------- États ---------- */
 .empty,
 .loading {
