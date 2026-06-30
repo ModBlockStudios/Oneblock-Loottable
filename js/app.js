@@ -46,7 +46,9 @@
     els.rows.innerHTML =
       '<tr><td colspan="5" class="loading">Chargement du catalogue…</td></tr>';
     try {
-      const res = await fetch(DATA_URL);
+      // ?v= : force le rechargement du JSON après une mise à jour (cache-busting)
+      const bust = (window.APP_INFO && window.APP_INFO.version) || '';
+      const res = await fetch(DATA_URL + '?v=' + bust);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       state.all = data.items || [];

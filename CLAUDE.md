@@ -91,6 +91,8 @@ npm start                   # sert le site en local sur http://localhost:5173
 ## ✅ Checklist avant chaque commit
 
 - [ ] La version (`js/version.js`) et `CHANGELOG.md` sont à jour si nécessaire.
+- [ ] Les `?v=` de cache-busting dans `index.html` (css/js) correspondent à la
+      nouvelle version.
 - [ ] Le code reste découpé par responsabilité (pas de fichier fourre-tout).
 - [ ] Les standards de nommage/format sont respectés.
 - [ ] Le site se charge sans erreur console (testé via un serveur local).

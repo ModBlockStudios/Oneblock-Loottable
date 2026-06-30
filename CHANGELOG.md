@@ -7,6 +7,14 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [2.0.1] — 2026-06-30
+
+### Corrigé
+- **Cache-busting** sur `css/`, `js/` et `data/items.json` (`?v=version`) :
+  après un déploiement, le navigateur charge immédiatement les nouveaux
+  fichiers au lieu de servir un mélange d'anciens fichiers en cache (qui
+  provoquait un thème/version obsolètes et « 0 résultat »).
+
 ## [2.0.0] — 2026-06-30
 
 ### Changé (cassant)
