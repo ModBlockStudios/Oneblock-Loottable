@@ -923,6 +923,65 @@ th.col-stack {
   border-top: 1px dashed var(--line-strong);
 }
 
+/* ---------- Nom de coffre ---------- */
+.chest-name-input {
+  margin-left: 10px;
+  width: 180px;
+  padding: 5px 9px;
+  font-size: 0.85rem;
+  font-family: var(--mono);
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 7px;
+  outline: none;
+}
+
+.chest-name-input:focus {
+  border-color: var(--ink-soft);
+  box-shadow: 0 0 0 3px rgba(31, 30, 28, 0.06);
+}
+
+.btn-ghost--active {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* ---------- Vue code (JSON) ---------- */
+.codeview {
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.codeview__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.codeview__label {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.codeview__pre {
+  margin: 0;
+  padding: 16px;
+  max-height: 70vh;
+  overflow: auto;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--ink);
+  white-space: pre;
+  tab-size: 2;
+}
+
 /* ---------- États ---------- */
 .empty,
 .loading {

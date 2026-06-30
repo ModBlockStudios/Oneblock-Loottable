@@ -52,7 +52,9 @@ function migrateContent(c) {
 }
 
 function migrateEntry(e) {
-  return e.kind === 'chest' ? { ...e, contents: (e.contents || []).map(migrateContent) } : e;
+  return e.kind === 'chest'
+    ? { ...e, label: e.label ?? '', contents: (e.contents || []).map(migrateContent) }
+    : e;
 }
 
 function migrateConfig(c) {
@@ -208,7 +210,7 @@ export function useLootConfigs() {
     (tierId) =>
       updateTierEntries(tierId, (entries) => [
         ...entries,
-        { kind: 'chest', id: genId('chest'), weight: 1, contents: [] },
+        { kind: 'chest', id: genId('chest'), label: '', weight: 1, contents: [] },
       ]),
     [updateTierEntries]
   );
@@ -287,6 +289,15 @@ export function useLootConfigs() {
     [updateChest]
   );
 
+  // Nom personnalisé d'un chest (utilisé pour l'export loot_table: path/to/<nom>).
+  const setChestLabel = useCallback(
+    (tierId, chestId, label) =>
+      updateTierEntries(tierId, (entries) =>
+        entries.map((e) => (e.kind === 'chest' && e.id === chestId ? { ...e, label } : e))
+      ),
+    [updateTierEntries]
+  );
+
   return {
     configs,
     current,
@@ -306,5 +317,6 @@ export function useLootConfigs() {
     addChestItem,
     removeChestItem,
     setChestRange,
+    setChestLabel,
   };
 }

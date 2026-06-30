@@ -1,13 +1,19 @@
+import { useMemo, useState } from 'react';
 import ConfigBar from '../components/ConfigBar.jsx';
 import TierCard from '../components/TierCard.jsx';
+import CodeView from '../components/CodeView.jsx';
+import { configToJson } from '../lib/exportCode.js';
 
 /*
  * Page « Lootable » : on choisit une config, qui contient un ou plusieurs
- * tiers. Chaque tiers a son propre tableau (items + weights). En bas, on peut
- * ajouter un tiers vierge ou dupliquer le dernier.
+ * tiers. Chaque tiers a son propre tableau (items + chests). Un bouton « Code »
+ * bascule sur la vue JSON (read-only) de la config courante.
  */
-export default function LootTablePage({ items, configs, onCopy }) {
+export default function LootTablePage({ items, configs, onCopy, onCopyText }) {
   const { current } = configs;
+  const [codeView, setCodeView] = useState(false);
+
+  const json = useMemo(() => (current ? configToJson(current) : ''), [current]);
 
   return (
     <>
@@ -17,6 +23,8 @@ export default function LootTablePage({ items, configs, onCopy }) {
         onSelect={configs.selectConfig}
         onCreate={configs.createConfig}
         onDelete={configs.deleteConfig}
+        codeView={codeView}
+        onToggleCode={() => setCodeView((v) => !v)}
       />
 
       {!current ? (
@@ -26,6 +34,8 @@ export default function LootTablePage({ items, configs, onCopy }) {
             Crée une config (donne-lui un nom ci-dessus) pour commencer.
           </p>
         </div>
+      ) : codeView ? (
+        <CodeView json={json} onCopy={onCopyText} />
       ) : (
         <>
           {current.tiers.map((tier, i) => (
@@ -44,6 +54,7 @@ export default function LootTablePage({ items, configs, onCopy }) {
               onAddChestItem={(chestId, item) => configs.addChestItem(tier.id, chestId, item)}
               onRemoveChestItem={(chestId, item) => configs.removeChestItem(tier.id, chestId, item)}
               onSetChestRange={(chestId, item, lo, hi) => configs.setChestRange(tier.id, chestId, item, lo, hi)}
+              onSetChestLabel={(chestId, label) => configs.setChestLabel(tier.id, chestId, label)}
               onClear={() => configs.clearTier(tier.id)}
               onDelete={() => configs.deleteTier(tier.id)}
               has={(item) => configs.hasItem(tier.id, item)}

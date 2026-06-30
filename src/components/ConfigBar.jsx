@@ -1,7 +1,15 @@
 import { useState } from 'react';
 
-/* Barre de gestion des configs : sélection, création, suppression. */
-export default function ConfigBar({ configs, current, onSelect, onCreate, onDelete }) {
+/* Barre de gestion des configs : sélection, création, suppression, vue code. */
+export default function ConfigBar({
+  configs,
+  current,
+  onSelect,
+  onCreate,
+  onDelete,
+  codeView,
+  onToggleCode,
+}) {
   const [name, setName] = useState('');
 
   const submit = (e) => {
@@ -56,6 +64,16 @@ export default function ConfigBar({ configs, current, onSelect, onCreate, onDele
         <button type="submit" className="btn-primary" disabled={!name.trim()}>
           Créer
         </button>
+        {current && (
+          <button
+            type="button"
+            className={'btn-ghost' + (codeView ? ' btn-ghost--active' : '')}
+            onClick={onToggleCode}
+            title="Afficher le code JSON de cette config"
+          >
+            {codeView ? '← Éditeur' : '{ } Code'}
+          </button>
+        )}
       </form>
     </div>
   );

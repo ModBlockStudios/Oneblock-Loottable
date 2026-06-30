@@ -19,6 +19,7 @@ export default function TierCard({
   onAddChestItem,
   onRemoveChestItem,
   onSetChestRange,
+  onSetChestLabel,
   onClear,
   onDelete,
   has,
@@ -87,6 +88,7 @@ export default function TierCard({
                     onCopy={onCopy}
                     onRemove={() => onRemoveEntry(e)}
                     onSetWeight={(w) => onSetWeight(e, w)}
+                    onSetLabel={(label) => onSetChestLabel(e.id, label)}
                     onAddItem={(item) => onAddChestItem(e.id, item)}
                     onRemoveItem={(item) => onRemoveChestItem(e.id, item)}
                     onSetRange={(item, lo, hi) => onSetChestRange(e.id, item, lo, hi)}

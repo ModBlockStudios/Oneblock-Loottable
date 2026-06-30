@@ -7,6 +7,19 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.10.0] — 2026-06-30
+
+### Ajouté
+- **Bouton « Code »** (à droite de « Créer ») : bascule sur une vue **JSON
+  read-only** de la config courante, avec un bouton **Copier**.
+- Format généré : `{ "phases": [...] }` où 1 phase = 1 tiers.
+  - Tiers 1 → `{ "blocks": [...] }` ; tiers suivants → `{ "blockstobreak": <seuil>, "blocks": [...] }`.
+  - Item → `{ "name": "minecraft:<id>", "weight": N }`.
+  - Chest → `{ "name": "minecraft:chest", "loot_table": "path/to/<nom>", "weight": N }`.
+- **Nom personnalisé par coffre** (champ texte) utilisé dans `loot_table`.
+  Le contenu inline d'un chest reste éditable mais est ignoré dans l'export.
+- Composants `CodeView` ; lib `exportCode` ; hook `setChestLabel`.
+
 ## [3.9.0] — 2026-06-30
 
 ### Ajouté

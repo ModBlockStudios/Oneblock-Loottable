@@ -12,6 +12,7 @@ export default function ChestRow({
   onCopy,
   onRemove,
   onSetWeight,
+  onSetLabel,
   onAddItem,
   onRemoveItem,
   onSetRange,
@@ -30,9 +31,18 @@ export default function ChestRow({
             className="chest-toggle"
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
+            title={open ? 'Replier' : 'Déplier'}
           >
             <span className="chest-caret">{open ? '▾' : '▸'}</span> Chest
           </button>
+          <input
+            type="text"
+            className="chest-name-input"
+            placeholder="Nom_custom"
+            value={chest.label}
+            onChange={(e) => onSetLabel(e.target.value)}
+            title="Nom du coffre (loot_table: path/to/<nom>)"
+          />
           <span className="chest-sub">{chest.contents.length} item(s)</span>
         </td>
         <td className="cell-id">

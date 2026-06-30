@@ -25,6 +25,14 @@ export default function App() {
     [showToast]
   );
 
+  const handleCopyText = useCallback(
+    (text) => {
+      copyText(text);
+      showToast('Code copié dans le presse-papiers');
+    },
+    [showToast]
+  );
+
   const lootCount = configs.current
     ? configs.current.tiers.reduce((n, t) => n + t.entries.length, 0)
     : 0;
@@ -36,7 +44,12 @@ export default function App() {
 
       <main className="container">
         {route === 'lootable' ? (
-          <LootTablePage items={items} configs={configs} onCopy={handleCopy} />
+          <LootTablePage
+            items={items}
+            configs={configs}
+            onCopy={handleCopy}
+            onCopyText={handleCopyText}
+          />
         ) : (
           <CatalogPage loading={loading} error={error} items={items} onCopy={handleCopy} />
         )}
