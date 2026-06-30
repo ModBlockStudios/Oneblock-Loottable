@@ -1,20 +1,31 @@
 # OneBlock Loot Table 🧱
 
-Interface web servant de catalogue de **tous les blocs et items de Minecraft**
-(inventaire créatif, dernière version stable). Première brique d'un futur outil
-de création de *loot tables* pour OneBlock.
+Interface web servant de catalogue de **tous les blocs et items de Minecraft
+Bedrock** (inventaire créatif). Première brique d'un futur outil de création de
+*loot tables* pour OneBlock.
 
 ➡️ **Démo en ligne** : `https://<ton-pseudo-github>.github.io/Oneblock-Loottable/`
 (remplace `<ton-pseudo-github>` une fois GitHub Pages activé).
 
 ## ✨ Fonctionnalités
 
-- Catalogue complet : **1415 entrées** (952 blocs + 463 items) de Minecraft **1.21.8**.
-- Recherche instantanée (nom affiché ou identifiant `minecraft:…`).
-- Filtres : Tout / Blocs / Items.
+- **Édition Bedrock** : les identifiants affichés sont ceux de Bedrock
+  (ex. `minecraft:web`, `minecraft:magma`, `minecraft:noteblock`).
+- Catalogue complet : **1408 entrées** (436 full blocks, 514 decoration blocks,
+  458 items).
+- Présentation en **tableau** : icône, nom, identifiant, catégorie, taille de pile.
+- Recherche instantanée (nom affiché ou identifiant).
+- Filtres : **Tout / Full Block / Decoration Block / Item**.
+  - *Full Block* = bloc cube plein (géométrie cube de Minecraft).
+  - *Decoration Block* = le reste (escaliers, dalles, portes, plantes…).
 - Icônes officielles (textures 16×16) pour quasiment chaque entrée.
-- Clic sur une carte → copie de l'identifiant (ex. `minecraft:diamond`) dans le presse-papiers.
-- Chargement progressif (scroll infini), responsive.
+- Clic sur une ligne → copie de l'identifiant (ex. `minecraft:diamond`).
+- Design épuré noir & blanc, chargement progressif (scroll infini), responsive.
+
+> ℹ️ **Note technique** : le contenu (blocs/items) est identique entre les
+> éditions Java et Bedrock. La liste « propre » de l'inventaire créatif et les
+> textures proviennent des données **Java** ; les identifiants sont convertis en
+> **Bedrock** via une table de correspondance validée contre `minecraft-data`.
 
 ## 🚀 Mettre la page en ligne avec GitHub Pages
 
@@ -67,24 +78,32 @@ Les données et les icônes sont générées à partir des paquets
 
 ```bash
 npm install
-npm run build-data          # version par défaut : 1.21.8
-# pour une autre version (doit exister dans les DEUX paquets) :
-MC_VERSION=1.21.6 npm run build-data
+npm run build-data          # défaut : textures Java 1.21.8, ids Bedrock 1.21.111
+# pour d'autres versions :
+MC_VERSION=1.21.6 MC_BEDROCK_VERSION=1.21.90 npm run build-data
 ```
 
+- `MC_VERSION` : version Java pour la liste créative + les textures
+  (doit exister dans `minecraft-data` ET `minecraft-assets`).
+- `MC_BEDROCK_VERSION` : version Bedrock servant à **valider** les identifiants
+  convertis (doit exister dans `minecraft-data`).
+
 Cela régénère `data/items.json` et les dossiers `assets/items/`, `assets/blocks/`.
+La table de correspondance Java→Bedrock se trouve en haut de
+`scripts/build-data.js` (`JAVA_TO_BEDROCK`).
 
 ## 📁 Structure
 
 ```
 .
-├── index.html               # page principale
-├── css/style.css            # styles
-├── js/app.js                # logique (recherche, filtres, rendu)
-├── data/items.json          # catalogue généré (id, nom, type, icône)
+├── index.html               # structure (tableau)
+├── css/style.css            # styles (DA noir & blanc épurée)
+├── js/version.js            # version de l'interface (source unique)
+├── js/app.js                # logique (recherche, filtres, rendu tableau)
+├── data/items.json          # catalogue généré (id Bedrock, nom, catégorie, icône)
 ├── assets/items/*.png       # icônes des items
 ├── assets/blocks/*.png      # icônes des blocs
-├── scripts/build-data.js    # générateur des données + textures
+├── scripts/build-data.js    # générateur (ids Bedrock + textures Java)
 └── .github/workflows/       # déploiement GitHub Pages (option B)
 ```
 

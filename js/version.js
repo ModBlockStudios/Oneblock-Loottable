@@ -9,6 +9,6 @@
  * si la version en ligne est bien à jour.
  * ------------------------------------------------------------------ */
 window.APP_INFO = {
-  version: '1.1.0',
+  version: '2.0.0',
   buildDate: '2026-06-30',
 };
