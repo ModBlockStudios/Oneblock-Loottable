@@ -1,4 +1,5 @@
 import { tagLabel } from '../lib/tags.js';
+import SearchField from './SearchField.jsx';
 
 /* Barre d'outils : recherche, filtres de catégorie, filtre de tag, compteur. */
 
@@ -18,18 +19,16 @@ export default function Toolbar({
   onTag,
   tags,
   count,
+  items,
 }) {
   return (
     <section className="toolbar" aria-label="Filtres">
       <div className="toolbar__search">
-        <input
-          type="search"
-          className="search-input"
-          placeholder="Rechercher…  #tag (ex #bois)  ·  !catégorie (ex !item)  ·  ou un nom"
+        <SearchField
           value={query}
-          onChange={(e) => onQuery(e.target.value)}
-          autoComplete="off"
-          spellCheck="false"
+          onChange={onQuery}
+          placeholder="Rechercher…  #tag (ex #bois)  ·  !catégorie (ex !item)  ·  ou un nom"
+          items={items}
         />
         <p className="toolbar__hint">
           <span className="kbd">#</span> tag · <span className="kbd">!</span> catégorie ·

@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { makeFilter } from '../lib/search.js';
+import SearchField from './SearchField.jsx';
 
 const MAX_RESULTS = 40;
 
@@ -26,14 +27,11 @@ export default function ItemPicker({ items, onAdd, has }) {
 
   return (
     <div className="picker">
-      <input
-        type="search"
-        className="search-input"
-        placeholder="Ajouter un item…  nom, #tag (ex #bois) ou !catégorie (ex !item)"
+      <SearchField
         value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        autoComplete="off"
-        spellCheck="false"
+        onChange={setQuery}
+        placeholder="Ajouter un item…  nom, #tag (ex #bois) ou !catégorie (ex !item)"
+        items={items}
       />
 
       {query.trim() && (

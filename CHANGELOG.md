@@ -7,6 +7,16 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.5.0] — 2026-06-30
+
+### Ajouté
+- **Aide à l'écriture (autocomplétion)** pour `#` et `!` : en tapant l'un de ces
+  préfixes, une liste de tags / catégories s'affiche (avec leur nombre),
+  filtrée au fur et à mesure. Sélection à la souris ou au clavier (↑/↓ + Entrée,
+  Échap pour fermer).
+- Nouveau composant réutilisable `SearchField`, utilisé par la Table et par le
+  sélecteur d'items de la Lootable.
+
 ## [3.4.1] — 2026-06-30
 
 ### Ajouté

@@ -133,6 +133,65 @@ body {
   box-shadow: 0 0 0 3px rgba(31, 30, 28, 0.06);
 }
 
+/* ---------- Autocomplétion #tag / !catégorie ---------- */
+.search-field {
+  position: relative;
+}
+
+.suggest {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.suggest__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  font: inherit;
+  text-align: left;
+  background: none;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+}
+
+.suggest__item--active {
+  background: var(--hover);
+}
+
+.suggest__prefix {
+  width: 12px;
+  font-family: var(--mono);
+  color: var(--ink-faint);
+}
+
+.suggest__label {
+  flex: 1 1 auto;
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.suggest__count {
+  flex: 0 0 auto;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  font-variant-numeric: tabular-nums;
+}
+
 .toolbar__hint {
   margin: 6px 2px 0;
   font-size: 0.74rem;

@@ -5,6 +5,8 @@ export const CATEGORY_LABEL = {
   item: 'Item',
 };
 
+export const CATEGORY_ORDER = ['full_block', 'decoration_block', 'item'];
+
 export function categoryLabel(category) {
   return CATEGORY_LABEL[category] || category;
 }

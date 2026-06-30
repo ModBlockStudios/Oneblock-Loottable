@@ -32,6 +32,7 @@ export default function CatalogPage({ loading, error, items, onCopy }) {
         onTag={setTag}
         tags={tags}
         count={filtered.length}
+        items={items}
       />
 
       {loading && <div className="loading">Chargement du catalogue…</div>}
