@@ -326,6 +326,13 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+.col-mine {
+  width: 110px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
 th.col-stack {
   text-align: right;
 }
@@ -1045,8 +1052,10 @@ th.col-stack {
   /* On garde Nom, Identifiant et Tag (le filtre vedette) ; on masque le reste. */
   .col-cat,
   .col-stack,
+  .col-mine,
   .catalog .cell-cat,
-  .catalog .cell-stack {
+  .catalog .cell-stack,
+  .catalog .cell-mine {
     display: none;
   }
 }

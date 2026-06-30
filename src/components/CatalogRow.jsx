@@ -1,6 +1,7 @@
 import { memo, useState } from 'react';
 import { tagLabel } from '../lib/tags.js';
 import { categoryLabel } from '../lib/categories.js';
+import { formatMineTime } from '../lib/mining.js';
 
 /* Une ligne du catalogue. Clic sur la ligne = copie de l'identifiant Bedrock. */
 function CatalogRow({ item, onCopy, onTagClick }) {
@@ -45,6 +46,9 @@ function CatalogRow({ item, onCopy, onTagClick }) {
         >
           {tagLabel(item.tag)}
         </button>
+      </td>
+      <td className="col-mine cell-mine" title="Temps de minage à la main">
+        {formatMineTime(item.mining)}
       </td>
       <td className="col-stack cell-stack">{item.stackSize}</td>
     </tr>

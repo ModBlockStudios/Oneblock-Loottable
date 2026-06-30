@@ -7,6 +7,18 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.12.0] — 2026-06-30
+
+### Ajouté
+- **Temps de minage** par bloc (étape 1 du simulateur OneBlock) :
+  - colonne **« Minage »** dans la Table (temps à la main : `instant`,
+    `X s`, ou `incassable`).
+  - données générées (`mining`) : `hardness`, `requiresTool`, `tool`
+    (pickaxe/shovel/axe/hoe/sword), `time` (secondes à la main), pour les blocs.
+  - formule : `hardness × 1.5` (cassable à la main) ou `× 5` (outil requis) ;
+    `0` = instantané, `null` = incassable.
+- Lib `mining.js` (formatage + durée), réutilisable par le futur simulateur.
+
 ## [3.11.0] — 2026-06-30
 
 ### Changé

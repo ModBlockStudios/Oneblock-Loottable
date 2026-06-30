@@ -107,6 +107,43 @@ function toBedrockId(javaName) {
 
 // nom du bloc -> true, pour catégoriser item vs bloc
 const blockNames = new Set(blocks.map((b) => b.name));
+const blockByName = new Map(blocks.map((b) => [b.name, b]));
+
+/*
+ * Données de minage d'un bloc (pour le simulateur OneBlock) :
+ *  - hardness     : dureté Minecraft ;
+ *  - requiresTool : le bloc nécessite un outil pour dropper (harvestTools) ;
+ *  - tool         : type d'outil efficace (pickaxe/shovel/axe/hoe/sword/none) ;
+ *  - time         : temps de minage À LA MAIN en secondes
+ *                   (null = incassable, 0 = instantané, sinon hardness×1.5 ou ×5).
+ */
+function toolFromMaterial(material, requiresTool) {
+  const m = material || '';
+  if (m.includes('mineable/pickaxe')) return 'pickaxe';
+  if (m.includes('mineable/shovel')) return 'shovel';
+  if (m.includes('mineable/axe')) return 'axe';
+  if (m.includes('mineable/hoe')) return 'hoe';
+  if (m.includes('sword')) return 'sword';
+  // « incorrect_for_wooden_tool » = minerais/obsidienne → pioche
+  if (requiresTool) return 'pickaxe';
+  return 'none';
+}
+
+function miningOf(name) {
+  const b = blockByName.get(name);
+  if (!b) return null; // items : pas de minage
+  const requiresTool = !!(b.harvestTools && Object.keys(b.harvestTools).length > 0);
+  const tool = toolFromMaterial(b.material, requiresTool);
+  let time;
+  if (!b.diggable || b.hardness === null || b.hardness < 0) {
+    time = null; // incassable
+  } else if (b.hardness === 0) {
+    time = 0; // instantané
+  } else {
+    time = Math.round(b.hardness * (requiresTool ? 5 : 1.5) * 100) / 100;
+  }
+  return { hardness: b.hardness, requiresTool, tool, time };
+}
 
 /*
  * Classification "bloc plein" (full block) vs "bloc de décoration".
@@ -261,16 +298,19 @@ for (const it of items) {
   // La résolution texture + catégorie reste basée sur le nom Java (visuel identique).
   const category = categoryOf(it.name); // full_block | decoration_block | item
   const tag = subCategoryOf(it.name); // sous-catégorie (food, armor, ore…)
+  const mining = miningOf(it.name); // données de minage (blocs uniquement)
   const icon = resolveIcon(it.name);
   if (!icon) missing++;
-  out.push({
+  const entry = {
     name: bedrockId, // identifiant Bedrock
     displayName: it.displayName,
     stackSize: it.stackSize,
     category: category,
     tag: tag,
     icon: icon, // peut être null -> l'UI affiche un placeholder
-  });
+  };
+  if (mining) entry.mining = mining;
+  out.push(entry);
 }
 
 out.sort((a, b) => a.displayName.localeCompare(b.displayName));

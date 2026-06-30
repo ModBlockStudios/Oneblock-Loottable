@@ -46,6 +46,7 @@ export default function CatalogTable({ items, onCopy, onTagClick }) {
               <th className="col-id">Identifiant</th>
               <th className="col-cat">Catégorie</th>
               <th className="col-tag">Tag</th>
+              <th className="col-mine">Minage</th>
               <th className="col-stack">Pile</th>
             </tr>
           </thead>
