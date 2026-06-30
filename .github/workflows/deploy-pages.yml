@@ -4,7 +4,11 @@ name: Deploy to GitHub Pages
 # Source à régler dans Settings > Pages > "GitHub Actions".
 on:
   push:
-    branches: [main, master]
+    # Déploiement direct depuis la branche de travail (pas de PR/merge nécessaire).
+    branches:
+      - main
+      - master
+      - claude/minecraft-lootable-interface-2mfzmn
   workflow_dispatch:
 
 permissions:
