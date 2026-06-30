@@ -25,12 +25,16 @@ export default function Toolbar({
         <input
           type="search"
           className="search-input"
-          placeholder="Rechercher… (ex : diamond, stone, spawn_egg)"
+          placeholder="Rechercher…  #tag (ex #bois)  ·  !catégorie (ex !item)  ·  ou un nom"
           value={query}
           onChange={(e) => onQuery(e.target.value)}
           autoComplete="off"
           spellCheck="false"
         />
+        <p className="toolbar__hint">
+          <span className="kbd">#</span> tag · <span className="kbd">!</span> catégorie ·
+          sinon nom / identifiant
+        </p>
       </div>
 
       <div className="toolbar__filters" role="group" aria-label="Catégorie">

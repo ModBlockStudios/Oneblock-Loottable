@@ -133,6 +133,18 @@ body {
   box-shadow: 0 0 0 3px rgba(31, 30, 28, 0.06);
 }
 
+.toolbar__hint {
+  margin: 6px 2px 0;
+  font-size: 0.74rem;
+  color: var(--ink-faint);
+}
+
+.toolbar__hint .kbd {
+  min-width: 16px;
+  padding: 0 5px;
+  font-size: 0.74rem;
+}
+
 .toolbar__filters {
   display: flex;
   flex-wrap: wrap;

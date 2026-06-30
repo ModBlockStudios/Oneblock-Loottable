@@ -1,11 +1,6 @@
 import { memo, useState } from 'react';
 import { tagLabel } from '../lib/tags.js';
-
-const CATEGORY_LABEL = {
-  full_block: 'Full Block',
-  decoration_block: 'Decoration',
-  item: 'Item',
-};
+import { categoryLabel } from '../lib/categories.js';
 
 /* Une ligne du catalogue. Clic sur la ligne = copie de l'identifiant Bedrock. */
 function CatalogRow({ item, onCopy, onTagClick }) {
@@ -35,7 +30,7 @@ function CatalogRow({ item, onCopy, onTagClick }) {
       </td>
       <td className="cell-cat">
         <span className={'cat-badge cat-badge--' + item.category}>
-          {CATEGORY_LABEL[item.category] || item.category}
+          {categoryLabel(item.category)}
         </span>
       </td>
       <td className="cell-tag">

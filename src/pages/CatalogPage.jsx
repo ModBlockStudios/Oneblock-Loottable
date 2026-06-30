@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import Toolbar from '../components/Toolbar.jsx';
 import CatalogTable from '../components/CatalogTable.jsx';
 import { tagsPresent } from '../lib/tags.js';
+import { makeFilter } from '../lib/search.js';
 
 /* Page « Table » : catalogue filtrable (référence). */
 export default function CatalogPage({ loading, error, items, onCopy }) {
@@ -12,14 +13,11 @@ export default function CatalogPage({ loading, error, items, onCopy }) {
   const tags = useMemo(() => tagsPresent(items), [items]);
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
+    const match = makeFilter(query); // gère #tag, !catégorie, ou texte libre
     return items.filter((it) => {
       if (category !== 'all' && it.category !== category) return false;
       if (tag !== 'all' && it.tag !== tag) return false;
-      if (!q) return true;
-      return (
-        it.name.toLowerCase().includes(q) || it.displayName.toLowerCase().includes(q)
-      );
+      return match(it);
     });
   }, [items, query, category, tag]);
 

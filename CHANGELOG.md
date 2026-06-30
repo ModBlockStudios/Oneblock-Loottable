@@ -7,6 +7,18 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.4.0] — 2026-06-30
+
+### Ajouté
+- **Recherche par préfixe** dans la page Table :
+  - `#tag` → filtre par sous-catégorie (ex. `#bois`, `#food`, `#armure`).
+  - `!catégorie` → filtre par catégorie (ex. `!item`, `!full`, `!deco`).
+  - sinon : recherche par nom / identifiant (comme avant).
+  - Tolère les accents et le pluriel ; marche sur le libellé FR comme sur la
+    clé technique. Astuce affichée sous le champ de recherche.
+- Moteur de recherche extrait dans `src/lib/search.js` ; libellés de catégorie
+  centralisés dans `src/lib/categories.js`.
+
 ## [3.3.0] — 2026-06-30
 
 ### Changé
