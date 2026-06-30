@@ -18,7 +18,7 @@ via **GitHub Pages**.
 - La version de l'interface **doit toujours être affichée** dans l'en-tête du
   site, afin de vérifier en un coup d'œil si la version en ligne / en review
   est à jour.
-- Source unique de vérité : **`js/version.js`** (`version` en SemVer +
+- Source unique de vérité : **`src/version.js`** (`version` en SemVer +
   `buildDate` au format `AAAA-MM-JJ`).
 - **À chaque modification notable**, incrémenter `version` et mettre `buildDate`
   à jour, puis ajouter une entrée dans **`CHANGELOG.md`**.
@@ -27,35 +27,34 @@ via **GitHub Pages**.
   - `MINEUR` : nouvelle fonctionnalité rétrocompatible.
   - `MAJEUR` : changement cassant (structure de données, URL, etc.).
 
-### 2. Structure du code maintenable
+### 2. Structure du code maintenable (React + Vite)
 - Garder une **séparation claire des responsabilités** :
-  - `index.html` → structure/markup uniquement.
-  - `css/` → présentation uniquement.
-  - `js/` → logique uniquement.
-  - `data/` → données générées (ne pas éditer à la main).
+  - `src/components/` → composants React de présentation (un fichier = un composant).
+  - `src/lib/` → logique réutilisable (hooks, utilitaires : fetch, presse-papiers).
+  - `src/App.jsx` → composition + état global de la page.
+  - `src/styles.css` → présentation (CSS maison).
+  - `public/data/`, `public/assets/` → données/icônes générées (ne pas éditer à la main).
   - `scripts/` → outils de build (génération des données/assets).
-- Les données (`data/items.json`) et les icônes (`assets/`) sont **générées**
-  par `scripts/build-data.js`. Ne jamais les modifier à la main : régénérer via
-  `npm run build-data`.
+- Les données (`public/data/items.json`) et les icônes (`public/assets/`) sont
+  **générées** par `scripts/build-data.js`. Ne jamais les modifier à la main :
+  régénérer via `npm run build-data`.
 - Toute nouvelle dépendance ou source de données doit être documentée dans le
   `README.md`.
 
 ### 3. Pas de code « en un seul fichier » (anti toile d'araignée)
-- **Interdit** de tout entasser dans un seul gros fichier illisible.
-- Découper par **responsabilité** ; quand un fichier JS dépasse ~250–300 lignes
-  ou mélange plusieurs préoccupations, le scinder en modules dédiés
-  (ex. `js/version.js`, `js/data.js`, `js/ui.js`, `js/filters.js`, …).
-- Éviter les dépendances circulaires et les fonctions « fourre-tout ».
-- Une fonction = une responsabilité claire ; préférer plusieurs petites
-  fonctions à une fonction géante.
+- **Interdit** de tout entasser dans un seul gros composant illisible.
+- Découper par **responsabilité** ; quand un composant dépasse ~150–200 lignes
+  ou mélange plusieurs préoccupations, le scinder (composant dédié, hook, util).
+- Extraire la logique réutilisable dans `src/lib/` (hooks `useX`, utilitaires).
+- Éviter les dépendances circulaires et les composants « fourre-tout ».
+- Un composant / une fonction = une responsabilité claire.
 
 ### 4. Respecter les standards de développement
-- **Nommage** : `camelCase` pour les variables/fonctions JS, `kebab-case` pour
-  les fichiers et les classes CSS, `UPPER_SNAKE_CASE` pour les constantes
-  globales.
+- **Nommage** : `camelCase` pour variables/fonctions, `PascalCase` pour les
+  composants React et leurs fichiers (`CatalogTable.jsx`), `kebab-case` pour les
+  classes CSS, `UPPER_SNAKE_CASE` pour les constantes globales.
 - **Indentation** : 2 espaces. Point-virgules en JS. Guillemets simples en JS.
-- `'use strict'` et code encapsulé (IIFE ou modules), pas de fuite dans le
-  scope global non maîtrisée.
+- Composants fonctionnels + hooks ; pas d'état global non maîtrisé.
 - **Lisibilité** : commentaires utiles (le *pourquoi*, pas le *quoi* évident),
   noms explicites, pas de code mort.
 - **Accessibilité & responsive** : conserver les attributs ARIA, la navigation
@@ -77,23 +76,24 @@ via **GitHub Pages**.
 ## 🔧 Commandes utiles
 
 ```bash
-npm install                 # installe minecraft-data + minecraft-assets
-npm run build-data          # régénère data/ + assets/ (ids Bedrock, textures Java)
+npm install                 # installe React/Vite + minecraft-data/assets
+npm run dev                 # serveur de dev Vite -> http://localhost:5173
+npm run build               # build de production -> dist/
+npm run preview             # prévisualise le build de production
+npm run build-data          # régénère public/data + public/assets (ids Bedrock)
 MC_VERSION=1.21.x MC_BEDROCK_VERSION=1.21.x npm run build-data   # autres versions
-npm start                   # sert le site en local sur http://localhost:5173
 ```
 
-> ⚠️ Toujours servir le site via un serveur local (pas `file://`), sinon le
-> `fetch` de `data/items.json` est bloqué par le navigateur.
+> Le déploiement GitHub Pages se fait via **GitHub Actions** (build Vite).
+> Source à régler sur « GitHub Actions » dans *Settings → Pages*.
 
 ---
 
 ## ✅ Checklist avant chaque commit
 
-- [ ] La version (`js/version.js`) et `CHANGELOG.md` sont à jour si nécessaire.
-- [ ] Les `?v=` de cache-busting dans `index.html` (css/js) correspondent à la
-      nouvelle version.
-- [ ] Le code reste découpé par responsabilité (pas de fichier fourre-tout).
+- [ ] La version (`src/version.js`) et `CHANGELOG.md` sont à jour si nécessaire.
+- [ ] `npm run build` passe sans erreur.
+- [ ] Le code reste découpé par responsabilité (pas de composant fourre-tout).
 - [ ] Les standards de nommage/format sont respectés.
 - [ ] Le site se charge sans erreur console (testé via un serveur local).
 - [ ] Les données générées n'ont pas été éditées à la main.

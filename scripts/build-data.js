@@ -40,9 +40,10 @@ const MD_DIR = path.join(ROOT, 'node_modules', 'minecraft-data', 'minecraft-data
 const BEDROCK_DIR = path.join(ROOT, 'node_modules', 'minecraft-data', 'minecraft-data', 'data', 'bedrock', MC_BEDROCK_VERSION);
 const MA_DIR = path.join(ROOT, 'node_modules', 'minecraft-assets', 'minecraft-assets', 'data', MC_JAVA_VERSION);
 
-const OUT_DATA = path.join(ROOT, 'data');
-const OUT_ITEMS_IMG = path.join(ROOT, 'assets', 'items');
-const OUT_BLOCKS_IMG = path.join(ROOT, 'assets', 'blocks');
+// Sorties dans public/ : Vite copie ce dossier tel quel dans le build.
+const OUT_DATA = path.join(ROOT, 'public', 'data');
+const OUT_ITEMS_IMG = path.join(ROOT, 'public', 'assets', 'items');
+const OUT_BLOCKS_IMG = path.join(ROOT, 'public', 'assets', 'blocks');
 
 function readJSON(p) {
   return JSON.parse(fs.readFileSync(p, 'utf8'));

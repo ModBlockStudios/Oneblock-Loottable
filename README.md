@@ -27,48 +27,37 @@ Bedrock** (inventaire créatif). Première brique d'un futur outil de création 
 > textures proviennent des données **Java** ; les identifiants sont convertis en
 > **Bedrock** via une table de correspondance validée contre `minecraft-data`.
 
+## 🧰 Stack technique
+
+- **React 18** + **Vite** (build statique).
+- Aucune librairie UI : CSS maison (DA noir & blanc épurée).
+- Données + icônes générées (voir plus bas), servies depuis `public/`.
+
 ## 🚀 Mettre la page en ligne avec GitHub Pages
 
-Tu as **deux options**. La première est la plus simple.
+L'application a une **étape de build** (Vite), le déploiement se fait donc via
+**GitHub Actions** (le mode « Deploy from a branch » ne convient pas car il ne
+build pas).
 
-### Option A — Déployer depuis la branche (sans configuration, recommandé pour débuter)
-
-1. Pousse ce dépôt sur GitHub (déjà fait si tu lis ceci).
-2. Va dans **Settings** (Paramètres) du dépôt → menu **Pages** (colonne de gauche).
-3. Sous **Build and deployment** → **Source**, choisis **Deploy from a branch**.
-4. **Branch** : sélectionne la branche qui contient le site
-   (`main` après fusion, ou directement la branche de travail), puis le dossier **`/ (root)`**.
-5. Clique **Save**. Attends 1–2 minutes.
-6. L'URL publique s'affiche en haut de la page Pages :
+1. **Settings** (Paramètres) du dépôt → menu **Pages** (colonne de gauche).
+2. Sous **Build and deployment** → **Source**, choisis **GitHub Actions**.
+3. Le workflow `.github/workflows/deploy-pages.yml` (build Vite + déploiement)
+   se déclenche à chaque push sur `main`/`master`, ou manuellement via l'onglet
+   **Actions** → *Run workflow*.
+4. À la fin du job, l'URL publique apparaît dans **Actions** et **Settings → Pages** :
    `https://<ton-pseudo-github>.github.io/Oneblock-Loottable/`.
 
-> Le fichier `.nojekyll` est déjà présent pour que GitHub serve correctement
-> les dossiers `assets/`, `css/`, `js/`.
-
-### Option B — Déployer via GitHub Actions (automatique à chaque push)
-
-1. **Settings** → **Pages** → **Source** : choisis **GitHub Actions**.
-2. Le workflow `.github/workflows/deploy-pages.yml` se déclenche à chaque push
-   sur `main`/`master` (ou manuellement via l'onglet **Actions** → *Run workflow*).
-3. À la fin du job, l'URL de déploiement apparaît dans l'onglet **Actions**
-   et dans **Settings → Pages**.
-
-> ℹ️ Le workflow ne se déclenche que sur `main`/`master`. Si tu travailles sur une
-> autre branche, fusionne-la d'abord, ou lance le workflow manuellement.
+> ℹ️ Le chemin de base (`/Oneblock-Loottable/`) est configuré dans
+> `vite.config.js`. Si tu renommes le dépôt, mets-le à jour.
 
 ## 🛠️ Développement local
 
 ```bash
-# Servir le site localement (n'importe quel serveur statique fait l'affaire)
-npm start          # -> http://localhost:5173
-# ou
-python3 -m http.server 5173
+npm install
+npm run dev        # serveur de dev Vite -> http://localhost:5173
+npm run build      # build de production -> dist/
+npm run preview    # prévisualise le build de production
 ```
-
-Ouvre ensuite `http://localhost:5173`.
-
-> ⚠️ Ouvrir `index.html` directement par `file://` ne fonctionne pas :
-> le navigateur bloque le `fetch` du JSON. Utilise un petit serveur local.
 
 ## 🔄 Régénérer le catalogue (changer de version de Minecraft)
 
@@ -88,23 +77,28 @@ MC_VERSION=1.21.6 MC_BEDROCK_VERSION=1.21.90 npm run build-data
 - `MC_BEDROCK_VERSION` : version Bedrock servant à **valider** les identifiants
   convertis (doit exister dans `minecraft-data`).
 
-Cela régénère `data/items.json` et les dossiers `assets/items/`, `assets/blocks/`.
-La table de correspondance Java→Bedrock se trouve en haut de
-`scripts/build-data.js` (`JAVA_TO_BEDROCK`).
+Cela régénère `public/data/items.json` et les dossiers `public/assets/items/`,
+`public/assets/blocks/`. La table de correspondance Java→Bedrock se trouve en
+haut de `scripts/build-data.js` (`JAVA_TO_BEDROCK`).
 
 ## 📁 Structure
 
 ```
 .
-├── index.html               # structure (tableau)
-├── css/style.css            # styles (DA noir & blanc épurée)
-├── js/version.js            # version de l'interface (source unique)
-├── js/app.js                # logique (recherche, filtres, rendu tableau)
-├── data/items.json          # catalogue généré (id Bedrock, nom, catégorie, icône)
-├── assets/items/*.png       # icônes des items
-├── assets/blocks/*.png      # icônes des blocs
-├── scripts/build-data.js    # générateur (ids Bedrock + textures Java)
-└── .github/workflows/       # déploiement GitHub Pages (option B)
+├── index.html                  # point d'entrée Vite
+├── vite.config.js              # config Vite (base path, plugin React)
+├── src/
+│   ├── main.jsx                # montage React
+│   ├── App.jsx                 # composition + état (recherche, filtres, toast)
+│   ├── version.js              # version de l'interface (source unique)
+│   ├── styles.css              # styles (DA noir & blanc épurée)
+│   ├── components/             # Header, Toolbar, CatalogTable, CatalogRow, Toast
+│   └── lib/                    # useCatalog (fetch), copy (presse-papiers)
+├── public/
+│   ├── data/items.json         # catalogue généré (id Bedrock, nom, catégorie, icône)
+│   └── assets/{items,blocks}/  # icônes
+├── scripts/build-data.js       # générateur (ids Bedrock + textures Java)
+└── .github/workflows/          # build + déploiement GitHub Pages
 ```
 
 ## 📜 Crédits
