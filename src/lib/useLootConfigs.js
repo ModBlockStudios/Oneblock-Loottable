@@ -75,12 +75,29 @@ function migrateConfig(c) {
   };
 }
 
+// Classe les entrées de chaque tiers par weight décroissant (du plus grand au
+// plus petit). Tri stable : à weight égal, l'ordre d'ajout est conservé.
+function sortTiersByWeight(tiers) {
+  return tiers.map((t) => ({
+    ...t,
+    entries: [...t.entries].sort((a, b) => (b.weight ?? 0) - (a.weight ?? 0)),
+  }));
+}
+
+function sortConfigByWeight(c) {
+  return { ...c, tiers: sortTiersByWeight(c.tiers) };
+}
+
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     const data = raw ? JSON.parse(raw) : null;
     if (data && Array.isArray(data.configs)) {
-      return { configs: data.configs.map(migrateConfig), currentId: data.currentId ?? null };
+      // Au chargement (reload), on présente déjà les tiers triés par weight.
+      return {
+        configs: data.configs.map(migrateConfig).map(sortConfigByWeight),
+        currentId: data.currentId ?? null,
+      };
     }
   } catch (e) {
     /* ignore */
@@ -122,6 +139,14 @@ export function useLootConfigs() {
   }, []);
 
   const selectConfig = useCallback((id) => setState((s) => ({ ...s, currentId: id })), []);
+
+  // Reclasse les entrées de tous les tiers par weight décroissant. Appelé à
+  // l'entrée dans l'onglet Lootable (et au reload via load()) : on ne réordonne
+  // pas en direct pendant l'édition pour éviter que les lignes sautent.
+  const sortByWeight = useCallback(
+    () => setState((s) => ({ ...s, configs: s.configs.map(sortConfigByWeight) })),
+    []
+  );
 
   const deleteConfig = useCallback((id) => {
     setState((s) => {
@@ -303,6 +328,7 @@ export function useLootConfigs() {
     current,
     createConfig,
     selectConfig,
+    sortByWeight,
     deleteConfig,
     addTier,
     duplicateLastTier,

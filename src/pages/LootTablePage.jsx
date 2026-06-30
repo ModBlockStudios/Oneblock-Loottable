@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import ConfigBar from '../components/ConfigBar.jsx';
 import TierCard from '../components/TierCard.jsx';
 import CodeView from '../components/CodeView.jsx';
@@ -12,6 +12,13 @@ import { configToJson } from '../lib/exportCode.js';
 export default function LootTablePage({ items, configs, onCopy, onCopyText }) {
   const { current } = configs;
   const [codeView, setCodeView] = useState(false);
+
+  // À l'entrée dans l'onglet, on reclasse les tiers par weight décroissant.
+  // (Pas de réordonnancement en direct pendant l'édition.)
+  const { sortByWeight } = configs;
+  useEffect(() => {
+    sortByWeight();
+  }, [sortByWeight]);
 
   const json = useMemo(() => (current ? configToJson(current) : ''), [current]);
   // Dans un tiers on ne mine que des BLOCS ; les items sont réservés aux coffres.

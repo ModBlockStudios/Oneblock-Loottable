@@ -7,6 +7,14 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.18.0] — 2026-06-30
+
+### Ajouté
+- **Tri par weight** des tiers Lootable : à l'entrée dans l'onglet et au reload,
+  les entrées de chaque tiers sont reclassées **du weight le plus grand au plus
+  petit** (tri stable : à weight égal, l'ordre d'ajout est conservé). Pas de
+  réordonnancement en direct pendant l'édition pour éviter que les lignes sautent.
+
 ## [3.17.0] — 2026-06-30
 
 ### Ajouté
