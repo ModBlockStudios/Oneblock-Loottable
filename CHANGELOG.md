@@ -7,6 +7,27 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.15.0] — 2026-06-30
+
+### Ajouté
+- **Retour visuel de minage** plus clair : un remplissage « cassage » monte
+  du bas vers le haut **sur le bloc** lui-même, et le pourcentage de progression
+  s'affiche pendant le minage. La barre de progression est rendue plus visible.
+
+### Corrigé
+- Le **sélecteur d'items** (page Lootable) classe désormais les résultats par
+  pertinence (exact → préfixe → contient) avant de plafonner à 40. Un bloc comme
+  **Stone** n'est plus coupé par la limite et réapparaît dans les suggestions.
+
+## [3.14.1] — 2026-06-30
+
+### Changé
+- Le **craft consomme désormais les ressources** de l'inventaire (au lieu
+  d'exiger juste de les avoir). Les petits items sont utilisés en premier ;
+  casser un log (×4) ou un bloc (×9) **rend la monnaie** en item de base
+  (ex. 2 logs pour 5 bois → 3 planches rendues).
+- Le journal des drops devient l'« **Inventaire** » (se réduit au craft).
+
 ## [3.14.0] — 2026-06-30
 
 ### Ajouté

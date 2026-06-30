@@ -5,12 +5,12 @@ export default function DropsList({ drops }) {
   return (
     <div className="drops">
       <div className="drops__head">
-        <span className="drops__title">Drops</span>
-        <span className="drops__total">{total.toLocaleString('fr-FR')} obtenu(s)</span>
+        <span className="drops__title">Inventaire</span>
+        <span className="drops__total">{total.toLocaleString('fr-FR')} item(s)</span>
       </div>
 
       {drops.length === 0 ? (
-        <div className="drops__empty">Mine des blocs pour voir les drops ici.</div>
+        <div className="drops__empty">Mine des blocs pour récolter des ressources ici.</div>
       ) : (
         <ul className="drops__list">
           {drops.map((d) => (

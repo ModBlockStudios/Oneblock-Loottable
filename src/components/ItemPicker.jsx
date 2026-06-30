@@ -4,6 +4,21 @@ import SearchField from './SearchField.jsx';
 
 const MAX_RESULTS = 40;
 
+const norm = (s) =>
+  String(s)
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase();
+
+// Pertinence d'un item pour une recherche texte : exact < préfixe < contient.
+function relevance(it, q) {
+  const n = norm(it.name);
+  const dn = norm(it.displayName);
+  if (n === q || dn === q) return 0;
+  if (n.startsWith(q) || dn.startsWith(q)) return 1;
+  return 2;
+}
+
 /*
  * Sélecteur d'items intégré à la page Lootable : on cherche dans le catalogue
  * et on ajoute à la config courante, sans changer de page.
@@ -18,16 +33,19 @@ export default function ItemPicker({
   const [query, setQuery] = useState('');
 
   const results = useMemo(() => {
-    if (!query.trim()) return [];
+    const raw = query.trim();
+    if (!raw) return [];
     const match = makeFilter(query);
-    const out = [];
-    for (const it of items) {
-      if (match(it)) {
-        out.push(it);
-        if (out.length >= MAX_RESULTS) break;
-      }
-    }
-    return out;
+    const all = items.filter(match);
+    // Recherches #tag / !catégorie : ordre catalogue. Texte libre : par pertinence
+    // (sinon un match exact comme « Stone » pouvait être coupé par le plafond).
+    if (raw[0] === '#' || raw[0] === '!') return all.slice(0, MAX_RESULTS);
+    const q = norm(raw);
+    return all
+      .map((it) => ({ it, r: relevance(it, q) }))
+      .sort((a, b) => a.r - b.r || a.it.displayName.localeCompare(b.it.displayName))
+      .slice(0, MAX_RESULTS)
+      .map((x) => x.it);
   }, [items, query]);
 
   return (

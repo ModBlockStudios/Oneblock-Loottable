@@ -74,3 +74,54 @@ export function proposalFor(currentTier, inventory) {
 export function recipeText(recipe) {
   return recipe.map((r) => `${r.amount} ${TIER_LABEL[r.group]}`).join(' + ');
 }
+
+// Item « de base » (1 unité) de chaque groupe, pour rendre la monnaie.
+export const BASE_ITEM = {
+  wood: 'oak_planks',
+  stone: 'cobblestone',
+  iron: 'iron_ingot',
+  diamond: 'diamond',
+  netherite: 'netherite_ingot',
+};
+
+// Consomme `amount` unités d'un groupe depuis l'inventaire (petits items
+// d'abord). Casser un item multi-unités (log=4, bloc=9) rend la monnaie en
+// item de base. `baseItem` = entrée { name, displayName, icon } ou null.
+function consumeGroup(inventory, group, amount, baseItem) {
+  let need = amount;
+  let change = 0;
+  const out = inventory.map((d) => ({ ...d }));
+  const order = out
+    .map((d, i) => ({ i, u: unitsFor(d.name, group) }))
+    .filter((x) => x.u > 0)
+    .sort((a, b) => a.u - b.u);
+
+  for (const { i, u } of order) {
+    if (need <= 0) break;
+    const d = out[i];
+    const takeCount = u === 1 ? Math.min(d.count, need) : Math.min(d.count, Math.ceil(need / u));
+    d.count -= takeCount;
+    const got = takeCount * u;
+    need -= got;
+    if (need < 0) {
+      change += -need;
+      need = 0;
+    }
+  }
+
+  let result = out.filter((d) => d.count > 0);
+  if (change > 0 && baseItem) {
+    const key = baseItem.name + '|' + baseItem.displayName;
+    const ex = result.find((d) => d.key === key);
+    if (ex) ex.count += change;
+    else result = [{ key, ...baseItem, count: change }, ...result];
+  }
+  return result;
+}
+
+// Consomme toute une recette ; `baseItems` = map group -> { name, displayName, icon }.
+export function consumeMaterials(inventory, recipe, baseItems) {
+  let inv = inventory;
+  for (const r of recipe) inv = consumeGroup(inv, r.group, r.amount, baseItems[r.group]);
+  return inv;
+}

@@ -74,6 +74,8 @@ export default function MiningStage({ block, mineMs, onBreak }) {
         ) : (
           <span className="stage__emoji" aria-hidden="true">∅</span>
         )}
+        {/* Remplissage « cassage » qui monte selon la progression */}
+        <span className="stage__crack" style={{ height: progress * 100 + '%' }} aria-hidden="true" />
       </button>
 
       <div className="stage__progress">
@@ -81,7 +83,7 @@ export default function MiningStage({ block, mineMs, onBreak }) {
       </div>
 
       <div className="stage__label">{block ? label : 'Aucun bloc'}</div>
-      <div className="stage__hint">Maintiens le clic pour miner</div>
+      <div className="stage__hint">{progress > 0 ? Math.round(progress * 100) + ' %' : 'Maintiens le clic pour miner'}</div>
     </div>
   );
 }

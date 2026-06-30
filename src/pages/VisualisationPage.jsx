@@ -4,6 +4,7 @@ import DropsList from '../components/DropsList.jsx';
 import CraftPanel from '../components/CraftPanel.jsx';
 import { pickWeighted, tierIndexFor, rollChest } from '../lib/sim.js';
 import { mineTimeWithTools, canHarvestWith } from '../lib/mining.js';
+import { recipeFor, consumeMaterials, BASE_ITEM } from '../lib/crafting.js';
 
 const NO_TOOLS = { pickaxe: null, shovel: null, axe: null };
 
@@ -40,6 +41,18 @@ export default function VisualisationPage({ items, configs }) {
     return m;
   }, [items]);
 
+  // Items « de base » (pour rendre la monnaie au craft), depuis le catalogue.
+  const baseItems = useMemo(() => {
+    const byName = new Map();
+    for (const it of items) if (!byName.has(it.name)) byName.set(it.name, it);
+    const out = {};
+    for (const [group, name] of Object.entries(BASE_ITEM)) {
+      const it = byName.get(name);
+      if (it) out[group] = { name: it.name, displayName: it.displayName, icon: it.icon };
+    }
+    return out;
+  }, [items]);
+
   const reset = useCallback(() => {
     const tiers = configRef.current?.tiers || [];
     const next = tiers[0] ? pickWeighted(tiers[0].entries) : null;
@@ -68,9 +81,13 @@ export default function VisualisationPage({ items, configs }) {
     return ms == null ? 1000 : ms; // incassable/inconnu → repli 1 s
   }, [currentBlock, miningByName, tools]);
 
-  const craft = useCallback((toolType, tier) => {
-    setTools((t) => ({ ...t, [toolType]: tier }));
-  }, []);
+  const craft = useCallback(
+    (toolType, tier) => {
+      setDrops((prev) => consumeMaterials(prev, recipeFor(tier), baseItems));
+      setTools((t) => ({ ...t, [toolType]: tier }));
+    },
+    [baseItems]
+  );
 
   const addDrops = useCallback((arr) => {
     setDrops((prev) => {

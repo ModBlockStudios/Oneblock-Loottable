@@ -1039,6 +1039,7 @@ th.col-stack {
 }
 
 .stage__block {
+  position: relative;
   width: 160px;
   height: 160px;
   display: flex;
@@ -1048,6 +1049,7 @@ th.col-stack {
   border: 2px solid var(--line-strong);
   border-radius: 16px;
   cursor: pointer;
+  overflow: hidden;
   transition: transform 0.05s, box-shadow 0.1s;
   touch-action: none;
 }
@@ -1086,16 +1088,30 @@ th.col-stack {
   pointer-events: none;
 }
 
+/* Remplissage « cassage » qui monte du bas vers le haut sur le bloc. */
+.stage__crack {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(31, 30, 28, 0.18);
+  border-top: 2px solid var(--accent);
+  pointer-events: none;
+  transition: height 0.05s linear;
+}
+
 .stage__progress {
   width: 200px;
-  height: 10px;
+  height: 16px;
   background: var(--line);
+  border: 1px solid var(--line-strong);
   border-radius: 999px;
   overflow: hidden;
 }
 
 .stage__progress-fill {
   height: 100%;
+  min-width: 2px;
   background: var(--accent);
   transition: width 0.05s linear;
 }
