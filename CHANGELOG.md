@@ -7,6 +7,15 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.20.0] — 2026-06-30
+
+### Ajouté
+- **Export du contenu des coffres** : la vue Code ajoute, **en bas du JSON et
+  dissocié des phases**, un bloc `loot_tables` indexé par le chemin de chaque
+  coffre (`path/to/<nom>`), listant son contenu (`{ name, min, max }`).
+- **Bouton « Télécharger »** dans la vue Code : exporte la config en fichier
+  `.json` (nommé d'après la config) pour l'uploader sur GitHub.
+
 ## [3.19.0] — 2026-06-30
 
 ### Ajouté

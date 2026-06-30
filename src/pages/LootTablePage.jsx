@@ -3,6 +3,7 @@ import ConfigBar from '../components/ConfigBar.jsx';
 import TierCard from '../components/TierCard.jsx';
 import CodeView from '../components/CodeView.jsx';
 import { configToJson } from '../lib/exportCode.js';
+import { downloadText, jsonFileName } from '../lib/download.js';
 
 /*
  * Page « Lootable » : on choisit une config, qui contient un ou plusieurs
@@ -21,6 +22,7 @@ export default function LootTablePage({ items, configs, onCopy, onCopyText }) {
   }, [sortByWeight]);
 
   const json = useMemo(() => (current ? configToJson(current) : ''), [current]);
+  const fileName = useMemo(() => jsonFileName(current?.name), [current]);
   // Dans un tiers on ne mine que des BLOCS ; les items sont réservés aux coffres.
   const blockItems = useMemo(() => items.filter((it) => it.category !== 'item'), [items]);
 
@@ -45,7 +47,12 @@ export default function LootTablePage({ items, configs, onCopy, onCopyText }) {
           </p>
         </div>
       ) : codeView ? (
-        <CodeView json={json} onCopy={onCopyText} />
+        <CodeView
+          json={json}
+          fileName={fileName}
+          onCopy={onCopyText}
+          onDownload={() => downloadText(fileName, json)}
+        />
       ) : (
         <>
           {current.tiers.map((tier, i) => (

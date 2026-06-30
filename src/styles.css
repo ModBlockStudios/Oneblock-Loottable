@@ -972,6 +972,11 @@ th.col-stack {
   border-bottom: 1px solid var(--line);
 }
 
+.codeview__actions {
+  display: flex;
+  gap: 8px;
+}
+
 .codeview__label {
   font-size: 0.85rem;
   color: var(--ink-soft);
