@@ -7,6 +7,12 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.4.1] — 2026-06-30
+
+### Ajouté
+- La recherche par préfixe (`#tag`, `!catégorie`) fonctionne aussi dans le
+  **sélecteur d'items de la page Lootable** (réutilise `makeFilter`).
+
 ## [3.4.0] — 2026-06-30
 
 ### Ajouté

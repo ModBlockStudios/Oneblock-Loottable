@@ -1,20 +1,22 @@
 import { useMemo, useState } from 'react';
+import { makeFilter } from '../lib/search.js';
 
 const MAX_RESULTS = 40;
 
 /*
  * Sélecteur d'items intégré à la page Lootable : on cherche dans le catalogue
  * et on ajoute à la config courante, sans changer de page.
+ * Supporte la même syntaxe que la Table : #tag, !catégorie, ou texte libre.
  */
 export default function ItemPicker({ items, onAdd, has }) {
   const [query, setQuery] = useState('');
 
   const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
+    if (!query.trim()) return [];
+    const match = makeFilter(query);
     const out = [];
     for (const it of items) {
-      if (it.name.toLowerCase().includes(q) || it.displayName.toLowerCase().includes(q)) {
+      if (match(it)) {
         out.push(it);
         if (out.length >= MAX_RESULTS) break;
       }
@@ -27,7 +29,7 @@ export default function ItemPicker({ items, onAdd, has }) {
       <input
         type="search"
         className="search-input"
-        placeholder="Ajouter un item… cherche par nom ou identifiant (ex : diamond, cooked_beef)"
+        placeholder="Ajouter un item…  nom, #tag (ex #bois) ou !catégorie (ex !item)"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         autoComplete="off"
