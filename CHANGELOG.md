@@ -7,6 +7,14 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.16.1] — 2026-06-30
+
+### Corrigé
+- **Animation de cassage plus réactive** : suppression de la transition CSS
+  (`0.05s`) sur le remplissage du bloc et la barre de progression. La boucle
+  met déjà la valeur à jour à chaque frame ; la transition ne faisait qu'ajouter
+  un retard, rendant l'animation invisible sur les minages courts.
+
 ## [3.16.0] — 2026-06-30
 
 ### Ajouté

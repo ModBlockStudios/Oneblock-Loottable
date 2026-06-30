@@ -1097,7 +1097,8 @@ th.col-stack {
   background: rgba(31, 30, 28, 0.18);
   border-top: 2px solid var(--accent);
   pointer-events: none;
-  transition: height 0.05s linear;
+  /* Pas de transition : la boucle met déjà à jour la hauteur à chaque frame.
+     Une transition CSS n'ajouterait qu'un retard, invisible sur un minage court. */
 }
 
 .stage__progress {
@@ -1113,7 +1114,7 @@ th.col-stack {
   height: 100%;
   min-width: 2px;
   background: var(--accent);
-  transition: width 0.05s linear;
+  /* Suivi direct de la progression (mise à jour à chaque frame) : pas de retard. */
 }
 
 .stage__label {
