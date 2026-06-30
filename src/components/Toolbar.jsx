@@ -1,4 +1,6 @@
-/* Barre d'outils : recherche, filtres de catégorie et compteur de résultats. */
+import { tagLabel } from '../lib/tags.js';
+
+/* Barre d'outils : recherche, filtres de catégorie, filtre de tag, compteur. */
 
 export const FILTERS = [
   { key: 'all', label: 'Tout' },
@@ -7,7 +9,16 @@ export const FILTERS = [
   { key: 'item', label: 'Item' },
 ];
 
-export default function Toolbar({ query, onQuery, category, onCategory, count }) {
+export default function Toolbar({
+  query,
+  onQuery,
+  category,
+  onCategory,
+  tag,
+  onTag,
+  tags,
+  count,
+}) {
   return (
     <section className="toolbar" aria-label="Filtres">
       <div className="toolbar__search">
@@ -35,9 +46,19 @@ export default function Toolbar({ query, onQuery, category, onCategory, count })
         ))}
       </div>
 
-      <div className="toolbar__count">
-        {count.toLocaleString('fr-FR')} résultat(s)
-      </div>
+      <label className="tag-select">
+        <span className="tag-select__label">Tag</span>
+        <select value={tag} onChange={(e) => onTag(e.target.value)} aria-label="Filtrer par sous-catégorie">
+          <option value="all">Tous</option>
+          {tags.map((t) => (
+            <option key={t} value={t}>
+              {tagLabel(t)}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <div className="toolbar__count">{count.toLocaleString('fr-FR')} résultat(s)</div>
     </section>
   );
 }

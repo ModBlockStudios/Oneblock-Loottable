@@ -139,6 +139,52 @@ function categoryOf(name) {
   return isFullBlock(name) ? 'full_block' : 'decoration_block';
 }
 
+/*
+ * Sous-catégorie (tag) — inspirée du rangement créatif de Mojang, pour trier
+ * finement (nourriture, armures, armes, outils, minerais, bois…).
+ * Une seule étiquette par entrée, choisie par ordre de priorité.
+ * Calculée à partir du nom Java + enchantCategories + foods.json.
+ */
+const foodNames = new Set(readJSON(path.join(MD_DIR, 'foods.json')).map((f) => f.name));
+const enchantById = new Map(items.map((it) => [it.name, it.enchantCategories || []]));
+
+function subCategoryOf(name) {
+  const ench = enchantById.get(name) || [];
+  const has = (c) => ench.includes(c);
+  const re = (r) => r.test(name);
+
+  // ---- Items (priorité au plus spécifique) ----
+  if (re(/_spawn_egg$/)) return 'spawn_egg';
+  if (re(/^music_disc_|^disc_fragment/)) return 'music_disc';
+  if (foodNames.has(name) || re(/^(milk_bucket|honey_bottle|cookie|cake)$/)) return 'food';
+  if (re(/potion$|^glass_bottle$|^dragon_breath$|^experience_bottle$/)) return 'potion';
+  // Outils AVANT armes (une hache a la catégorie 'weapon' mais reste un outil)
+  if (re(/_(pickaxe|axe|shovel|hoe)$|^(shears|flint_and_steel|fishing_rod|brush|spyglass|lead|name_tag|compass|recovery_compass|clock|goat_horn|bundle)$|bucket$/) || has('mining') || has('fishing')) {
+    return 'tool';
+  }
+  if (has('weapon') || has('sword') || has('bow') || has('crossbow') || has('trident') || has('mace') || re(/^(arrow|shield)$/)) {
+    return 'weapon';
+  }
+  if (has('armor') || re(/_horse_armor$|^(elytra|turtle_helmet)$/)) return 'armor';
+  if (re(/boat$|minecart$|^saddle$|on_a_stick$/)) return 'transport';
+  if (re(/_dye$/)) return 'dye';
+
+  // ---- Blocs (best-effort, large) ----
+  if (blockNames.has(name)) {
+    if (re(/_ore$|^ancient_debris$|^raw_\w+_block$/)) return 'ore';
+    if (re(/^(crafting_table|furnace|blast_furnace|smoker|chest|trapped_chest|ender_chest|barrel|anvil|chipped_anvil|damaged_anvil|grindstone|smithing_table|loom|cartography_table|fletching_table|stonecutter|enchanting_table|brewing_stand|beacon|lectern|bell|bookshelf|chiseled_bookshelf|composter|cauldron|jukebox|lodestone|respawn_anchor|conduit|hopper|spawner|mob_spawner)$/)) return 'utility';
+    if (re(/redstone|piston|observer|dispenser|dropper|repeater|comparator|lever|_button$|_pressure_plate$|rail$|^rail$|target$|tripwire|daylight_detector|sculk_sensor|noteblock|^note_block$|_lamp$/)) return 'redstone';
+    if (re(/torch$|lantern$|^glowstone$|^sea_lantern$|candle$|campfire$|^end_rod$|froglight$|^shroomlight$|^glow_lichen$/)) return 'light';
+    if (re(/_(log|wood|planks|stem|hyphae)$|^stripped_/)) return 'wood';
+    if (re(/^(wool|carpet|concrete|concrete_powder|stained_glass|stained_glass_pane|terracotta|glazed_terracotta|shulker_box|candle|bed|banner|wool_carpet)$|^(white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black|silver)_/)) return 'colored';
+    if (re(/sapling|leaves$|flower|mushroom|fungus|roots$|sprouts$|fern$|grass$|vine|lily|kelp|seagrass|coral|bamboo|cactus|sugar_cane|moss|lichen|propagule|pickle|dripleaf|spore_blossom|petals$|wart$|bush$|tulip$|orchid$|allium$|bluet$|poppy$|dandelion$|sunflower$|lilac$|peony$|pitcher|nylium|podzol|mycelium/)) return 'plant';
+    return 'building'; // pierre, briques, verre, béton non coloré, etc.
+  }
+
+  // ---- Items restants (matériaux/ingrédients) ----
+  return 'material';
+}
+
 // nom de l'item -> chemin de texture "minecraft:block/xxx" ou "minecraft:item/xxx"
 const textureByName = new Map();
 for (const t of itemTextures) {
@@ -214,6 +260,7 @@ for (const it of items) {
 
   // La résolution texture + catégorie reste basée sur le nom Java (visuel identique).
   const category = categoryOf(it.name); // full_block | decoration_block | item
+  const tag = subCategoryOf(it.name); // sous-catégorie (food, armor, ore…)
   const icon = resolveIcon(it.name);
   if (!icon) missing++;
   out.push({
@@ -221,6 +268,7 @@ for (const it of items) {
     displayName: it.displayName,
     stackSize: it.stackSize,
     category: category,
+    tag: tag,
     icon: icon, // peut être null -> l'UI affiche un placeholder
   });
 }
@@ -242,6 +290,9 @@ const nFull = out.filter((o) => o.category === 'full_block').length;
 const nDeco = out.filter((o) => o.category === 'decoration_block').length;
 const nItems = out.filter((o) => o.category === 'item').length;
 console.log(`> ${out.length} entrées écrites (${nFull} full blocks, ${nDeco} decoration blocks, ${nItems} items)`);
+const tagCounts = {};
+for (const o of out) tagCounts[o.tag] = (tagCounts[o.tag] || 0) + 1;
+console.log('> sous-catégories :', JSON.stringify(tagCounts));
 console.log(`> ${dropped} items Java sans équivalent Bedrock retirés`);
 console.log(`> ${copied.size} textures copiées`);
 console.log(`> ${missing} entrées sans icône (placeholder utilisé)`);

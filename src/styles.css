@@ -276,7 +276,61 @@ th.col-stack {
 }
 
 .col-cat {
-  width: 160px;
+  width: 140px;
+}
+
+/* Badge de tag (sous-catégorie), cliquable pour filtrer */
+.col-tag {
+  width: 140px;
+}
+
+.tag-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 0.72rem;
+  font-family: inherit;
+  color: var(--ink-soft);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.12s;
+}
+
+.tag-badge:hover {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Sélecteur de tag dans la barre d'outils */
+.tag-select {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tag-select__label {
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+}
+
+.tag-select select {
+  padding: 9px 12px;
+  font-size: 0.88rem;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.tag-select select:hover,
+.tag-select select:focus {
+  border-color: var(--ink-soft);
 }
 
 /* ---------- États ---------- */
@@ -335,14 +389,13 @@ th.col-stack {
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 640px) {
+@media (max-width: 760px) {
   .topbar__title {
     font-size: 1.6rem;
   }
+  /* On garde Nom, Identifiant et Tag (le filtre vedette) ; on masque le reste. */
   .col-cat,
-  .col-stack {
-    display: none;
-  }
+  .col-stack,
   .catalog .cell-cat,
   .catalog .cell-stack {
     display: none;

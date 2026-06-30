@@ -7,6 +7,22 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.1.0] — 2026-06-30
+
+### Ajouté
+- **Sous-catégories (tags) filtrables**, inspirées du rangement créatif de
+  Mojang : Nourriture, Armure, Arme, Outil, Potion, Œuf d'apparition, Disque,
+  Transport, Teinture, Matériau (items) ; Minerai, Bois, Plante, Coloré,
+  Redstone, Lumière, Utilitaire, Construction (blocs).
+- Colonne **Tag** dans le tableau : clic sur un tag = filtre dessus
+  (re-clic = réinitialise). Sélecteur de tag dans la barre d'outils.
+- Tags dérivés des données `minecraft-data` (`enchantCategories`, `foods.json`)
+  + motifs de noms ; calculés dans `scripts/build-data.cjs` (`subCategoryOf`).
+
+### Changé
+- `scripts/build-data.js` renommé en **`scripts/build-data.cjs`** (le projet
+  est passé en `"type": "module"` pour Vite).
+
 ## [3.0.0] — 2026-06-30
 
 ### Changé (cassant)

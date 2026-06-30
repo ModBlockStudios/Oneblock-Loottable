@@ -5,26 +5,31 @@ import CatalogTable from './components/CatalogTable.jsx';
 import Toast from './components/Toast.jsx';
 import { useCatalog } from './lib/useCatalog.js';
 import { copyText } from './lib/copy.js';
+import { tagsPresent } from './lib/tags.js';
 
 export default function App() {
   const { loading, error, items, edition, version } = useCatalog();
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('all');
+  const [tag, setTag] = useState('all');
   const [toast, setToast] = useState({ message: '', show: false });
   const toastTimer = useRef(null);
 
-  // Filtrage (catégorie + recherche), recalculé seulement si nécessaire.
+  const tags = useMemo(() => tagsPresent(items), [items]);
+
+  // Filtrage (catégorie + tag + recherche), recalculé seulement si nécessaire.
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     return items.filter((it) => {
       if (category !== 'all' && it.category !== category) return false;
+      if (tag !== 'all' && it.tag !== tag) return false;
       if (!q) return true;
       return (
         it.name.toLowerCase().includes(q) ||
         it.displayName.toLowerCase().includes(q)
       );
     });
-  }, [items, query, category]);
+  }, [items, query, category, tag]);
 
   const handleCopy = useCallback((name) => {
     const id = 'minecraft:' + name;
@@ -37,6 +42,11 @@ export default function App() {
     );
   }, []);
 
+  // Clic sur un tag d'une ligne : filtre dessus (re-clic = réinitialise).
+  const handleTagClick = useCallback((clicked) => {
+    setTag((cur) => (cur === clicked ? 'all' : clicked));
+  }, []);
+
   return (
     <>
       <Header edition={edition} dataVersion={version} />
@@ -47,6 +57,9 @@ export default function App() {
           onQuery={setQuery}
           category={category}
           onCategory={setCategory}
+          tag={tag}
+          onTag={setTag}
+          tags={tags}
           count={filtered.length}
         />
 
@@ -54,7 +67,9 @@ export default function App() {
         {error && (
           <div className="loading">Impossible de charger les données ({error}).</div>
         )}
-        {!loading && !error && <CatalogTable items={filtered} onCopy={handleCopy} />}
+        {!loading && !error && (
+          <CatalogTable items={filtered} onCopy={handleCopy} onTagClick={handleTagClick} />
+        )}
       </main>
 
       <footer className="footer">

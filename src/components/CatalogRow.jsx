@@ -1,4 +1,5 @@
 import { memo, useState } from 'react';
+import { tagLabel } from '../lib/tags.js';
 
 const CATEGORY_LABEL = {
   full_block: 'Full Block',
@@ -6,8 +7,8 @@ const CATEGORY_LABEL = {
   item: 'Item',
 };
 
-/* Une ligne du catalogue. Clic = copie de l'identifiant Bedrock. */
-function CatalogRow({ item, onCopy }) {
+/* Une ligne du catalogue. Clic sur la ligne = copie de l'identifiant Bedrock. */
+function CatalogRow({ item, onCopy, onTagClick }) {
   const [broken, setBroken] = useState(false);
   const iconSrc = item.icon ? import.meta.env.BASE_URL + 'assets/' + item.icon : null;
 
@@ -36,6 +37,19 @@ function CatalogRow({ item, onCopy }) {
         <span className={'cat-badge cat-badge--' + item.category}>
           {CATEGORY_LABEL[item.category] || item.category}
         </span>
+      </td>
+      <td className="cell-tag">
+        <button
+          type="button"
+          className="tag-badge"
+          title={'Filtrer : ' + tagLabel(item.tag)}
+          onClick={(e) => {
+            e.stopPropagation(); // ne pas déclencher la copie de la ligne
+            onTagClick(item.tag);
+          }}
+        >
+          {tagLabel(item.tag)}
+        </button>
       </td>
       <td className="col-stack cell-stack">{item.stackSize}</td>
     </tr>
