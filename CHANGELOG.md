@@ -7,6 +7,17 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.16.0] — 2026-06-30
+
+### Ajouté
+- **Palier d'outils « Cuivre »** (Copper Age) dans le simulateur, intercalé
+  entre Pierre et Fer :
+  - plus rapide que la pierre (vitesse 5 vs 4) et **même niveau de récolte que
+    le fer** (peut donc miner le diamant).
+  - recette : 2 planches + 3 cuivre (`copper_ingot`/`raw_copper`/minerai ;
+    `copper_block` = 9). Désormais proposé au craft quand il améliore l'outil
+    en pierre.
+
 ## [3.15.2] — 2026-06-30
 
 ### Corrigé

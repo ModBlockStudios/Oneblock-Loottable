@@ -24,6 +24,9 @@ function unitsFor(name, group) {
       return 0;
     case 'stone':
       return /^(cobblestone|cobbled_deepslate|blackstone|stone|deepslate)$/.test(name) ? 1 : 0;
+    case 'copper':
+      if (/^(copper_block|raw_copper_block)$/.test(name)) return 9;
+      return /^(copper_ingot|raw_copper|copper_ore|deepslate_copper_ore)$/.test(name) ? 1 : 0;
     case 'iron':
       if (/^(iron_block|raw_iron_block)$/.test(name)) return 9;
       return /^(iron_ingot|raw_iron|iron_ore|deepslate_iron_ore)$/.test(name) ? 1 : 0;
@@ -79,6 +82,7 @@ export function recipeText(recipe) {
 export const BASE_ITEM = {
   wood: 'oak_planks',
   stone: 'cobblestone',
+  copper: 'copper_ingot',
   iron: 'iron_ingot',
   diamond: 'diamond',
   netherite: 'netherite_ingot',

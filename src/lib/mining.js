@@ -16,12 +16,15 @@ export function mineTimeMs(mining) {
 
 /* ---------- Outils ---------- */
 // Paliers d'outils (du moins bon au meilleur) + vitesse et niveau de récolte.
-export const TIER_ORDER = ['wood', 'stone', 'iron', 'diamond', 'netherite'];
-export const TOOL_SPEED = { wood: 2, stone: 4, iron: 6, diamond: 8, netherite: 9 };
-export const TOOL_LEVEL = { wood: 0, stone: 1, iron: 2, diamond: 3, netherite: 4 };
+// Le cuivre (Copper Age) s'intercale entre pierre et fer : plus rapide que la
+// pierre et même niveau de récolte que le fer (il peut donc miner le diamant).
+export const TIER_ORDER = ['wood', 'stone', 'copper', 'iron', 'diamond', 'netherite'];
+export const TOOL_SPEED = { wood: 2, stone: 4, copper: 5, iron: 6, diamond: 8, netherite: 9 };
+export const TOOL_LEVEL = { wood: 0, stone: 1, copper: 2, iron: 2, diamond: 3, netherite: 4 };
 export const TIER_LABEL = {
   wood: 'Bois',
   stone: 'Pierre',
+  copper: 'Cuivre',
   iron: 'Fer',
   diamond: 'Diamant',
   netherite: 'Netherite',
