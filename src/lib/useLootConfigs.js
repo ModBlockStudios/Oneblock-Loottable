@@ -15,12 +15,32 @@ function genId(prefix) {
 
 const newTier = () => ({ id: genId('tier'), entries: [] });
 
-// Migration : une config peut être au vieux format { entries } → on l'enveloppe
-// dans un premier tiers. On garantit toujours au moins un tiers.
+/*
+ * Migration des données persistées :
+ *  - vieux format { entries } → enveloppé dans un premier tiers ;
+ *  - contenu de chest avec `quantity` (nombre) → plage { min, max }.
+ */
+function migrateContent(c) {
+  if (typeof c.min === 'number' && typeof c.max === 'number') return c;
+  const q = typeof c.quantity === 'number' ? c.quantity : 1;
+  const { quantity, ...rest } = c;
+  return { ...rest, min: q, max: q };
+}
+
+function migrateEntry(e) {
+  return e.kind === 'chest' ? { ...e, contents: (e.contents || []).map(migrateContent) } : e;
+}
+
 function migrateConfig(c) {
-  if (Array.isArray(c.tiers) && c.tiers.length > 0) return c;
-  const entries = Array.isArray(c.entries) ? c.entries : [];
-  return { id: c.id, name: c.name, tiers: [{ id: genId('tier'), entries }] };
+  const tiers =
+    Array.isArray(c.tiers) && c.tiers.length > 0
+      ? c.tiers
+      : [{ id: genId('tier'), entries: Array.isArray(c.entries) ? c.entries : [] }];
+  return {
+    id: c.id,
+    name: c.name,
+    tiers: tiers.map((t) => ({ id: t.id, entries: (t.entries || []).map(migrateEntry) })),
+  };
 }
 
 function load() {
@@ -202,7 +222,8 @@ export function useLootConfigs() {
                 category: item.category,
                 tag: item.tag,
                 stackSize: item.stackSize,
-                quantity: 1,
+                min: 1,
+                max: 1,
               },
             ]
       ),
@@ -217,10 +238,10 @@ export function useLootConfigs() {
     [updateChest]
   );
 
-  const setChestQuantity = useCallback(
-    (tierId, chestId, item, quantity) =>
+  const setChestRange = useCallback(
+    (tierId, chestId, item, min, max) =>
       updateChest(tierId, chestId, (contents) =>
-        contents.map((c) => (entryKey(c) === entryKey(item) ? { ...c, quantity } : c))
+        contents.map((c) => (entryKey(c) === entryKey(item) ? { ...c, min, max } : c))
       ),
     [updateChest]
   );
@@ -242,6 +263,6 @@ export function useLootConfigs() {
     hasItem,
     addChestItem,
     removeChestItem,
-    setChestQuantity,
+    setChestRange,
   };
 }

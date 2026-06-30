@@ -14,7 +14,7 @@ export default function ChestRow({
   onSetWeight,
   onAddItem,
   onRemoveItem,
-  onSetQuantity,
+  onSetRange,
 }) {
   const [open, setOpen] = useState(true);
 
@@ -57,7 +57,7 @@ export default function ChestRow({
               items={items}
               onAddItem={onAddItem}
               onRemoveItem={onRemoveItem}
-              onSetQuantity={onSetQuantity}
+              onSetRange={onSetRange}
               onCopy={onCopy}
             />
           </td>

@@ -7,6 +7,15 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.8.0] — 2026-06-30
+
+### Changé
+- Dans un **chest**, la quantité d'un item devient une **plage min–max**
+  (ex. « entre 3 et 5 ») au lieu d'un nombre fixe : deux champs `min` / `max`.
+- Migration auto des contenus existants (`quantity: N` → `min: N, max: N`).
+- Nouveau composant `RangeInput` ; hook `setChestRange` (remplace
+  `setChestQuantity`).
+
 ## [3.7.0] — 2026-06-30
 
 ### Ajouté

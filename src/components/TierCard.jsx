@@ -15,7 +15,7 @@ export default function TierCard({
   onSetWeight,
   onAddChestItem,
   onRemoveChestItem,
-  onSetChestQuantity,
+  onSetChestRange,
   onClear,
   onDelete,
   has,
@@ -74,7 +74,7 @@ export default function TierCard({
                     onSetWeight={(w) => onSetWeight(e, w)}
                     onAddItem={(item) => onAddChestItem(e.id, item)}
                     onRemoveItem={(item) => onRemoveChestItem(e.id, item)}
-                    onSetQuantity={(item, q) => onSetChestQuantity(e.id, item, q)}
+                    onSetRange={(item, lo, hi) => onSetChestRange(e.id, item, lo, hi)}
                   />
                 ) : (
                   <LootItemRow

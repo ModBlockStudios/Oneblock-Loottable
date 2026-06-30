@@ -41,7 +41,7 @@ export default function LootTablePage({ items, configs, onCopy }) {
               onSetWeight={(entry, w) => configs.setWeight(tier.id, entry, w)}
               onAddChestItem={(chestId, item) => configs.addChestItem(tier.id, chestId, item)}
               onRemoveChestItem={(chestId, item) => configs.removeChestItem(tier.id, chestId, item)}
-              onSetChestQuantity={(chestId, item, q) => configs.setChestQuantity(tier.id, chestId, item, q)}
+              onSetChestRange={(chestId, item, lo, hi) => configs.setChestRange(tier.id, chestId, item, lo, hi)}
               onClear={() => configs.clearTier(tier.id)}
               onDelete={() => configs.deleteTier(tier.id)}
               has={(item) => configs.hasItem(tier.id, item)}

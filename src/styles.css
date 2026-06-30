@@ -765,6 +765,25 @@ th.col-stack {
   box-shadow: 0 0 0 3px rgba(31, 30, 28, 0.06);
 }
 
+/* Plage min–max (quantité dans un chest) */
+.col-range {
+  width: 150px;
+}
+
+.range-input {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.range-input__field {
+  width: 56px;
+}
+
+.range-input__sep {
+  color: var(--ink-faint);
+}
+
 /* ---------- Tiers (page Lootable) ---------- */
 .tier {
   margin-bottom: 24px;

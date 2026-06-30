@@ -1,9 +1,9 @@
 import ItemPicker from './ItemPicker.jsx';
-import WeightInput from './WeightInput.jsx';
+import RangeInput from './RangeInput.jsx';
 import { entryKey } from '../lib/useLootConfigs.js';
 
-/* Éditeur du contenu d'un chest : picker + tableau (items/blocs avec quantité). */
-export default function ChestEditor({ chest, items, onAddItem, onRemoveItem, onSetQuantity, onCopy }) {
+/* Éditeur du contenu d'un chest : picker + tableau (items/blocs avec quantité min–max). */
+export default function ChestEditor({ chest, items, onAddItem, onRemoveItem, onSetRange, onCopy }) {
   const has = (item) => chest.contents.some((c) => entryKey(c) === entryKey(item));
 
   return (
@@ -20,7 +20,7 @@ export default function ChestEditor({ chest, items, onAddItem, onRemoveItem, onS
                 <th className="col-icon" />
                 <th className="col-name">Nom</th>
                 <th className="col-id">Identifiant</th>
-                <th className="col-weight">Quantité</th>
+                <th className="col-range">Quantité (min–max)</th>
                 <th className="col-remove" />
               </tr>
             </thead>
@@ -49,8 +49,8 @@ export default function ChestEditor({ chest, items, onAddItem, onRemoveItem, onS
                     <span className="ns">minecraft:</span>
                     {c.name}
                   </td>
-                  <td className="col-weight" onClick={(e) => e.stopPropagation()}>
-                    <WeightInput value={c.quantity} onChange={(q) => onSetQuantity(c, q)} />
+                  <td className="col-range" onClick={(e) => e.stopPropagation()}>
+                    <RangeInput min={c.min} max={c.max} onChange={(lo, hi) => onSetRange(c, lo, hi)} />
                   </td>
                   <td className="col-remove">
                     <button
