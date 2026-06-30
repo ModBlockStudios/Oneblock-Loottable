@@ -7,6 +7,16 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.9.0] — 2026-06-30
+
+### Ajouté
+- Seuil **« Block à miner »** par tiers : nombre de blocs à miner pour débloquer
+  ce tiers. Le **Tiers 1 est fixé à 0** ; les suivants sont éditables.
+- Validation **strictement croissante** : un tiers est toujours supérieur au
+  précédent. Si une valeur casse l'ordre, les tiers suivants se réajustent
+  automatiquement (cascade). Migration auto des configs existantes.
+- Composant `UnlockInput` ; hook `setTierUnlock` + normalisation `normalizeUnlocks`.
+
 ## [3.8.0] — 2026-06-30
 
 ### Changé

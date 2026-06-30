@@ -15,6 +15,30 @@ function genId(prefix) {
 
 const newTier = () => ({ id: genId('tier'), entries: [] });
 
+// Écart par défaut entre deux paliers « block à miner » pour un nouveau tiers.
+const DEFAULT_UNLOCK_GAP = 100;
+
+/*
+ * Normalise le seuil « block à miner » (unlockAt) de chaque tiers :
+ *  - Tiers 1 (index 0) toujours à 0 ;
+ *  - chaque tiers suivant strictement supérieur au précédent (sinon on remonte).
+ * Un tiers sans valeur reçoit « précédent + écart par défaut ».
+ */
+function normalizeUnlocks(tiers) {
+  let prev = -1;
+  return tiers.map((t, i) => {
+    let u;
+    if (i === 0) {
+      u = 0;
+    } else {
+      const cur = typeof t.unlockAt === 'number' ? t.unlockAt : prev + DEFAULT_UNLOCK_GAP;
+      u = cur > prev ? cur : prev + 1;
+    }
+    prev = u;
+    return t.unlockAt === u ? t : { ...t, unlockAt: u };
+  });
+}
+
 /*
  * Migration des données persistées :
  *  - vieux format { entries } → enveloppé dans un premier tiers ;
@@ -39,7 +63,13 @@ function migrateConfig(c) {
   return {
     id: c.id,
     name: c.name,
-    tiers: tiers.map((t) => ({ id: t.id, entries: (t.entries || []).map(migrateEntry) })),
+    tiers: normalizeUnlocks(
+      tiers.map((t) => ({
+        id: t.id,
+        unlockAt: t.unlockAt,
+        entries: (t.entries || []).map(migrateEntry),
+      }))
+    ),
   };
 }
 
@@ -84,7 +114,7 @@ export function useLootConfigs() {
     if (!trimmed) return;
     const id = genId('cfg');
     setState((s) => ({
-      configs: [...s.configs, { id, name: trimmed, tiers: [newTier()] }],
+      configs: [...s.configs, { id, name: trimmed, tiers: normalizeUnlocks([newTier()]) }],
       currentId: id,
     }));
   }, []);
@@ -100,10 +130,13 @@ export function useLootConfigs() {
   }, []);
 
   // Applique fn() à la liste de tiers de la config courante.
+  // On re-normalise toujours les seuils « block à miner » après modification.
   const updateTiers = useCallback((fn) => {
     setState((s) => ({
       ...s,
-      configs: s.configs.map((c) => (c.id === s.currentId ? { ...c, tiers: fn(c.tiers) } : c)),
+      configs: s.configs.map((c) =>
+        c.id === s.currentId ? { ...c, tiers: normalizeUnlocks(fn(c.tiers)) } : c
+      ),
     }));
   }, []);
 
@@ -118,6 +151,14 @@ export function useLootConfigs() {
 
   /* ---------- Tiers ---------- */
   const addTier = useCallback(() => updateTiers((tiers) => [...tiers, newTier()]), [updateTiers]);
+
+  // Définit le seuil « block à miner » d'un tiers (normalisé ensuite : strictement
+  // croissant ; le Tiers 1 reste à 0).
+  const setTierUnlock = useCallback(
+    (tierId, value) =>
+      updateTiers((tiers) => tiers.map((t) => (t.id === tierId ? { ...t, unlockAt: value } : t))),
+    [updateTiers]
+  );
 
   const duplicateLastTier = useCallback(
     () =>
@@ -256,6 +297,7 @@ export function useLootConfigs() {
     duplicateLastTier,
     deleteTier,
     clearTier,
+    setTierUnlock,
     addItem,
     addChest,
     removeEntry,

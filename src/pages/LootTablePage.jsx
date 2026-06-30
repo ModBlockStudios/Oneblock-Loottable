@@ -33,12 +33,14 @@ export default function LootTablePage({ items, configs, onCopy }) {
               key={tier.id}
               index={i}
               tier={tier}
+              prevUnlock={i > 0 ? current.tiers[i - 1].unlockAt : 0}
               items={items}
               onCopy={onCopy}
               onAddItem={(item) => configs.addItem(tier.id, item)}
               onAddChest={() => configs.addChest(tier.id)}
               onRemoveEntry={(entry) => configs.removeEntry(tier.id, entry)}
               onSetWeight={(entry, w) => configs.setWeight(tier.id, entry, w)}
+              onSetUnlock={(value) => configs.setTierUnlock(tier.id, value)}
               onAddChestItem={(chestId, item) => configs.addChestItem(tier.id, chestId, item)}
               onRemoveChestItem={(chestId, item) => configs.removeChestItem(tier.id, chestId, item)}
               onSetChestRange={(chestId, item, lo, hi) => configs.setChestRange(tier.id, chestId, item, lo, hi)}

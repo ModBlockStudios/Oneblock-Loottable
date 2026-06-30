@@ -1,18 +1,21 @@
 import ItemPicker from './ItemPicker.jsx';
 import LootItemRow from './LootItemRow.jsx';
 import ChestRow from './ChestRow.jsx';
+import UnlockInput from './UnlockInput.jsx';
 import { entryId } from '../lib/useLootConfigs.js';
 
-/* Un « tiers » : sélecteur d'items, bouton chest, et tableau (items + chests). */
+/* Un « tiers » : seuil de déblocage, sélecteur d'items, chests et tableau. */
 export default function TierCard({
   index,
   tier,
+  prevUnlock,
   items,
   onCopy,
   onAddItem,
   onAddChest,
   onRemoveEntry,
   onSetWeight,
+  onSetUnlock,
   onAddChestItem,
   onRemoveChestItem,
   onSetChestRange,
@@ -41,6 +44,18 @@ export default function TierCard({
             </button>
           )}
         </div>
+      </div>
+
+      <div className="tier__unlock">
+        <span className="tier__unlock-label">🪨 Block à miner pour débloquer&nbsp;:</span>
+        {index === 0 ? (
+          <span className="tier__unlock-fixed">0 <em>(tiers de base)</em></span>
+        ) : (
+          <>
+            <UnlockInput value={tier.unlockAt} min={prevUnlock + 1} onChange={onSetUnlock} />
+            <span className="tier__unlock-hint">doit être &gt; {prevUnlock}</span>
+          </>
+        )}
       </div>
 
       <ItemPicker items={items} onAdd={onAddItem} has={has} />

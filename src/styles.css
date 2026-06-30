@@ -824,6 +824,55 @@ th.col-stack {
   font-size: 0.9rem;
 }
 
+.tier__unlock {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  font-size: 0.9rem;
+}
+
+.tier__unlock-label {
+  color: var(--ink-soft);
+}
+
+.tier__unlock-fixed {
+  color: var(--ink);
+  font-weight: 550;
+}
+
+.tier__unlock-fixed em {
+  font-weight: 400;
+  color: var(--ink-faint);
+}
+
+.unlock-input {
+  width: 110px;
+  padding: 6px 10px;
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 7px;
+  outline: none;
+}
+
+.unlock-input:focus {
+  border-color: var(--ink-soft);
+  box-shadow: 0 0 0 3px rgba(31, 30, 28, 0.06);
+}
+
+.tier__unlock-hint {
+  color: var(--ink-faint);
+  font-size: 0.8rem;
+}
+
 .tier-controls {
   display: flex;
   flex-wrap: wrap;
