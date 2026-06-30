@@ -765,6 +765,53 @@ th.col-stack {
   box-shadow: 0 0 0 3px rgba(31, 30, 28, 0.06);
 }
 
+/* ---------- Tiers (page Lootable) ---------- */
+.tier {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+}
+
+.tier__head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.tier__title {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.tier__count {
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+}
+
+.tier__actions {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+}
+
+.tier__empty {
+  padding: 18px 4px 4px;
+  color: var(--ink-faint);
+  font-size: 0.9rem;
+}
+
+.tier-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 8px 0 40px;
+}
+
 /* ---------- États ---------- */
 .empty,
 .loading {

@@ -1,11 +1,10 @@
 import ConfigBar from '../components/ConfigBar.jsx';
-import ItemPicker from '../components/ItemPicker.jsx';
-import WeightInput from '../components/WeightInput.jsx';
-import { tagLabel } from '../lib/tags.js';
+import TierCard from '../components/TierCard.jsx';
 
 /*
- * Page « Lootable » : on choisit une config, on y ajoute des items via le
- * sélecteur intégré, et on règle le « weight » de chaque entrée.
+ * Page « Lootable » : on choisit une config, qui contient un ou plusieurs
+ * tiers. Chaque tiers a son propre tableau (items + weights). En bas, on peut
+ * ajouter un tiers vierge ou dupliquer le dernier.
  */
 export default function LootTablePage({ items, configs, onCopy }) {
   const { current } = configs;
@@ -24,97 +23,36 @@ export default function LootTablePage({ items, configs, onCopy }) {
         <div className="loot-empty">
           <p className="loot-empty__title">Aucune config sélectionnée.</p>
           <p className="loot-empty__hint">
-            Crée une config (donne-lui un nom ci-dessus) pour commencer à ajouter des items.
+            Crée une config (donne-lui un nom ci-dessus) pour commencer.
           </p>
         </div>
       ) : (
         <>
-          <ItemPicker items={items} onAdd={configs.addItem} has={configs.hasItem} />
+          {current.tiers.map((tier, i) => (
+            <TierCard
+              key={tier.id}
+              index={i}
+              tier={tier}
+              items={items}
+              onCopy={onCopy}
+              onAdd={(item) => configs.addItem(tier.id, item)}
+              onRemove={(item) => configs.removeItem(tier.id, item)}
+              onSetWeight={(item, w) => configs.setWeight(tier.id, item, w)}
+              onClear={() => configs.clearTier(tier.id)}
+              onDelete={() => configs.deleteTier(tier.id)}
+              has={(item) => configs.hasItem(tier.id, item)}
+              canDelete={current.tiers.length > 1}
+            />
+          ))}
 
-          {current.entries.length === 0 ? (
-            <div className="loot-empty">
-              <p className="loot-empty__title">« {current.name} » est vide.</p>
-              <p className="loot-empty__hint">
-                Utilise la recherche ci-dessus pour ajouter des items à cette config.
-              </p>
-            </div>
-          ) : (
-            <>
-              <div className="loot-bar">
-                <span className="loot-bar__count">
-                  {current.entries.length} entrée(s) dans « {current.name} »
-                </span>
-                <button type="button" className="btn-ghost" onClick={configs.clearCurrent}>
-                  Tout vider
-                </button>
-              </div>
-
-              <div className="table-wrap">
-                <table className="catalog">
-                  <thead>
-                    <tr>
-                      <th className="col-icon" />
-                      <th className="col-name">Nom</th>
-                      <th className="col-id">Identifiant</th>
-                      <th className="col-tag">Tag</th>
-                      <th className="col-weight">Weight</th>
-                      <th className="col-remove" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {current.entries.map((it) => (
-                      <tr
-                        key={it.name + '|' + it.displayName}
-                        title={'Cliquer pour copier : minecraft:' + it.name}
-                        onClick={() => onCopy(it.name)}
-                      >
-                        <td className="col-icon">
-                          {it.icon ? (
-                            <img
-                              className="cell-icon"
-                              src={import.meta.env.BASE_URL + 'assets/' + it.icon}
-                              alt=""
-                              loading="lazy"
-                              decoding="async"
-                            />
-                          ) : (
-                            <span className="cell-icon cell-icon--missing" />
-                          )}
-                        </td>
-                        <td className="cell-name">{it.displayName}</td>
-                        <td className="cell-id">
-                          <span className="ns">minecraft:</span>
-                          {it.name}
-                        </td>
-                        <td className="cell-tag">
-                          <span className="tag-badge tag-badge--static">{tagLabel(it.tag)}</span>
-                        </td>
-                        <td className="col-weight" onClick={(e) => e.stopPropagation()}>
-                          <WeightInput
-                            value={it.weight}
-                            onChange={(w) => configs.setWeight(it, w)}
-                          />
-                        </td>
-                        <td className="col-remove">
-                          <button
-                            type="button"
-                            className="remove-btn"
-                            title="Retirer de la config"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              configs.removeItem(it);
-                            }}
-                          >
-                            ×
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          )}
+          <div className="tier-controls">
+            <button type="button" className="btn-primary" onClick={configs.addTier}>
+              + Ajouter un tiers
+            </button>
+            <button type="button" className="btn-ghost" onClick={configs.duplicateLastTier}>
+              Dupliquer le dernier tiers
+            </button>
+          </div>
         </>
       )}
     </>

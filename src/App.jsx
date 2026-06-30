@@ -25,7 +25,9 @@ export default function App() {
     [showToast]
   );
 
-  const lootCount = configs.current ? configs.current.entries.length : 0;
+  const lootCount = configs.current
+    ? configs.current.tiers.reduce((n, t) => n + t.entries.length, 0)
+    : 0;
 
   return (
     <>

@@ -21,11 +21,14 @@ export default function ConfigBar({ configs, current, onSelect, onCreate, onDele
               onChange={(e) => onSelect(e.target.value)}
               aria-label="Choisir une config"
             >
-              {configs.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.name} ({c.entries.length})
-                </option>
-              ))}
+              {configs.map((c) => {
+                const total = c.tiers.reduce((n, t) => n + t.entries.length, 0);
+                return (
+                  <option key={c.id} value={c.id}>
+                    {c.name} — {c.tiers.length} tiers, {total} items
+                  </option>
+                );
+              })}
             </select>
           </label>
         )}

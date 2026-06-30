@@ -7,6 +7,18 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.6.0] — 2026-06-30
+
+### Ajouté
+- **Tiers par config** : une config contient maintenant plusieurs tableaux de
+  loot (Tiers 1, 2, 3…), chacun avec son sélecteur d'items et ses weights.
+- Deux boutons en bas : **« + Ajouter un tiers »** (tableau vierge) et
+  **« Dupliquer le dernier tiers »** (copie modifiable du précédent).
+- Suppression / vidage d'un tiers (au moins un tiers conservé).
+- Migration automatique des configs existantes (l'ancienne liste devient
+  le « Tiers 1 ») — aucune perte de données.
+- Composant `TierCard`.
+
 ## [3.5.0] — 2026-06-30
 
 ### Ajouté
