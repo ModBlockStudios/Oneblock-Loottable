@@ -5,9 +5,10 @@ dépôt. **Ces règles sont obligatoires** et priment sur les habitudes par déf
 
 ## 🎯 Objectif du projet
 
-Interface web servant de catalogue des blocs et items Minecraft, première
-brique d'un futur outil de création de **loot tables OneBlock**. Le site est
-statique et déployé via **GitHub Pages**.
+Interface web servant de catalogue des blocs et items Minecraft **Bedrock**
+(les identifiants exposés sont ceux de Bedrock), première brique d'un futur
+outil de création de **loot tables OneBlock**. Le site est statique et déployé
+via **GitHub Pages**.
 
 ---
 
@@ -77,8 +78,8 @@ statique et déployé via **GitHub Pages**.
 
 ```bash
 npm install                 # installe minecraft-data + minecraft-assets
-npm run build-data          # régénère data/ et assets/ (Minecraft 1.21.8)
-MC_VERSION=1.21.x npm run build-data   # autre version (présente dans les 2 paquets)
+npm run build-data          # régénère data/ + assets/ (ids Bedrock, textures Java)
+MC_VERSION=1.21.x MC_BEDROCK_VERSION=1.21.x npm run build-data   # autres versions
 npm start                   # sert le site en local sur http://localhost:5173
 ```
 

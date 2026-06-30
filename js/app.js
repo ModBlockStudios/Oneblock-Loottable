@@ -1,14 +1,21 @@
 /* ------------------------------------------------------------------ *
- * OneBlock Loot Table — catalogue des blocs & items Minecraft
+ * OneBlock Loot Table — catalogue des blocs & items Minecraft Bedrock
  * ------------------------------------------------------------------ */
 (function () {
   'use strict';
 
   const DATA_URL = './data/items.json';
-  const BATCH = 120; // nombre de cartes ajoutées par lot (scroll infini)
+  const BATCH = 150; // nombre de lignes ajoutées par lot (scroll infini)
+
+  // Libellés affichés pour chaque catégorie
+  const CATEGORY_LABEL = {
+    full_block: 'Full Block',
+    decoration_block: 'Decoration',
+    item: 'Item',
+  };
 
   const els = {
-    grid: document.getElementById('grid'),
+    rows: document.getElementById('rows'),
     search: document.getElementById('search'),
     count: document.getElementById('result-count'),
     empty: document.getElementById('empty'),
@@ -19,6 +26,14 @@
     chips: Array.from(document.querySelectorAll('.chip')),
   };
 
+  const state = {
+    all: [],
+    filtered: [],
+    rendered: 0,
+    category: 'all', // all | full_block | decoration_block | item
+    query: '',
+  };
+
   /* ---------- Versioning visible ---------- */
   function renderAppVersion() {
     const info = window.APP_INFO || {};
@@ -26,30 +41,24 @@
     if (els.buildDate) els.buildDate.textContent = info.buildDate || '?';
   }
 
-  const state = {
-    all: [],        // toutes les entrées
-    filtered: [],   // entrées après recherche/filtre
-    rendered: 0,    // combien sont déjà dans le DOM
-    type: 'all',    // all | block | item
-    query: '',
-  };
-
   /* ---------- Chargement des données ---------- */
   async function load() {
-    els.grid.innerHTML = '<div class="loading">Chargement du catalogue…</div>';
+    els.rows.innerHTML =
+      '<tr><td colspan="5" class="loading">Chargement du catalogue…</td></tr>';
     try {
       const res = await fetch(DATA_URL);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
       state.all = data.items || [];
-      if (els.version) els.version.textContent = data.version || '';
-      els.grid.innerHTML = '';
+      if (els.version) {
+        els.version.textContent = (data.edition || '') + ' ' + (data.version || '');
+      }
       applyFilters();
     } catch (err) {
-      els.grid.innerHTML =
-        '<div class="loading">Impossible de charger les données (' +
+      els.rows.innerHTML =
+        '<tr><td colspan="5" class="loading">Impossible de charger les données (' +
         String(err.message) +
-        ').</div>';
+        ').</td></tr>';
     }
   }
 
@@ -57,7 +66,7 @@
   function applyFilters() {
     const q = state.query.trim().toLowerCase();
     state.filtered = state.all.filter((it) => {
-      if (state.type !== 'all' && it.type !== state.type) return false;
+      if (state.category !== 'all' && it.category !== state.category) return false;
       if (!q) return true;
       return (
         it.name.toLowerCase().includes(q) ||
@@ -65,7 +74,7 @@
       );
     });
 
-    els.grid.innerHTML = '';
+    els.rows.innerHTML = '';
     state.rendered = 0;
     els.count.textContent = state.filtered.length.toLocaleString('fr-FR');
     els.empty.hidden = state.filtered.length > 0;
@@ -78,54 +87,66 @@
     if (next.length === 0) return;
 
     const frag = document.createDocumentFragment();
-    for (const it of next) frag.appendChild(makeCard(it));
-    els.grid.appendChild(frag);
+    for (const it of next) frag.appendChild(makeRow(it));
+    els.rows.appendChild(frag);
     state.rendered += next.length;
   }
 
-  function makeCard(it) {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.title = 'Cliquer pour copier : minecraft:' + it.name;
-    card.dataset.id = it.name;
+  function makeRow(it) {
+    const tr = document.createElement('tr');
+    tr.dataset.id = it.name;
+    tr.title = 'Cliquer pour copier : minecraft:' + it.name;
 
-    const badge = document.createElement('span');
-    badge.className = 'card__badge card__badge--' + it.type;
-    badge.textContent = it.type === 'block' ? 'bloc' : 'item';
-
-    const imgWrap = document.createElement('div');
-    imgWrap.className = 'card__img-wrap';
+    // Icône
+    const tdIcon = document.createElement('td');
+    tdIcon.className = 'col-icon';
     if (it.icon) {
       const img = document.createElement('img');
-      img.className = 'card__img';
+      img.className = 'cell-icon';
       img.loading = 'lazy';
       img.decoding = 'async';
-      img.alt = it.displayName;
+      img.alt = '';
       img.src = './assets/' + it.icon;
-      img.addEventListener('error', () => {
-        img.replaceWith(makeMissing());
-      });
-      imgWrap.appendChild(img);
+      img.addEventListener('error', () => img.replaceWith(makeMissing()));
+      tdIcon.appendChild(img);
     } else {
-      imgWrap.appendChild(makeMissing());
+      tdIcon.appendChild(makeMissing());
     }
 
-    const name = document.createElement('div');
-    name.className = 'card__name';
-    name.textContent = it.displayName;
+    // Nom
+    const tdName = document.createElement('td');
+    tdName.className = 'cell-name';
+    tdName.textContent = it.displayName;
 
-    const id = document.createElement('div');
-    id.className = 'card__id';
-    id.textContent = it.name;
+    // Identifiant Bedrock
+    const tdId = document.createElement('td');
+    tdId.className = 'cell-id';
+    const ns = document.createElement('span');
+    ns.className = 'ns';
+    ns.textContent = 'minecraft:';
+    tdId.append(ns, document.createTextNode(it.name));
 
-    card.append(badge, imgWrap, name, id);
-    card.addEventListener('click', () => copyId(it.name));
-    return card;
+    // Catégorie
+    const tdCat = document.createElement('td');
+    tdCat.className = 'cell-cat';
+    const badge = document.createElement('span');
+    badge.className = 'cat-badge cat-badge--' + it.category;
+    badge.textContent = CATEGORY_LABEL[it.category] || it.category;
+    tdCat.appendChild(badge);
+
+    // Taille de pile
+    const tdStack = document.createElement('td');
+    tdStack.className = 'col-stack cell-stack';
+    tdStack.textContent = it.stackSize;
+
+    tr.append(tdIcon, tdName, tdId, tdCat, tdStack);
+    tr.addEventListener('click', () => copyId(it.name));
+    return tr;
   }
 
   function makeMissing() {
-    const ph = document.createElement('div');
-    ph.className = 'card__img card__img--missing';
+    const ph = document.createElement('span');
+    ph.className = 'cell-icon cell-icon--missing';
     return ph;
   }
 
@@ -179,7 +200,7 @@
     chip.addEventListener('click', () => {
       els.chips.forEach((c) => c.classList.remove('chip--active'));
       chip.classList.add('chip--active');
-      state.type = chip.dataset.filter;
+      state.category = chip.dataset.filter;
       applyFilters();
     });
   });
@@ -189,7 +210,7 @@
     (entries) => {
       if (entries.some((e) => e.isIntersecting)) renderMore();
     },
-    { rootMargin: '600px' }
+    { rootMargin: '700px' }
   );
   io.observe(els.sentinel);
 
