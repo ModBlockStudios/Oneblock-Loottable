@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import MiningStage from '../components/MiningStage.jsx';
 import DropsList from '../components/DropsList.jsx';
+import CraftPanel from '../components/CraftPanel.jsx';
 import { pickWeighted, tierIndexFor, rollChest } from '../lib/sim.js';
+import { mineTimeWithTools, canHarvestWith } from '../lib/mining.js';
+
+const NO_TOOLS = { pickaxe: null, shovel: null, axe: null };
 
 /*
  * Page « Visualisation » : simulateur OneBlock. On choisit une config, on mine
@@ -17,14 +21,17 @@ export default function VisualisationPage({ items, configs }) {
   const [blocksMined, setBlocksMined] = useState(0);
   const [drops, setDrops] = useState([]);
   const [currentBlock, setCurrentBlock] = useState(null);
+  const [tools, setTools] = useState(NO_TOOLS);
 
   // Refs pour la boucle de minage (évite les closures périmées).
   const blocksMinedRef = useRef(0);
   const currentBlockRef = useRef(null);
   const configRef = useRef(config);
+  const toolsRef = useRef(tools);
   blocksMinedRef.current = blocksMined;
   currentBlockRef.current = currentBlock;
   configRef.current = config;
+  toolsRef.current = tools;
 
   // Temps de minage à la main, par identifiant Bedrock.
   const miningByName = useMemo(() => {
@@ -41,6 +48,7 @@ export default function VisualisationPage({ items, configs }) {
     setBlocksMined(0);
     setDrops([]);
     setCurrentBlock(next);
+    setTools(NO_TOOLS);
   }, []);
 
   // (Ré)initialise quand on change de config.
@@ -54,11 +62,15 @@ export default function VisualisationPage({ items, configs }) {
 
   const mineMs = useMemo(() => {
     if (!currentBlock) return 0;
-    const lookup = currentBlock.kind === 'chest' ? 'chest' : currentBlock.name;
-    const t = miningByName.get(lookup)?.time;
-    // 0 = instantané ; null/absent (incassable/inconnu) → repli 1 s
-    return (t == null ? 1 : t) * 1000;
-  }, [currentBlock, miningByName]);
+    if (currentBlock.kind === 'chest') return (miningByName.get('chest')?.time ?? 3.75) * 1000;
+    const mining = miningByName.get(currentBlock.name);
+    const ms = mineTimeWithTools(mining, tools);
+    return ms == null ? 1000 : ms; // incassable/inconnu → repli 1 s
+  }, [currentBlock, miningByName, tools]);
+
+  const craft = useCallback((toolType, tier) => {
+    setTools((t) => ({ ...t, [toolType]: tier }));
+  }, []);
 
   const addDrops = useCallback((arr) => {
     setDrops((prev) => {
@@ -81,8 +93,15 @@ export default function VisualisationPage({ items, configs }) {
   const handleBreak = useCallback(() => {
     const block = currentBlockRef.current;
     if (!block) return;
-    if (block.kind === 'chest') addDrops(rollChest(block));
-    else addDrops([{ name: block.name, displayName: block.displayName, icon: block.icon, count: 1 }]);
+    if (block.kind === 'chest') {
+      addDrops(rollChest(block));
+    } else {
+      // On ne récupère le drop que si l'outil possédé permet la récolte.
+      const mining = miningByName.get(block.name);
+      if (canHarvestWith(mining, toolsRef.current)) {
+        addDrops([{ name: block.name, displayName: block.displayName, icon: block.icon, count: 1 }]);
+      }
+    }
 
     const newCount = blocksMinedRef.current + 1;
     blocksMinedRef.current = newCount;
@@ -93,7 +112,7 @@ export default function VisualisationPage({ items, configs }) {
     const next = pickWeighted(tiers[idx].entries);
     currentBlockRef.current = next;
     setCurrentBlock(next);
-  }, [addDrops]);
+  }, [addDrops, miningByName]);
 
   if (list.length === 0) {
     return (
@@ -149,6 +168,7 @@ export default function VisualisationPage({ items, configs }) {
         </div>
 
         <aside className="viz__side">
+          <CraftPanel tools={tools} inventory={drops} onCraft={craft} />
           <DropsList drops={drops} />
         </aside>
       </div>

@@ -7,6 +7,20 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.14.0] — 2026-06-30
+
+### Ajouté
+- **Craft d'outils** dans le simulateur (étape 4 — outils) :
+  - panneau « Outils » (Pioche / Pelle / Hache) qui **propose le meilleur palier
+    abordable** selon les ressources minées (recette : 2 planches + 3 matériau ;
+    un `_block` = 9). Outil **permanent** une fois crafté ; on ne propose ensuite
+    que mieux.
+  - le **minage utilise le meilleur outil** : vitesse selon le palier
+    (bois→netherite) et **drop conditionnel** (il faut le niveau d'outil requis
+    pour récolter le bloc, sinon il casse sans rien donner).
+- Données : `minLevel` (niveau d'outil requis) ajouté à `mining`.
+- Libs `crafting.js` ; `mining.js` étendu (`mineTimeWithTools`, `canHarvestWith`).
+
 ## [3.13.0] — 2026-06-30
 
 ### Ajouté

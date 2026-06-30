@@ -129,6 +129,21 @@ function toolFromMaterial(material, requiresTool) {
   return 'none';
 }
 
+// Niveau d'outil minimum requis pour DROP le bloc (0=bois, 1=pierre, 2=fer,
+// 3=diamant, 4=netherite), déduit des harvestTools. null si pas d'outil requis.
+const itemNameById = new Map(items.map((i) => [i.id, i.name]));
+const TIER_LEVEL = { wooden: 0, golden: 0, stone: 1, iron: 2, diamond: 3, netherite: 4 };
+function minHarvestLevel(b) {
+  if (!b.harvestTools) return null;
+  let min = Infinity;
+  for (const id of Object.keys(b.harvestTools)) {
+    const n = itemNameById.get(Number(id)) || '';
+    const lvl = TIER_LEVEL[n.split('_')[0]];
+    if (lvl != null && lvl < min) min = lvl;
+  }
+  return min === Infinity ? null : min;
+}
+
 function miningOf(name) {
   const b = blockByName.get(name);
   if (!b) return null; // items : pas de minage
@@ -142,7 +157,7 @@ function miningOf(name) {
   } else {
     time = Math.round(b.hardness * (requiresTool ? 5 : 1.5) * 100) / 100;
   }
-  return { hardness: b.hardness, requiresTool, tool, time };
+  return { hardness: b.hardness, requiresTool, tool, minLevel: minHarvestLevel(b), time };
 }
 
 /*

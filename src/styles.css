@@ -1110,11 +1110,80 @@ th.col-stack {
   color: var(--ink-faint);
 }
 
-/* Journal des drops */
+/* Panneau de craft d'outils */
 .viz__side {
   position: sticky;
   top: 16px;
 }
+
+.craft {
+  margin-bottom: 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.craft__head {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+
+.craft__title {
+  font-weight: 600;
+}
+
+.craft__list {
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+}
+
+.craft__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.craft__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.craft__tool {
+  font-size: 0.9rem;
+  font-weight: 550;
+  color: var(--ink);
+}
+
+.craft__cur {
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.craft__cur--none {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+.craft__btn {
+  padding: 7px 12px;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.craft__goal {
+  font-size: 0.76rem;
+  color: var(--ink-faint);
+  text-align: right;
+}
+
+/* Journal des drops */
 
 .drops {
   background: var(--surface);
