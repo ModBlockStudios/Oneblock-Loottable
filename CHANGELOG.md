@@ -7,6 +7,16 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.15.2] — 2026-06-30
+
+### Corrigé
+- **Minage en chaîne (suite)** : le réarmage du chrono passait par un effet
+  React *passif* (exécuté après le paint), donc certaines frames cassaient
+  encore le bloc suivant avec le temps du précédent — visible surtout entre deux
+  blocs de types différents (ex. planche → terre). La détection du nouveau bloc
+  est désormais **synchrone dans la boucle de minage** (comparaison du `blockId`
+  via ref) : impossible de recompter avec un `mineMs` périmé.
+
 ## [3.15.1] — 2026-06-30
 
 ### Corrigé
