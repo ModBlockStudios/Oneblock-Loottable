@@ -1,0 +1,14 @@
+{
+  "name": "oneblock-loottable",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interface web : catalogue des blocs et items Minecraft pour construire des loot tables OneBlock.",
+  "scripts": {
+    "build-data": "node scripts/build-data.js",
+    "start": "npx --yes serve -l 5173 ."
+  },
+  "devDependencies": {
+    "minecraft-assets": "^1.17.0",
+    "minecraft-data": "^3.111.0"
+  }
+}

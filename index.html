@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OneBlock Loot Table — Blocs &amp; Items Minecraft</title>
+  <meta name="description" content="Catalogue complet des blocs et items Minecraft (inventaire créatif) pour construire des loot tables OneBlock." />
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="icon" href="./assets/items/diamond.png" type="image/png" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar__inner">
+      <h1 class="topbar__title">
+        <span class="topbar__cube">⬛</span>
+        OneBlock <span class="topbar__accent">Loot Table</span>
+      </h1>
+      <p class="topbar__subtitle">
+        Catalogue de l'inventaire créatif — Minecraft <span id="mc-version">…</span>
+      </p>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="toolbar" aria-label="Filtres">
+      <div class="toolbar__search">
+        <input
+          type="search"
+          id="search"
+          class="search-input"
+          placeholder="Rechercher un bloc ou un item… (ex: diamond, stone, spawn_egg)"
+          autocomplete="off"
+          spellcheck="false"
+        />
+      </div>
+
+      <div class="toolbar__filters" role="group" aria-label="Type">
+        <button class="chip chip--active" data-filter="all">Tout</button>
+        <button class="chip" data-filter="block">Blocs</button>
+        <button class="chip" data-filter="item">Items</button>
+      </div>
+
+      <div class="toolbar__count">
+        <span id="result-count">0</span> résultat(s)
+      </div>
+    </section>
+
+    <section id="grid" class="grid" aria-live="polite"></section>
+
+    <div id="empty" class="empty" hidden>
+      Aucun résultat pour cette recherche.
+    </div>
+
+    <div id="sentinel" class="sentinel"></div>
+  </main>
+
+  <footer class="footer">
+    <p>
+      Données : <a href="https://github.com/PrismarineJS/minecraft-data" target="_blank" rel="noopener">minecraft-data</a>
+      &amp; <a href="https://github.com/PrismarineJS/minecraft-assets" target="_blank" rel="noopener">minecraft-assets</a>.
+      Minecraft est une marque de Mojang Studios. Projet non affilié.
+    </p>
+  </footer>
+
+  <script src="./js/app.js" defer></script>
+</body>
+</html>
