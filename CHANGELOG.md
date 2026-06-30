@@ -7,6 +7,24 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.0.0] — 2026-06-30
+
+### Changé (cassant)
+- **Réécriture en React + Vite.** L'interface n'est plus du HTML/JS « vanilla »
+  mais une application React découpée en composants
+  (`Header`, `Toolbar`, `CatalogTable`, `CatalogRow`, `Toast`) + hooks
+  (`useCatalog`) et utilitaires (`copyText`).
+- Build via **Vite** : les bundles JS/CSS sont **hashés** → cache-busting
+  natif (le `?v=` manuel n'est plus nécessaire pour le code).
+- Déploiement GitHub Pages désormais **via GitHub Actions** (étape de build).
+  Régler *Settings → Pages → Source* sur **GitHub Actions**.
+- Données et icônes déplacées dans `public/` (servies telles quelles par Vite).
+
+### Conservé
+- Toutes les fonctionnalités : tableau, recherche, filtres
+  `Tout / Full Block / Decoration Block / Item`, identifiants Bedrock,
+  copie au clic, versioning visible, DA noir & blanc épurée.
+
 ## [2.0.1] — 2026-06-30
 
 ### Corrigé

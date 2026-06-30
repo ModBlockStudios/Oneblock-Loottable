@@ -1,86 +1,17 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>OneBlock Loot Table — Blocs &amp; Items Minecraft</title>
-  <meta name="description" content="Catalogue complet des blocs et items Minecraft (inventaire créatif) pour construire des loot tables OneBlock." />
-  <!-- ?v= : cache-busting. Garder synchronisé avec js/version.js à chaque release. -->
-  <link rel="stylesheet" href="./css/style.css?v=2.0.1" />
-  <link rel="icon" href="./assets/items/diamond.png" type="image/png" />
-</head>
-<body>
-  <header class="topbar">
-    <div class="topbar__inner">
-      <div class="topbar__heading">
-        <h1 class="topbar__title">OneBlock Loot Table</h1>
-        <a
-          id="app-version"
-          class="version-badge"
-          href="./CHANGELOG.md"
-          title="Version de l'interface — clique pour voir le changelog"
-        >v…</a>
-      </div>
-      <p class="topbar__subtitle">
-        Catalogue de l'inventaire créatif — Minecraft <span id="mc-version">…</span>
-        <span class="topbar__build">· build <span id="build-date">…</span></span>
-      </p>
-    </div>
-  </header>
-
-  <main class="container">
-    <section class="toolbar" aria-label="Filtres">
-      <div class="toolbar__search">
-        <input
-          type="search"
-          id="search"
-          class="search-input"
-          placeholder="Rechercher… (ex : diamond, stone, spawn_egg)"
-          autocomplete="off"
-          spellcheck="false"
-        />
-      </div>
-
-      <div class="toolbar__filters" role="group" aria-label="Catégorie">
-        <button class="chip chip--active" data-filter="all">Tout</button>
-        <button class="chip" data-filter="full_block">Full Block</button>
-        <button class="chip" data-filter="decoration_block">Decoration Block</button>
-        <button class="chip" data-filter="item">Item</button>
-      </div>
-
-      <div class="toolbar__count">
-        <span id="result-count">0</span> résultat(s)
-      </div>
-    </section>
-
-    <div class="table-wrap">
-      <table class="catalog" aria-live="polite">
-        <thead>
-          <tr>
-            <th class="col-icon" scope="col"></th>
-            <th class="col-name" scope="col">Nom</th>
-            <th class="col-id" scope="col">Identifiant</th>
-            <th class="col-cat" scope="col">Catégorie</th>
-            <th class="col-stack" scope="col">Pile</th>
-          </tr>
-        </thead>
-        <tbody id="rows"></tbody>
-      </table>
-    </div>
-
-    <div id="empty" class="empty" hidden>Aucun résultat pour cette recherche.</div>
-    <div id="sentinel" class="sentinel"></div>
-  </main>
-
-  <footer class="footer">
-    <p>
-      Données : <a href="https://github.com/PrismarineJS/minecraft-data" target="_blank" rel="noopener">minecraft-data</a>
-      &amp; <a href="https://github.com/PrismarineJS/minecraft-assets" target="_blank" rel="noopener">minecraft-assets</a>.
-      Minecraft est une marque de Mojang Studios. Projet non affilié.
-    </p>
-  </footer>
-
-  <script src="./js/version.js?v=2.0.1" defer></script>
-  <script src="./js/app.js?v=2.0.1" defer></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OneBlock Loot Table — Blocs &amp; Items Minecraft Bedrock</title>
+    <meta
+      name="description"
+      content="Catalogue complet des blocs et items Minecraft Bedrock (inventaire créatif) pour construire des loot tables OneBlock."
+    />
+    <link rel="icon" href="./assets/items/diamond.png" type="image/png" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
