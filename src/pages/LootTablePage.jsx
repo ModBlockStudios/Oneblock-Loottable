@@ -35,9 +35,13 @@ export default function LootTablePage({ items, configs, onCopy }) {
               tier={tier}
               items={items}
               onCopy={onCopy}
-              onAdd={(item) => configs.addItem(tier.id, item)}
-              onRemove={(item) => configs.removeItem(tier.id, item)}
-              onSetWeight={(item, w) => configs.setWeight(tier.id, item, w)}
+              onAddItem={(item) => configs.addItem(tier.id, item)}
+              onAddChest={() => configs.addChest(tier.id)}
+              onRemoveEntry={(entry) => configs.removeEntry(tier.id, entry)}
+              onSetWeight={(entry, w) => configs.setWeight(tier.id, entry, w)}
+              onAddChestItem={(chestId, item) => configs.addChestItem(tier.id, chestId, item)}
+              onRemoveChestItem={(chestId, item) => configs.removeChestItem(tier.id, chestId, item)}
+              onSetChestQuantity={(chestId, item, q) => configs.setChestQuantity(tier.id, chestId, item, q)}
               onClear={() => configs.clearTier(tier.id)}
               onDelete={() => configs.deleteTier(tier.id)}
               has={(item) => configs.hasItem(tier.id, item)}

@@ -812,6 +812,49 @@ th.col-stack {
   margin: 8px 0 40px;
 }
 
+/* ---------- Chest (conteneur dans un tiers) ---------- */
+.chest-summary {
+  background: rgba(31, 30, 28, 0.025);
+}
+
+.chest-icon {
+  font-size: 1.15rem;
+}
+
+.chest-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  font: inherit;
+  font-weight: 550;
+  color: var(--ink);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.chest-caret {
+  color: var(--ink-faint);
+  font-size: 0.8rem;
+}
+
+.chest-sub {
+  margin-left: 10px;
+  color: var(--ink-faint);
+  font-size: 0.8rem;
+}
+
+.chest-editor-row > td {
+  padding: 0;
+}
+
+.chest-editor {
+  padding: 14px 16px 16px;
+  background: rgba(31, 30, 28, 0.025);
+  border-top: 1px dashed var(--line-strong);
+}
+
 /* ---------- États ---------- */
 .empty,
 .loading {

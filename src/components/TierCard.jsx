@@ -1,16 +1,21 @@
 import ItemPicker from './ItemPicker.jsx';
-import WeightInput from './WeightInput.jsx';
-import { tagLabel } from '../lib/tags.js';
+import LootItemRow from './LootItemRow.jsx';
+import ChestRow from './ChestRow.jsx';
+import { entryId } from '../lib/useLootConfigs.js';
 
-/* Un « tiers » : son propre sélecteur d'items et son tableau (avec weights). */
+/* Un « tiers » : sélecteur d'items, bouton chest, et tableau (items + chests). */
 export default function TierCard({
   index,
   tier,
   items,
   onCopy,
-  onAdd,
-  onRemove,
+  onAddItem,
+  onAddChest,
+  onRemoveEntry,
   onSetWeight,
+  onAddChestItem,
+  onRemoveChestItem,
+  onSetChestQuantity,
   onClear,
   onDelete,
   has,
@@ -22,6 +27,9 @@ export default function TierCard({
         <h2 className="tier__title">Tiers {index + 1}</h2>
         <span className="tier__count">{tier.entries.length} entrée(s)</span>
         <div className="tier__actions">
+          <button type="button" className="btn-ghost" onClick={onAddChest}>
+            📦 Ajouter un Chest
+          </button>
           {tier.entries.length > 0 && (
             <button type="button" className="btn-ghost" onClick={onClear}>
               Vider
@@ -35,11 +43,11 @@ export default function TierCard({
         </div>
       </div>
 
-      <ItemPicker items={items} onAdd={onAdd} has={has} />
+      <ItemPicker items={items} onAdd={onAddItem} has={has} />
 
       {tier.entries.length === 0 ? (
         <div className="tier__empty">
-          Aucun item. Ajoute-en via la recherche ci-dessus (nom, #tag ou !catégorie).
+          Aucune entrée. Ajoute des items via la recherche, ou un chest avec « 📦 Ajouter un Chest ».
         </div>
       ) : (
         <div className="table-wrap">
@@ -55,51 +63,29 @@ export default function TierCard({
               </tr>
             </thead>
             <tbody>
-              {tier.entries.map((it) => (
-                <tr
-                  key={it.name + '|' + it.displayName}
-                  title={'Cliquer pour copier : minecraft:' + it.name}
-                  onClick={() => onCopy(it.name)}
-                >
-                  <td className="col-icon">
-                    {it.icon ? (
-                      <img
-                        className="cell-icon"
-                        src={import.meta.env.BASE_URL + 'assets/' + it.icon}
-                        alt=""
-                        loading="lazy"
-                        decoding="async"
-                      />
-                    ) : (
-                      <span className="cell-icon cell-icon--missing" />
-                    )}
-                  </td>
-                  <td className="cell-name">{it.displayName}</td>
-                  <td className="cell-id">
-                    <span className="ns">minecraft:</span>
-                    {it.name}
-                  </td>
-                  <td className="cell-tag">
-                    <span className="tag-badge tag-badge--static">{tagLabel(it.tag)}</span>
-                  </td>
-                  <td className="col-weight" onClick={(e) => e.stopPropagation()}>
-                    <WeightInput value={it.weight} onChange={(w) => onSetWeight(it, w)} />
-                  </td>
-                  <td className="col-remove">
-                    <button
-                      type="button"
-                      className="remove-btn"
-                      title="Retirer de ce tiers"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRemove(it);
-                      }}
-                    >
-                      ×
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {tier.entries.map((e) =>
+                e.kind === 'chest' ? (
+                  <ChestRow
+                    key={entryId(e)}
+                    chest={e}
+                    items={items}
+                    onCopy={onCopy}
+                    onRemove={() => onRemoveEntry(e)}
+                    onSetWeight={(w) => onSetWeight(e, w)}
+                    onAddItem={(item) => onAddChestItem(e.id, item)}
+                    onRemoveItem={(item) => onRemoveChestItem(e.id, item)}
+                    onSetQuantity={(item, q) => onSetChestQuantity(e.id, item, q)}
+                  />
+                ) : (
+                  <LootItemRow
+                    key={entryId(e)}
+                    item={e}
+                    onCopy={onCopy}
+                    onRemove={() => onRemoveEntry(e)}
+                    onSetWeight={(w) => onSetWeight(e, w)}
+                  />
+                )
+              )}
             </tbody>
           </table>
         </div>

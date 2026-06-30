@@ -7,6 +7,17 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.7.0] — 2026-06-30
+
+### Ajouté
+- **Entrées « Chest »** dans les tiers : un chest a son propre weight (comme un
+  item) mais contient une liste d'items / blocs, chacun avec une **quantité**.
+- Bouton **« 📦 Ajouter un Chest »** par tiers ; ligne de chest dépliable
+  (éditeur de contenu : picker + quantités) ; retrait du chest.
+- Composants `ChestRow`, `ChestEditor`, `LootItemRow`. Hook étendu
+  (`addChest`, `addChestItem`, `removeChestItem`, `setChestQuantity`,
+  `removeEntry` générique). Entrées identifiées par `entryId` (item ou chest).
+
 ## [3.6.0] — 2026-06-30
 
 ### Ajouté

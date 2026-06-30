@@ -2,8 +2,11 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 const STORAGE_KEY = 'oneblock-loottable:configs:v1';
 
-// Clé unique d'une entrée (name peut être partagé, ex. banner/bed → on ajoute displayName).
+// Clé d'un item (name peut être partagé, ex. banner/bed → on ajoute displayName).
 export const entryKey = (it) => it.name + '|' + it.displayName;
+
+// Identité d'une entrée de tiers : un item OU un chest (conteneur).
+export const entryId = (e) => (e.kind === 'chest' ? 'c:' + e.id : 'i:' + entryKey(e));
 
 function genId(prefix) {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) return prefix + '_' + crypto.randomUUID();
@@ -120,11 +123,12 @@ export function useLootConfigs() {
   const addItem = useCallback(
     (tierId, item) =>
       updateTierEntries(tierId, (entries) =>
-        entries.some((e) => entryKey(e) === entryKey(item))
+        entries.some((e) => e.kind !== 'chest' && entryKey(e) === entryKey(item))
           ? entries
           : [
               ...entries,
               {
+                kind: 'item',
                 name: item.name,
                 displayName: item.displayName,
                 icon: item.icon,
@@ -138,26 +142,87 @@ export function useLootConfigs() {
     [updateTierEntries]
   );
 
-  const removeItem = useCallback(
-    (tierId, item) =>
-      updateTierEntries(tierId, (entries) => entries.filter((e) => entryKey(e) !== entryKey(item))),
+  // Ajoute un chest (conteneur vide) au tiers.
+  const addChest = useCallback(
+    (tierId) =>
+      updateTierEntries(tierId, (entries) => [
+        ...entries,
+        { kind: 'chest', id: genId('chest'), weight: 1, contents: [] },
+      ]),
     [updateTierEntries]
   );
 
+  // Retire une entrée (item ou chest) du tiers.
+  const removeEntry = useCallback(
+    (tierId, entry) =>
+      updateTierEntries(tierId, (entries) => entries.filter((e) => entryId(e) !== entryId(entry))),
+    [updateTierEntries]
+  );
+
+  // Modifie le weight d'une entrée (item ou chest).
   const setWeight = useCallback(
-    (tierId, item, weight) =>
+    (tierId, entry, weight) =>
       updateTierEntries(tierId, (entries) =>
-        entries.map((e) => (entryKey(e) === entryKey(item) ? { ...e, weight } : e))
+        entries.map((e) => (entryId(e) === entryId(entry) ? { ...e, weight } : e))
       ),
     [updateTierEntries]
   );
 
+  // Y a-t-il déjà cet item (entrée simple) dans le tiers ? (pour le picker)
   const hasItem = useCallback(
     (tierId, item) => {
       const tier = current?.tiers.find((t) => t.id === tierId);
-      return !!tier && tier.entries.some((e) => entryKey(e) === entryKey(item));
+      return !!tier && tier.entries.some((e) => e.kind !== 'chest' && entryKey(e) === entryKey(item));
     },
     [current]
+  );
+
+  /* ---------- Contenu d'un chest ---------- */
+  const updateChest = useCallback(
+    (tierId, chestId, fn) =>
+      updateTierEntries(tierId, (entries) =>
+        entries.map((e) =>
+          e.kind === 'chest' && e.id === chestId ? { ...e, contents: fn(e.contents) } : e
+        )
+      ),
+    [updateTierEntries]
+  );
+
+  const addChestItem = useCallback(
+    (tierId, chestId, item) =>
+      updateChest(tierId, chestId, (contents) =>
+        contents.some((c) => entryKey(c) === entryKey(item))
+          ? contents
+          : [
+              ...contents,
+              {
+                name: item.name,
+                displayName: item.displayName,
+                icon: item.icon,
+                category: item.category,
+                tag: item.tag,
+                stackSize: item.stackSize,
+                quantity: 1,
+              },
+            ]
+      ),
+    [updateChest]
+  );
+
+  const removeChestItem = useCallback(
+    (tierId, chestId, item) =>
+      updateChest(tierId, chestId, (contents) =>
+        contents.filter((c) => entryKey(c) !== entryKey(item))
+      ),
+    [updateChest]
+  );
+
+  const setChestQuantity = useCallback(
+    (tierId, chestId, item, quantity) =>
+      updateChest(tierId, chestId, (contents) =>
+        contents.map((c) => (entryKey(c) === entryKey(item) ? { ...c, quantity } : c))
+      ),
+    [updateChest]
   );
 
   return {
@@ -171,8 +236,12 @@ export function useLootConfigs() {
     deleteTier,
     clearTier,
     addItem,
-    removeItem,
+    addChest,
+    removeEntry,
     setWeight,
     hasItem,
+    addChestItem,
+    removeChestItem,
+    setChestQuantity,
   };
 }
