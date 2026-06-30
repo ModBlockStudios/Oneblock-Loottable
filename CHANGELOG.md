@@ -7,6 +7,13 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.19.0] — 2026-06-30
+
+### Ajouté
+- **Renommer une config existante** : bouton « Renommer » dans la barre de
+  configs, qui ouvre un champ pré-rempli (Entrée pour valider, Échap/Annuler
+  pour abandonner). Un nom vide est ignoré.
+
 ## [3.18.0] — 2026-06-30
 
 ### Ajouté

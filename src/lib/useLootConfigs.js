@@ -148,6 +148,16 @@ export function useLootConfigs() {
     []
   );
 
+  // Renomme une config existante (ignore un nom vide).
+  const renameConfig = useCallback((id, name) => {
+    const trimmed = (name || '').trim();
+    if (!trimmed) return;
+    setState((s) => ({
+      ...s,
+      configs: s.configs.map((c) => (c.id === id ? { ...c, name: trimmed } : c)),
+    }));
+  }, []);
+
   const deleteConfig = useCallback((id) => {
     setState((s) => {
       const cfgs = s.configs.filter((c) => c.id !== id);
@@ -329,6 +339,7 @@ export function useLootConfigs() {
     createConfig,
     selectConfig,
     sortByWeight,
+    renameConfig,
     deleteConfig,
     addTier,
     duplicateLastTier,

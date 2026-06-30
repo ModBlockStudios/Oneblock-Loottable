@@ -31,6 +31,7 @@ export default function LootTablePage({ items, configs, onCopy, onCopyText }) {
         current={current}
         onSelect={configs.selectConfig}
         onCreate={configs.createConfig}
+        onRename={configs.renameConfig}
         onDelete={configs.deleteConfig}
         codeView={codeView}
         onToggleCode={() => setCodeView((v) => !v)}

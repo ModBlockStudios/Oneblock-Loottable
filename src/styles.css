@@ -631,7 +631,8 @@ th.col-stack {
   border-color: var(--ink-soft);
 }
 
-.configbar__create {
+.configbar__create,
+.config-rename {
   display: flex;
   gap: 8px;
 }
