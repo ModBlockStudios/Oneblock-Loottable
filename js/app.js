@@ -14,8 +14,17 @@
     empty: document.getElementById('empty'),
     sentinel: document.getElementById('sentinel'),
     version: document.getElementById('mc-version'),
+    appVersion: document.getElementById('app-version'),
+    buildDate: document.getElementById('build-date'),
     chips: Array.from(document.querySelectorAll('.chip')),
   };
+
+  /* ---------- Versioning visible ---------- */
+  function renderAppVersion() {
+    const info = window.APP_INFO || {};
+    if (els.appVersion) els.appVersion.textContent = 'v' + (info.version || '?');
+    if (els.buildDate) els.buildDate.textContent = info.buildDate || '?';
+  }
 
   const state = {
     all: [],        // toutes les entrées
@@ -184,5 +193,6 @@
   );
   io.observe(els.sentinel);
 
+  renderAppVersion();
   load();
 })();

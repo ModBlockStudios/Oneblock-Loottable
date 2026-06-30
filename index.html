@@ -14,9 +14,16 @@
       <h1 class="topbar__title">
         <span class="topbar__cube">⬛</span>
         OneBlock <span class="topbar__accent">Loot Table</span>
+        <a
+          id="app-version"
+          class="version-badge"
+          href="./CHANGELOG.md"
+          title="Version de l'interface — clique pour voir le changelog"
+        >v…</a>
       </h1>
       <p class="topbar__subtitle">
         Catalogue de l'inventaire créatif — Minecraft <span id="mc-version">…</span>
+        <span class="topbar__build">· build <span id="build-date">…</span></span>
       </p>
     </div>
   </header>
@@ -62,6 +69,7 @@
     </p>
   </footer>
 
+  <script src="./js/version.js" defer></script>
   <script src="./js/app.js" defer></script>
 </body>
 </html>

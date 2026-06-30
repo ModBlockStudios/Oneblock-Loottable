@@ -57,6 +57,30 @@ body {
   color: var(--accent);
 }
 
+.version-badge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
+  padding: 3px 9px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  color: #cdeccf;
+  background: rgba(76, 175, 80, 0.16);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: background 0.15s;
+}
+
+.version-badge:hover {
+  background: rgba(76, 175, 80, 0.3);
+}
+
+.topbar__build {
+  color: var(--text-dim);
+}
+
 .topbar__subtitle {
   margin: 6px 0 0;
   color: var(--text-dim);
