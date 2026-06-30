@@ -333,6 +333,183 @@ th.col-stack {
   border-color: var(--ink-soft);
 }
 
+/* ---------- Onglets ---------- */
+.tabs {
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.tabs__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  gap: 4px;
+}
+
+.tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 6px;
+  margin-right: 18px;
+  font-size: 0.98rem;
+  color: var(--ink-faint);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover {
+  color: var(--ink);
+}
+
+.tab--active {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+  font-weight: 550;
+}
+
+.tab__badge {
+  min-width: 20px;
+  padding: 1px 6px;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  text-align: center;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+/* ---------- Boutons + / × dans les tableaux ---------- */
+.col-add,
+.col-remove {
+  width: 44px;
+  text-align: center;
+}
+
+.add-btn,
+.remove-btn {
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--ink-soft);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.add-btn:hover {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.add-btn--on {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.remove-btn {
+  font-size: 1.15rem;
+}
+
+.remove-btn:hover {
+  color: #fff;
+  background: #b3261e;
+  border-color: #b3261e;
+}
+
+.tag-badge--static {
+  cursor: default;
+  background: var(--paper);
+}
+
+.tag-badge--static:hover {
+  color: var(--ink-soft);
+  background: var(--paper);
+  border-color: var(--line-strong);
+}
+
+/* ---------- Barre & état de la page Lootable ---------- */
+.loot-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0 16px;
+}
+
+.loot-bar__count {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.btn-ghost {
+  padding: 8px 14px;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-ghost:hover {
+  color: #b3261e;
+  border-color: #b3261e;
+}
+
+.loot-empty {
+  text-align: center;
+  padding: 56px 20px;
+}
+
+.loot-empty__title {
+  font-size: 1.1rem;
+  color: var(--ink);
+  margin: 0 0 8px;
+}
+
+.loot-empty__hint {
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.kbd {
+  display: inline-block;
+  min-width: 20px;
+  padding: 1px 6px;
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  text-align: center;
+  color: var(--ink);
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+}
+
 /* ---------- États ---------- */
 .empty,
 .loading {

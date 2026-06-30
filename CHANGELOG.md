@@ -7,6 +7,19 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.2.0] — 2026-06-30
+
+### Ajouté
+- **Navigation par onglets** en haut : **Table** (catalogue) et **Lootable**
+  (constructeur). Routage par hash (`#/table`, `#/lootable`).
+- **Page Lootable** : tableau des items sélectionnés (vide au départ).
+- Depuis la **Table**, bouton **+** sur chaque ligne pour ajouter un item à la
+  lootable (re-clic = ✓ → retire). Bouton **×** pour retirer côté Lootable,
+  et « Tout vider ». Compteur sur l'onglet Lootable.
+- Sélection **persistée** (localStorage) : elle survit aux rechargements.
+- Découpage : `src/pages/` (CatalogPage, LootTablePage), hooks
+  `useLootTable`, `useHashRoute`, `useToast`, composant `Tabs`.
+
 ## [3.1.0] — 2026-06-30
 
 ### Ajouté
