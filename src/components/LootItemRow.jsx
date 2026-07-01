@@ -1,8 +1,9 @@
 import WeightInput from './WeightInput.jsx';
 import { tagLabel } from '../lib/tags.js';
+import { formatChance } from '../lib/chance.js';
 
-/* Ligne d'un item simple dans un tiers (icône, nom, id, tag, weight, retrait). */
-export default function LootItemRow({ item, onCopy, onRemove, onSetWeight }) {
+/* Ligne d'un item simple dans un tiers (icône, nom, id, tag, weight, chance, retrait). */
+export default function LootItemRow({ item, total, onCopy, onRemove, onSetWeight }) {
   return (
     <tr title={'Cliquer pour copier : minecraft:' + item.name} onClick={() => onCopy(item.name)}>
       <td className="col-icon">
@@ -29,6 +30,7 @@ export default function LootItemRow({ item, onCopy, onRemove, onSetWeight }) {
       <td className="col-weight" onClick={(e) => e.stopPropagation()}>
         <WeightInput value={item.weight} onChange={onSetWeight} />
       </td>
+      <td className="col-chance cell-chance">{formatChance(item.weight, total)}</td>
       <td className="col-remove">
         <button
           type="button"

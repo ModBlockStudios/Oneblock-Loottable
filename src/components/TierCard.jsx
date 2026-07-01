@@ -26,6 +26,9 @@ export default function TierCard({
   has,
   canDelete,
 }) {
+  // Somme des weights du tiers : base du calcul du % de chance de chaque entrée.
+  const totalWeight = tier.entries.reduce((s, e) => s + (e.weight || 0), 0);
+
   return (
     <section className="tier">
       <div className="tier__head">
@@ -82,6 +85,7 @@ export default function TierCard({
                 <th className="col-id">Identifiant</th>
                 <th className="col-tag">Tag</th>
                 <th className="col-weight">Weight</th>
+                <th className="col-chance" title="Chance de tirage dans ce tiers">Chance</th>
                 <th className="col-remove" />
               </tr>
             </thead>
@@ -91,6 +95,7 @@ export default function TierCard({
                   <ChestRow
                     key={entryId(e)}
                     chest={e}
+                    total={totalWeight}
                     items={items}
                     onCopy={onCopy}
                     onRemove={() => onRemoveEntry(e)}
@@ -104,6 +109,7 @@ export default function TierCard({
                   <LootItemRow
                     key={entryId(e)}
                     item={e}
+                    total={totalWeight}
                     onCopy={onCopy}
                     onRemove={() => onRemoveEntry(e)}
                     onSetWeight={(w) => onSetWeight(e, w)}

@@ -768,6 +768,17 @@ th.col-stack {
   width: 110px;
 }
 
+.col-chance {
+  width: 80px;
+}
+
+/* % de chance : lecture rapide, indicatif (dérivé du weight). */
+.cell-chance {
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-faint);
+  white-space: nowrap;
+}
+
 .weight-input {
   width: 72px;
   padding: 6px 8px;

@@ -7,6 +7,14 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.23.0] — 2026-07-01
+
+### Ajouté
+- **Colonne « Chance »** dans les tiers Lootable (à droite de Weight) : affiche
+  le **% de tirage** de chaque entrée (weight ÷ somme des weights du tiers). Pur
+  affichage indicatif, **mis à jour en direct** quand on change un weight — plus
+  simple à lire que des weights bruts.
+
 ## [3.22.1] — 2026-07-01
 
 ### Corrigé
