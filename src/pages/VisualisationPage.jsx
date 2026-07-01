@@ -83,7 +83,7 @@ export default function VisualisationPage({ items, configs }) {
 
   const craft = useCallback(
     (toolType, tier) => {
-      setDrops((prev) => consumeMaterials(prev, recipeFor(tier), baseItems));
+      setDrops((prev) => consumeMaterials(prev, recipeFor(tier, toolType), baseItems));
       setTools((t) => ({ ...t, [toolType]: tier }));
     },
     [baseItems]

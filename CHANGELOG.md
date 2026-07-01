@@ -7,6 +7,13 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.22.1] — 2026-07-01
+
+### Corrigé
+- **Recette de la pelle** : elle n'exige plus 3 matériaux mais **1 seul**
+  (2 bois + 1 matériau), conformément à Minecraft. La recette dépend désormais
+  du type d'outil (pioche/hache = 3 matériaux, pelle = 1) ; le manche reste 2.
+
 ## [3.22.0] — 2026-07-01
 
 ### Changé

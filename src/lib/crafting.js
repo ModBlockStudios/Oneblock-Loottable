@@ -50,11 +50,17 @@ export function availableUnits(inventory, group) {
   return u;
 }
 
-export function recipeFor(tier) {
-  if (tier === 'wood') return [{ group: 'wood', amount: 5 }];
+// Nombre de matériaux de « tête » selon l'outil (Minecraft) : pioche/hache = 3,
+// pelle = 1. Le manche vaut toujours 2 (sticks). Défaut prudent : 3.
+const HEAD_UNITS = { pickaxe: 3, axe: 3, shovel: 1 };
+
+export function recipeFor(tier, toolType) {
+  const head = HEAD_UNITS[toolType] ?? 3;
+  // Outil en bois : tête ET manche en bois → head + 2 unités de bois.
+  if (tier === 'wood') return [{ group: 'wood', amount: head + 2 }];
   return [
     { group: 'wood', amount: 2 },
-    { group: tier, amount: 3 },
+    { group: tier, amount: head },
   ];
 }
 
@@ -65,18 +71,19 @@ export function canCraft(recipe, inventory) {
 // Meilleur palier qu'on peut crafter au-dessus du palier actuel ; sinon le
 // palier suivant (objectif) marqué non abordable. null si déjà au max.
 // L'or (hors chaîne) équivaut au bois pour la progression : on vise la pierre+.
-export function proposalFor(currentTier, inventory) {
+export function proposalFor(currentTier, inventory, toolType) {
   let cur;
   if (!currentTier) cur = -1;
   else if (currentTier === 'gold') cur = TIER_ORDER.indexOf('wood');
   else cur = TIER_ORDER.indexOf(currentTier);
   for (let i = TIER_ORDER.length - 1; i > cur; i--) {
     const tier = TIER_ORDER[i];
-    if (canCraft(recipeFor(tier), inventory)) return { tier, affordable: true, recipe: recipeFor(tier) };
+    const recipe = recipeFor(tier, toolType);
+    if (canCraft(recipe, inventory)) return { tier, affordable: true, recipe };
   }
   if (cur + 1 < TIER_ORDER.length) {
     const tier = TIER_ORDER[cur + 1];
-    return { tier, affordable: false, recipe: recipeFor(tier) };
+    return { tier, affordable: false, recipe: recipeFor(tier, toolType) };
   }
   return null;
 }
@@ -84,11 +91,11 @@ export function proposalFor(currentTier, inventory) {
 // Proposition d'outil en or (sidegrade « rapide ») : uniquement quand l'outil
 // actuel est encore de niveau de récolte 0 (main ou bois). Au-delà (pierre+),
 // passer à l'or ferait perdre en récolte : on ne le propose pas. null sinon.
-export function goldProposalFor(currentTier, inventory) {
+export function goldProposalFor(currentTier, inventory, toolType) {
   if (currentTier === 'gold') return null; // déjà en or
   const level = currentTier ? TOOL_LEVEL[currentTier] : 0;
   if (level > TOOL_LEVEL.gold) return null;
-  const recipe = recipeFor('gold');
+  const recipe = recipeFor('gold', toolType);
   return { tier: 'gold', affordable: canCraft(recipe, inventory), recipe };
 }
 

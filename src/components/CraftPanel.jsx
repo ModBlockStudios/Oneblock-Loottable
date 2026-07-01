@@ -15,9 +15,9 @@ export default function CraftPanel({ tools, inventory, onCraft }) {
       <ul className="craft__list">
         {TOOL_TYPES.map(({ key, label }) => {
           const current = tools[key];
-          const prop = proposalFor(current, inventory);
+          const prop = proposalFor(current, inventory, key);
           // Or : sidegrade rapide, proposé seulement s'il est réalisable maintenant.
-          const gold = goldProposalFor(current, inventory);
+          const gold = goldProposalFor(current, inventory, key);
           return (
             <li key={key} className="craft__row">
               <div className="craft__info">
