@@ -1,12 +1,24 @@
 import { useMemo, useState } from 'react';
 import Toolbar from '../components/Toolbar.jsx';
 import CatalogTable from '../components/CatalogTable.jsx';
+import PackBar from '../components/PackBar.jsx';
 import { tagsPresent } from '../lib/tags.js';
 import { makeFilter } from '../lib/search.js';
 import { groupWoodSets } from '../lib/wood.js';
 
-/* Page « Table » : catalogue filtrable (référence). */
-export default function CatalogPage({ loading, error, items, usage, onCopy }) {
+/* Page « Table » : catalogue filtrable (référence) + import de packs custom. */
+export default function CatalogPage({
+  loading,
+  error,
+  items,
+  usage,
+  onCopy,
+  pack,
+  packStatus,
+  packError,
+  onImportPack,
+  onRemovePack,
+}) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('all');
   const [tag, setTag] = useState('all');
@@ -32,6 +44,13 @@ export default function CatalogPage({ loading, error, items, usage, onCopy }) {
 
   return (
     <>
+      <PackBar
+        pack={pack}
+        status={packStatus}
+        error={packError}
+        onImport={onImportPack}
+        onRemove={onRemovePack}
+      />
       <Toolbar
         query={query}
         onQuery={setQuery}

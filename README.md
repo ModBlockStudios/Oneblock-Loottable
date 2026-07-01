@@ -103,6 +103,21 @@ haut de `scripts/build-data.js` (`JAVA_TO_BEDROCK`).
 └── .github/workflows/          # build + déploiement GitHub Pages
 ```
 
+## 📦 Import de packs Bedrock
+
+Dans l'onglet **Table**, on peut **importer un pack Bedrock (.zip)** (clic ou
+drag & drop). Ses **blocs et items custom** rejoignent le catalogue et peuvent
+être utilisés dans les configs comme les blocs vanilla.
+
+- Détection sans hypothèse sur l'arborescence : tout JSON `minecraft:block` /
+  `minecraft:item`, noms via les `.lang`, icônes via `terrain_texture.json` /
+  `item_texture.json` → PNG du pack. **Sans PNG → pas d'image.**
+- Les identifiants custom gardent leur espace de noms (`mb_ob:cloud_block`).
+- **Un seul pack à la fois**, **persistant** (IndexedDB) : il reste lié après un
+  reload. Une config partagée qui utilise des blocs custom se charge même sans le
+  pack (valeurs conservées, sans nom/image).
+- Dépendance : [`jszip`](https://stuk.github.io/jszip/) (chargée à la demande).
+
 ## 🌐 Configs partagées
 
 Les fichiers `.json` déposés dans **`public/data/configs/`** sont des configs

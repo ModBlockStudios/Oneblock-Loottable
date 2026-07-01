@@ -7,6 +7,23 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.27.0] — 2026-07-01
+
+### Ajouté
+- **Import de packs Bedrock (.zip)** dans l'onglet Table : clique ou dépose un
+  zip pour lier un pack. Les **blocs et items custom** (tout JSON `minecraft:block`
+  / `minecraft:item`) rejoignent le catalogue, en tête, avec leur nom (fichiers
+  `.lang`) et leur image (`terrain_texture`/`item_texture` → PNG du pack). **Sans
+  PNG, pas d'image.** Fonctionne sur n'importe quel pack (aucune hypothèse sur
+  l'arborescence).
+  - on peut ensuite les **répartir dans les configs** et les sauvegarder ; les
+    identifiants gardent leur espace de noms (`mb_ob:cloud_block`) à l'export.
+  - **un seul pack à la fois**, **persistant** (IndexedDB) : il reste lié après
+    reload, sans ré-importer. Boutons « Remplacer » / « Retirer ».
+  - une config partagée (GitHub) qui référence des blocs custom se **charge sans
+    le pack** : les valeurs restent, mais sans nom/image (repli sur l'identifiant).
+- Dépendance : `jszip` (chargée à la demande, seulement lors d'un import).
+
 ## [3.26.0] — 2026-07-01
 
 ### Ajouté

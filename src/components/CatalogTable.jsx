@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import CatalogRow from './CatalogRow.jsx';
+import { iconUrl } from '../lib/icon.js';
 
 const BATCH = 150; // lignes ajoutées par lot (scroll infini)
 
@@ -84,9 +85,7 @@ export default function CatalogTable({ rows, usage, onCopy, onTagClick }) {
             {display.slice(0, visible).map((r) => {
               if (r.type === 'group') {
                 const isOpen = expanded.has(r.prefix);
-                const iconSrc = r.leaves.icon
-                  ? import.meta.env.BASE_URL + 'assets/' + r.leaves.icon
-                  : null;
+                const iconSrc = iconUrl(r.leaves.icon);
                 return (
                   <tr
                     key={'g:' + r.prefix}

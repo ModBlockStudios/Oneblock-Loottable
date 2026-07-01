@@ -1,3 +1,5 @@
+import { qualify } from './ids.js';
+
 /*
  * Génère le JSON d'une config au format attendu par le plugin :
  *
@@ -27,7 +29,7 @@ function entryToBlock(entry) {
   if (entry.kind === 'chest') {
     return { name: 'minecraft:chest', loot_table: chestPath(entry), weight: entry.weight };
   }
-  return { name: 'minecraft:' + entry.name, weight: entry.weight };
+  return { name: qualify(entry.name), weight: entry.weight };
 }
 
 export function buildPhases(config) {
@@ -47,7 +49,7 @@ export function buildLootTables(config) {
     for (const entry of tier.entries) {
       if (entry.kind !== 'chest') continue;
       tables[chestPath(entry)] = (entry.contents || []).map((c) => ({
-        name: 'minecraft:' + c.name,
+        name: qualify(c.name),
         min: c.min,
         max: c.max,
       }));

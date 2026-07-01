@@ -108,6 +108,68 @@ body {
   background: var(--paper);
 }
 
+/* ---------- Import de pack Bedrock (onglet Table) ---------- */
+.packbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0 0;
+}
+
+.packbar__drop {
+  flex: 1 1 100%;
+  padding: 14px 16px;
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font: inherit;
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s;
+}
+
+.packbar__drop:hover,
+.packbar__drop--drag {
+  border-color: var(--ink);
+  background: var(--line);
+  color: var(--ink);
+}
+
+.packbar__linked {
+  flex: 1 1 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.packbar__badge {
+  font-weight: 600;
+}
+
+.packbar__name {
+  font-weight: 550;
+}
+
+.packbar__count {
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+}
+
+.packbar__spacer {
+  flex: 1;
+}
+
+.packbar__error {
+  flex: 1 1 100%;
+  color: #b00020;
+  font-size: 0.85rem;
+}
+
 .toolbar__search {
   flex: 1 1 280px;
 }

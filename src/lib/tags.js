@@ -20,6 +20,8 @@ export const TAG_LABEL = {
   light: 'Lumière',
   utility: 'Utilitaire',
   building: 'Construction',
+  // Pack importé
+  custom: 'Custom',
 };
 
 export const TAG_ORDER = Object.keys(TAG_LABEL);

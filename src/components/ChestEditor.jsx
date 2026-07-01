@@ -1,6 +1,8 @@
 import ItemPicker from './ItemPicker.jsx';
 import RangeInput from './RangeInput.jsx';
 import { entryKey } from '../lib/useLootConfigs.js';
+import { iconUrl } from '../lib/icon.js';
+import { qualify, idParts } from '../lib/ids.js';
 
 /* Éditeur du contenu d'un chest : picker + tableau (items/blocs avec quantité min–max). */
 export default function ChestEditor({ chest, items, onAddItem, onRemoveItem, onSetRange, onCopy }) {
@@ -33,14 +35,14 @@ export default function ChestEditor({ chest, items, onAddItem, onRemoveItem, onS
               {chest.contents.map((c) => (
                 <tr
                   key={c.name + '|' + c.displayName}
-                  title={'Cliquer pour copier : minecraft:' + c.name}
+                  title={'Cliquer pour copier : ' + qualify(c.name)}
                   onClick={() => onCopy(c.name)}
                 >
                   <td className="col-icon">
                     {c.icon ? (
                       <img
                         className="cell-icon"
-                        src={import.meta.env.BASE_URL + 'assets/' + c.icon}
+                        src={iconUrl(c.icon)}
                         alt=""
                         loading="lazy"
                         decoding="async"
@@ -51,8 +53,8 @@ export default function ChestEditor({ chest, items, onAddItem, onRemoveItem, onS
                   </td>
                   <td className="cell-name">{c.displayName}</td>
                   <td className="cell-id">
-                    <span className="ns">minecraft:</span>
-                    {c.name}
+                    <span className="ns">{idParts(c.name).ns}:</span>
+                    {idParts(c.name).local}
                   </td>
                   <td className="col-range" onClick={(e) => e.stopPropagation()}>
                     <RangeInput min={c.min} max={c.max} onChange={(lo, hi) => onSetRange(c, lo, hi)} />

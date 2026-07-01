@@ -1,3 +1,5 @@
+import { iconUrl } from '../lib/icon.js';
+
 /* Journal des drops obtenus pendant la simulation (le plus récent en haut). */
 export default function DropsList({ drops }) {
   const total = drops.reduce((s, d) => s + d.count, 0);
@@ -18,7 +20,7 @@ export default function DropsList({ drops }) {
               {d.icon ? (
                 <img
                   className="drops__icon"
-                  src={import.meta.env.BASE_URL + 'assets/' + d.icon}
+                  src={iconUrl(d.icon)}
                   alt=""
                   loading="lazy"
                 />

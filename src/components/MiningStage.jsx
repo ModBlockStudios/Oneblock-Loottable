@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { iconUrl } from '../lib/icon.js';
 
 /*
  * Scène de minage : on maintient le clic sur le bloc pour le miner. La barre
@@ -76,7 +77,7 @@ export default function MiningStage({ block, blockId, mineMs, onBreak }) {
   };
 
   const isChest = block?.kind === 'chest';
-  const iconSrc = block?.icon ? import.meta.env.BASE_URL + 'assets/' + block.icon : null;
+  const iconSrc = iconUrl(block?.icon);
   const label = isChest ? block.label?.trim() || 'Chest' : block?.displayName;
 
   return (

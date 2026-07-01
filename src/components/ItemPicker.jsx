@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { makeFilter } from '../lib/search.js';
 import SearchField from './SearchField.jsx';
+import { iconUrl } from '../lib/icon.js';
+import { qualify } from '../lib/ids.js';
 
 const MAX_RESULTS = 40;
 
@@ -69,7 +71,7 @@ export default function ItemPicker({
                 {it.icon ? (
                   <img
                     className="picker__icon"
-                    src={import.meta.env.BASE_URL + 'assets/' + it.icon}
+                    src={iconUrl(it.icon)}
                     alt=""
                     loading="lazy"
                   />
@@ -77,7 +79,7 @@ export default function ItemPicker({
                   <span className="picker__icon picker__icon--missing" />
                 )}
                 <span className="picker__name">{it.displayName}</span>
-                <span className="picker__id">minecraft:{it.name}</span>
+                <span className="picker__id">{qualify(it.name)}</span>
                 <span className="picker__action">{added ? '✓' : '+'}</span>
               </button>
             );

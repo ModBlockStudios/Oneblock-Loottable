@@ -5,22 +5,30 @@ import Toast from './components/Toast.jsx';
 import CatalogPage from './pages/CatalogPage.jsx';
 import LootTablePage from './pages/LootTablePage.jsx';
 import VisualisationPage from './pages/VisualisationPage.jsx';
+import PackBar from './components/PackBar.jsx';
 import { useCatalog } from './lib/useCatalog.js';
 import { useLootConfigs } from './lib/useLootConfigs.js';
 import { useHashRoute } from './lib/useHashRoute.js';
 import { useToast } from './lib/useToast.js';
+import { usePack } from './lib/usePack.js';
 import { copyText } from './lib/copy.js';
 import { computeUsage } from './lib/usage.js';
+import { qualify } from './lib/ids.js';
 
 export default function App() {
   const { loading, error, items, edition, version } = useCatalog();
   const [route, navigate] = useHashRoute('table');
-  const configs = useLootConfigs(items);
+  const { pack, status: packStatus, error: packError, importPack, removePack } = usePack();
   const { toast, showToast } = useToast();
+
+  // Catalogue = blocs/items custom du pack lié (en tête, pour être visibles)
+  // puis items vanilla.
+  const allItems = useMemo(() => (pack ? [...pack.items, ...items] : items), [items, pack]);
+  const configs = useLootConfigs(allItems);
 
   const handleCopy = useCallback(
     (name) => {
-      const id = 'minecraft:' + name;
+      const id = qualify(name);
       copyText(id);
       showToast('Copié : ' + id);
     },
@@ -50,15 +58,26 @@ export default function App() {
       <main className="container">
         {route === 'lootable' ? (
           <LootTablePage
-            items={items}
+            items={allItems}
             configs={configs}
             onCopy={handleCopy}
             onCopyText={handleCopyText}
           />
         ) : route === 'visualisation' ? (
-          <VisualisationPage items={items} configs={configs} />
+          <VisualisationPage items={allItems} configs={configs} />
         ) : (
-          <CatalogPage loading={loading} error={error} items={items} usage={usage} onCopy={handleCopy} />
+          <CatalogPage
+            loading={loading}
+            error={error}
+            items={allItems}
+            usage={usage}
+            onCopy={handleCopy}
+            pack={pack}
+            packStatus={packStatus}
+            packError={packError}
+            onImportPack={importPack}
+            onRemovePack={removePack}
+          />
         )}
       </main>
 
