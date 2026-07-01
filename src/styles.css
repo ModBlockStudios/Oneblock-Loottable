@@ -337,7 +337,7 @@ th.col-stack {
   text-align: right;
 }
 
-/* Colonne « Utilisé » : nb de configs lootable qui utilisent l'item. */
+/* Colonne « Utilisé » : nb de configs Loot Table qui utilisent l'item. */
 .col-used {
   width: 76px;
   text-align: center;
@@ -545,7 +545,7 @@ th.col-used {
   border-color: var(--line-strong);
 }
 
-/* ---------- Barre & état de la page Lootable ---------- */
+/* ---------- Barre & état de la page Loot Table ---------- */
 .loot-bar {
   display: flex;
   align-items: center;
@@ -614,7 +614,7 @@ th.col-used {
   border-radius: 6px;
 }
 
-/* ---------- Config bar (page Lootable) ---------- */
+/* ---------- Config bar (page Loot Table) ---------- */
 .configbar {
   display: flex;
   flex-wrap: wrap;
@@ -841,7 +841,7 @@ th.col-used {
   color: var(--ink-faint);
 }
 
-/* ---------- Tiers (page Lootable) ---------- */
+/* ---------- Tiers (page Loot Table) ---------- */
 .tier {
   margin-bottom: 24px;
   padding: 16px;

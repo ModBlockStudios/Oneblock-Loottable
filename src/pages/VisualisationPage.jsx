@@ -136,7 +136,7 @@ export default function VisualisationPage({ items, configs }) {
       <div className="loot-empty">
         <p className="loot-empty__title">Aucune config.</p>
         <p className="loot-empty__hint">
-          Crée une config dans l'onglet Lootable, ajoute des blocs, puis reviens ici.
+          Crée une config dans l'onglet Loot Table, ajoute des blocs, puis reviens ici.
         </p>
       </div>
     );
@@ -179,7 +179,7 @@ export default function VisualisationPage({ items, configs }) {
           ) : (
             <div className="loot-empty">
               <p className="loot-empty__title">Ce tiers n'a aucun bloc.</p>
-              <p className="loot-empty__hint">Ajoute des blocs au tiers dans l'onglet Lootable.</p>
+              <p className="loot-empty__hint">Ajoute des blocs au tiers dans l'onglet Loot Table.</p>
             </div>
           )}
         </div>

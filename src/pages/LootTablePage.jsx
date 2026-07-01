@@ -6,7 +6,7 @@ import { configToJson, configToShareJson } from '../lib/exportCode.js';
 import { downloadText, jsonFileName } from '../lib/download.js';
 
 /*
- * Page « Lootable » : on choisit une config, qui contient un ou plusieurs
+ * Page « Loot Table » : on choisit une config, qui contient un ou plusieurs
  * tiers. Chaque tiers a son propre tableau (items + chests). Un bouton « Code »
  * bascule sur la vue JSON (read-only) de la config courante.
  */

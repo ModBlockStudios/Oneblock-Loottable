@@ -2,7 +2,7 @@
 
 Dépose ici (drag & drop) les fichiers `.json` de configs **exportées pour le
 partage** depuis le site (bouton **« Exporter (partage) »** dans l'onglet
-Lootable).
+Loot Table).
 
 - Chaque `.json` utilise **le même format que le code du plugin** : un bloc
   `phases` (identifiant + weight, `blockstobreak` par tier) et, en bas, un bloc

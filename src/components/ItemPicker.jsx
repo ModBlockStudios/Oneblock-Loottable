@@ -20,7 +20,7 @@ function relevance(it, q) {
 }
 
 /*
- * Sélecteur d'items intégré à la page Lootable : on cherche dans le catalogue
+ * Sélecteur d'items intégré à la page Loot Table : on cherche dans le catalogue
  * et on ajoute à la config courante, sans changer de page.
  * Supporte la même syntaxe que la Table : #tag, !catégorie, ou texte libre.
  */

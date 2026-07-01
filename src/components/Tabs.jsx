@@ -1,8 +1,8 @@
-/* Barre d'onglets de navigation : Table (catalogue) / Lootable (sélection). */
+/* Barre d'onglets de navigation : Table (catalogue) / Loot Table (sélection). */
 export default function Tabs({ route, onNavigate, lootCount }) {
   const tabs = [
     { key: 'table', label: 'Table' },
-    { key: 'lootable', label: 'Lootable', badge: lootCount },
+    { key: 'lootable', label: 'Loot Table', badge: lootCount },
     { key: 'visualisation', label: 'Visualisation' },
   ];
 

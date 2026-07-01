@@ -39,7 +39,7 @@ export default function App() {
     ? configs.current.tiers.reduce((n, t) => n + t.entries.length, 0)
     : 0;
 
-  // Nombre de configs lootable utilisant chaque item (pour la colonne « Utilisé »).
+  // Nombre de configs Loot Table utilisant chaque item (pour la colonne « Utilisé »).
   const usage = useMemo(() => computeUsage(configs.configs), [configs.configs]);
 
   return (

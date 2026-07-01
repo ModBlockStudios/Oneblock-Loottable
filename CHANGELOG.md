@@ -7,6 +7,13 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.24.2] — 2026-07-01
+
+### Changé
+- **Renommage « Lootable » → « Loot Table »** dans toute l'interface (onglet,
+  info-bulles, messages). La route interne (`#/lootable`) reste inchangée pour
+  ne pas casser les liens existants.
+
 ## [3.24.1] — 2026-07-01
 
 ### Ajouté

@@ -2,7 +2,7 @@ import { entryKey } from './useLootConfigs.js';
 
 /*
  * Renvoie, par item (clé name|displayName), la LISTE des noms de configs
- * lootable qui l'utilisent (tiers + contenus des coffres). Un item présent
+ * Loot Table qui l'utilisent (tiers + contenus des coffres). Un item présent
  * plusieurs fois dans une même config n'apparaît qu'une fois pour cette config.
  * Le nombre d'utilisations = longueur de la liste. Sert à la colonne « Utilisé »
  * du catalogue (badge + info-bulle listant les configs).

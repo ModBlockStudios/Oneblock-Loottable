@@ -48,7 +48,7 @@ export default function CatalogTable({ items, usage, onCopy, onTagClick }) {
               <th className="col-tag">Tag</th>
               <th className="col-mine">Minage</th>
               <th className="col-stack">Pile</th>
-              <th className="col-used" title="Nombre de configs lootable qui l'utilisent">
+              <th className="col-used" title="Nombre de configs Loot Table qui l'utilisent">
                 Utilisé
               </th>
             </tr>

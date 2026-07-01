@@ -13,7 +13,7 @@ function CatalogRow({ item, usedIn, onCopy, onTagClick }) {
   const used = names.length;
   const usedTitle =
     used > 0
-      ? used + ' config(s) lootable\n' + names.map((n) => 'Used in ' + n).join('\n')
+      ? used + ' config(s) Loot Table\n' + names.map((n) => 'Used in ' + n).join('\n')
       : 'Non utilisé';
 
   return (

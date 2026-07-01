@@ -11,7 +11,7 @@ const norm = (s) =>
 /*
  * Champ de recherche avec aide à l'écriture : dès qu'on tape « # » (tag) ou
  * « ! » (catégorie), une liste de suggestions filtrées apparaît (clic ou
- * clavier ↑/↓ + Entrée). Réutilisé par la Table et le picker de la Lootable.
+ * clavier ↑/↓ + Entrée). Réutilisé par la Table et le picker de la Loot Table.
  */
 export default function SearchField({ value, onChange, placeholder, items }) {
   const [open, setOpen] = useState(false);

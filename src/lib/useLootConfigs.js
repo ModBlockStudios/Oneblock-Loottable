@@ -259,7 +259,7 @@ export function useLootConfigs(catalogItems) {
   const selectConfig = useCallback((id) => setState((s) => ({ ...s, currentId: id })), []);
 
   // Reclasse les entrées de tous les tiers par weight décroissant. Appelé à
-  // l'entrée dans l'onglet Lootable (et au reload via load()) : on ne réordonne
+  // l'entrée dans l'onglet Loot Table (et au reload via load()) : on ne réordonne
   // pas en direct pendant l'édition pour éviter que les lignes sautent.
   const sortByWeight = useCallback(
     () => setState((s) => ({ ...s, configs: s.configs.map(sortConfigByWeight) })),
