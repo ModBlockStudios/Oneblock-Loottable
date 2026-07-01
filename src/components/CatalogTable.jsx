@@ -58,7 +58,7 @@ export default function CatalogTable({ items, usage, onCopy, onTagClick }) {
               <CatalogRow
                 key={it.name + '|' + it.displayName}
                 item={it}
-                used={usage ? usage.get(it.name + '|' + it.displayName) || 0 : 0}
+                usedIn={usage ? usage.get(it.name + '|' + it.displayName) : undefined}
                 onCopy={onCopy}
                 onTagClick={onTagClick}
               />

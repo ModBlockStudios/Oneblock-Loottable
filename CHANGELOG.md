@@ -7,6 +7,12 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.24.1] — 2026-07-01
+
+### Ajouté
+- **Info-bulle de la colonne « Utilisé »** : en plus du nombre, elle liste
+  désormais les **noms des configs** qui utilisent l'item (`Used in <config>`).
+
 ## [3.24.0] — 2026-07-01
 
 ### Ajouté

@@ -4,9 +4,17 @@ import { categoryLabel } from '../lib/categories.js';
 import { formatMineTime } from '../lib/mining.js';
 
 /* Une ligne du catalogue. Clic sur la ligne = copie de l'identifiant Bedrock. */
-function CatalogRow({ item, used, onCopy, onTagClick }) {
+function CatalogRow({ item, usedIn, onCopy, onTagClick }) {
   const [broken, setBroken] = useState(false);
   const iconSrc = item.icon ? import.meta.env.BASE_URL + 'assets/' + item.icon : null;
+
+  // Info-bulle « Utilisé » : compteur + liste des configs qui l'utilisent.
+  const names = usedIn || [];
+  const used = names.length;
+  const usedTitle =
+    used > 0
+      ? used + ' config(s) lootable\n' + names.map((n) => 'Used in ' + n).join('\n')
+      : 'Non utilisé';
 
   return (
     <tr title={'Cliquer pour copier : minecraft:' + item.name} onClick={() => onCopy(item.name)}>
@@ -51,7 +59,7 @@ function CatalogRow({ item, used, onCopy, onTagClick }) {
         {formatMineTime(item.mining)}
       </td>
       <td className="col-stack cell-stack">{item.stackSize}</td>
-      <td className="col-used cell-used" title={used > 0 ? used + ' config(s) lootable' : 'Non utilisé'}>
+      <td className="col-used cell-used" title={usedTitle}>
         {used > 0 ? <span className="used-badge">{used}</span> : <span className="used-zero">—</span>}
       </td>
     </tr>

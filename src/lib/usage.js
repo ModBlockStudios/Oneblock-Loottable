@@ -1,10 +1,11 @@
 import { entryKey } from './useLootConfigs.js';
 
 /*
- * Compte, par item (clé name|displayName), le nombre de CONFIGS lootable qui
- * l'utilisent. Un item présent plusieurs fois dans une même config (plusieurs
- * tiers, ou dans un coffre) ne compte que pour 1 pour cette config.
- * Sert à afficher une colonne « Utilisé » dans le catalogue.
+ * Renvoie, par item (clé name|displayName), la LISTE des noms de configs
+ * lootable qui l'utilisent (tiers + contenus des coffres). Un item présent
+ * plusieurs fois dans une même config n'apparaît qu'une fois pour cette config.
+ * Le nombre d'utilisations = longueur de la liste. Sert à la colonne « Utilisé »
+ * du catalogue (badge + info-bulle listant les configs).
  */
 export function computeUsage(configs) {
   const map = new Map();
@@ -21,7 +22,11 @@ export function computeUsage(configs) {
         }
       }
     }
-    for (const k of seen) map.set(k, (map.get(k) || 0) + 1);
+    for (const k of seen) {
+      const arr = map.get(k);
+      if (arr) arr.push(cfg.name);
+      else map.set(k, [cfg.name]);
+    }
   }
   return map;
 }
