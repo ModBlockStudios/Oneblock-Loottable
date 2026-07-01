@@ -96,10 +96,26 @@ haut de `scripts/build-data.js` (`JAVA_TO_BEDROCK`).
 │   └── lib/                    # useCatalog (fetch), copy (presse-papiers)
 ├── public/
 │   ├── data/items.json         # catalogue généré (id Bedrock, nom, catégorie, icône)
+│   ├── data/configs/           # configs PARTAGÉES (.json) chargées pour tous
 │   └── assets/{items,blocks}/  # icônes
 ├── scripts/build-data.js       # générateur (ids Bedrock + textures Java)
+├── scripts/build-shared-index.cjs # (re)génère public/data/configs/index.json
 └── .github/workflows/          # build + déploiement GitHub Pages
 ```
+
+## 🌐 Configs partagées
+
+Les fichiers `.json` déposés dans **`public/data/configs/`** sont des configs
+exportées depuis le site (bouton **« Exporter (partage) »**, format interne
+complet). Elles sont **chargées automatiquement** pour tous les visiteurs au
+(re)chargement du site.
+
+- Pour en ajouter/mettre à jour une : dépose (drag & drop) son `.json` dans ce
+  dossier et commite. L'index (`index.json`) est **régénéré au build**
+  (`npm run prebuild`, lancé avant `npm run build`) — pas besoin de l'éditer.
+- Les configs partagées ne sont **pas** sauvegardées dans le navigateur : un
+  reload recharge la version présente sur GitHub. Seules les configs perso
+  (non partagées) sont conservées en local.
 
 ## 📜 Crédits
 

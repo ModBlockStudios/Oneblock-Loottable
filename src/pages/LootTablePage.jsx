@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import ConfigBar from '../components/ConfigBar.jsx';
 import TierCard from '../components/TierCard.jsx';
 import CodeView from '../components/CodeView.jsx';
-import { configToJson } from '../lib/exportCode.js';
+import { configToJson, configToShareJson } from '../lib/exportCode.js';
 import { downloadText, jsonFileName } from '../lib/download.js';
 
 /*
@@ -35,6 +35,7 @@ export default function LootTablePage({ items, configs, onCopy, onCopyText }) {
         onCreate={configs.createConfig}
         onRename={configs.renameConfig}
         onDelete={configs.deleteConfig}
+        onShare={() => current && downloadText(jsonFileName(current.name), configToShareJson(current))}
         codeView={codeView}
         onToggleCode={() => setCodeView((v) => !v)}
       />

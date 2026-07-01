@@ -7,6 +7,20 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.21.0] — 2026-07-01
+
+### Ajouté
+- **Configs partagées via GitHub** : un dossier `public/data/configs/` où l'on
+  dépose (drag & drop) des `.json` de configs. Elles sont **chargées
+  automatiquement** pour tous les visiteurs au (re)chargement du site.
+  - bouton **« Exporter (partage) »** : télécharge la config au **format interne
+    complet** (tiers, blocs, coffres + contenu) à déposer dans le dossier.
+  - les configs partagées sont marquées **🌐** ; elles sont éditables en séance
+    mais **non sauvegardées** (un reload recharge la version GitHub). Seules les
+    configs perso restent dans le navigateur.
+  - l'index du dossier est **régénéré au build** (`prebuild`) : pas besoin de
+    l'éditer à la main, le simple dépôt d'un fichier suffit.
+
 ## [3.20.0] — 2026-06-30
 
 ### Ajouté

@@ -598,6 +598,18 @@ th.col-stack {
   padding: 16px 0;
 }
 
+.configbar__note {
+  flex-basis: 100%;
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  color: var(--ink-faint);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
 .configbar__left {
   display: flex;
   align-items: center;

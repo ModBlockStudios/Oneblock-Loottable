@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { fetchSharedConfigs } from './sharedConfigs.js';
 
 const STORAGE_KEY = 'oneblock-loottable:configs:v1';
+
+// Préfixe d'id des configs partagées (chargées depuis GitHub, non persistées).
+const SHARED_PREFIX = 'shared:';
 
 // Clé d'un item (name peut être partagé, ex. banner/bed → on ajoute displayName).
 export const entryKey = (it) => it.name + '|' + it.displayName;
@@ -88,6 +92,20 @@ function sortConfigByWeight(c) {
   return { ...c, tiers: sortTiersByWeight(c.tiers) };
 }
 
+// Construit une config « partagée » (lecture depuis GitHub) à partir d'un
+// fichier { file, data }. L'id est dérivé du nom de fichier (stable) et marqué
+// partagé : ces configs ne sont pas persistées dans le localStorage.
+function toSharedConfig({ file, data }) {
+  const base = file.replace(/\.json$/i, '');
+  const migrated = migrateConfig({
+    id: SHARED_PREFIX + base,
+    name: (data && data.name) || base,
+    tiers: data && data.tiers,
+    entries: data && data.entries,
+  });
+  return { ...sortConfigByWeight(migrated), shared: true, file };
+}
+
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -114,13 +132,35 @@ export function useLootConfigs() {
   const [state, setState] = useState(load);
   const { configs, currentId } = state;
 
+  // Persistance : on ne garde QUE les configs perso (non partagées). Les configs
+  // partagées viennent de GitHub et sont rechargées à chaque reload.
   useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      const localConfigs = configs.filter((c) => !c.shared);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ configs: localConfigs, currentId }));
     } catch (e) {
       /* quota / mode privé : on ignore */
     }
-  }, [state]);
+  }, [configs, currentId]);
+
+  // Chargement des configs partagées (GitHub) au montage : elles sont ajoutées
+  // en tête, devant les configs perso, et remplacent toute version précédente.
+  useEffect(() => {
+    let cancelled = false;
+    fetchSharedConfigs(import.meta.env.BASE_URL).then((list) => {
+      if (cancelled || list.length === 0) return;
+      const shared = list.map(toSharedConfig);
+      setState((s) => {
+        const local = s.configs.filter((c) => !c.shared);
+        const merged = [...shared, ...local];
+        const currentOk = s.currentId && merged.some((c) => c.id === s.currentId);
+        return { configs: merged, currentId: currentOk ? s.currentId : merged[0]?.id ?? null };
+      });
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const current = useMemo(
     () => configs.find((c) => c.id === currentId) || null,

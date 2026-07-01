@@ -8,6 +8,7 @@ export default function ConfigBar({
   onCreate,
   onRename,
   onDelete,
+  onShare,
   codeView,
   onToggleCode,
 }) {
@@ -68,12 +69,23 @@ export default function ConfigBar({
                     const total = c.tiers.reduce((n, t) => n + t.entries.length, 0);
                     return (
                       <option key={c.id} value={c.id}>
+                        {c.shared ? '🌐 ' : ''}
                         {c.name} — {c.tiers.length} tiers, {total} items
                       </option>
                     );
                   })}
                 </select>
               </label>
+            )}
+            {current && (
+              <button
+                type="button"
+                className="btn-ghost"
+                title="Exporter cette config pour le partage (à déposer dans data/configs sur GitHub)"
+                onClick={onShare}
+              >
+                ⬆ Exporter (partage)
+              </button>
             )}
             {current && (
               <button
@@ -98,6 +110,14 @@ export default function ConfigBar({
           </>
         )}
       </div>
+
+      {current?.shared && (
+        <p className="configbar__note">
+          🌐 Config partagée (GitHub). Tes modifs ne sont pas sauvegardées : un reload recharge la
+          version en ligne. Pour la mettre à jour : édite, « Exporter (partage) », puis remplace le
+          fichier sur GitHub.
+        </p>
+      )}
 
       <form className="configbar__create" onSubmit={submit}>
         <input

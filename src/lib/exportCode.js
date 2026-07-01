@@ -67,3 +67,13 @@ export function buildExport(config) {
 export function configToJson(config) {
   return JSON.stringify(buildExport(config), null, 2);
 }
+
+/*
+ * JSON de « partage » : le format INTERNE complet (nom + tiers + entrées avec
+ * leurs infos d'affichage/coffres), pour pouvoir recharger et rééditer la config
+ * dans le site. À déposer dans public/data/configs/ (≠ export plugin ci-dessus).
+ */
+export function configToShareJson(config) {
+  if (!config) return '';
+  return JSON.stringify({ name: config.name, tiers: config.tiers }, null, 2);
+}
