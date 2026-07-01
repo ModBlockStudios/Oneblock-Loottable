@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import ItemPicker from './ItemPicker.jsx';
 import LootItemRow from './LootItemRow.jsx';
 import ChestRow from './ChestRow.jsx';
@@ -29,10 +30,22 @@ export default function TierCard({
   // Somme des weights du tiers : base du calcul du % de chance de chaque entrée.
   const totalWeight = tier.entries.reduce((s, e) => s + (e.weight || 0), 0);
 
+  // Repli du tiers : ouvert par défaut (contrairement aux coffres).
+  const [open, setOpen] = useState(true);
+
   return (
     <section className="tier">
       <div className="tier__head">
-        <h2 className="tier__title">Tiers {index + 1}</h2>
+        <button
+          type="button"
+          className="tier__toggle"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          title={open ? 'Replier ce tiers' : 'Déplier ce tiers'}
+        >
+          <span className="tier__caret">{open ? '▾' : '▸'}</span>
+          <h2 className="tier__title">Tiers {index + 1}</h2>
+        </button>
         <span className="tier__count">{tier.entries.length} entrée(s)</span>
         <div className="tier__actions">
           <button type="button" className="btn-ghost" onClick={onAddChest}>
@@ -51,6 +64,8 @@ export default function TierCard({
         </div>
       </div>
 
+      {open && (
+      <>
       <div className="tier__unlock">
         <span className="tier__unlock-label">🪨 Block à miner pour débloquer&nbsp;:</span>
         {index === 0 ? (
@@ -119,6 +134,8 @@ export default function TierCard({
             </tbody>
           </table>
         </div>
+      )}
+      </>
       )}
     </section>
   );

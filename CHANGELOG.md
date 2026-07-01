@@ -7,6 +7,16 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.25.0] — 2026-07-01
+
+### Ajouté
+- **Repli des tiers** dans l'onglet Loot Table : clic sur le titre « Tiers N »
+  pour replier/déplier (ouvert par défaut) — navigation plus simple.
+
+### Changé
+- Les **coffres sont repliés par défaut** : en revenant sur l'onglet, ils ne
+  s'ouvrent plus tous automatiquement (clic sur « Chest » pour déplier).
+
 ## [3.24.2] — 2026-07-01
 
 ### Changé

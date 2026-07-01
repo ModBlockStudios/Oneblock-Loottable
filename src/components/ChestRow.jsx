@@ -19,7 +19,8 @@ export default function ChestRow({
   onRemoveItem,
   onSetRange,
 }) {
-  const [open, setOpen] = useState(true);
+  // Fermé par défaut : en revenant sur l'onglet, les coffres sont repliés.
+  const [open, setOpen] = useState(false);
 
   return (
     <>

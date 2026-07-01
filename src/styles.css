@@ -857,6 +857,23 @@ th.col-used {
   margin-bottom: 12px;
 }
 
+/* Titre du tiers cliquable pour replier/déplier. */
+.tier__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.tier__caret {
+  color: var(--ink-faint);
+  font-size: 0.9rem;
+}
+
 .tier__title {
   margin: 0;
   font-family: var(--serif);
