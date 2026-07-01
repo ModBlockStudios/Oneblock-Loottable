@@ -7,6 +7,15 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.26.0] — 2026-07-01
+
+### Ajouté
+- **Regroupement des sets de bois** dans la Table : chaque set (Oak, Dark Oak,
+  Spruce…) est replié en une seule ligne **représentée par ses feuilles**, que
+  l'on déroule pour voir tous les blocs du set. Idée : en Loot Table, donner les
+  feuilles suffit (le joueur récupère un sapling → arbre → tout le set). Actif en
+  navigation pure ; une recherche/filtre réaffiche la liste à plat.
+
 ## [3.25.1] — 2026-07-01
 
 ### Corrigé

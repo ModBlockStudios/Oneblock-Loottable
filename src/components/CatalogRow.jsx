@@ -4,7 +4,7 @@ import { categoryLabel } from '../lib/categories.js';
 import { formatMineTime } from '../lib/mining.js';
 
 /* Une ligne du catalogue. Clic sur la ligne = copie de l'identifiant Bedrock. */
-function CatalogRow({ item, usedIn, onCopy, onTagClick }) {
+function CatalogRow({ item, usedIn, nested, onCopy, onTagClick }) {
   const [broken, setBroken] = useState(false);
   const iconSrc = item.icon ? import.meta.env.BASE_URL + 'assets/' + item.icon : null;
 
@@ -17,7 +17,11 @@ function CatalogRow({ item, usedIn, onCopy, onTagClick }) {
       : 'Non utilisé';
 
   return (
-    <tr title={'Cliquer pour copier : minecraft:' + item.name} onClick={() => onCopy(item.name)}>
+    <tr
+      className={nested ? 'row-nested' : undefined}
+      title={'Cliquer pour copier : minecraft:' + item.name}
+      onClick={() => onCopy(item.name)}
+    >
       <td className="col-icon">
         {iconSrc && !broken ? (
           <img

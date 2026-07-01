@@ -347,6 +347,43 @@ th.col-used {
   text-align: center;
 }
 
+/* Ligne « set de bois » repliable (représentée par ses feuilles). */
+.wood-group {
+  cursor: pointer;
+  background: var(--surface);
+}
+
+.wood-group:hover {
+  background: var(--line);
+}
+
+.wood-group .cell-name {
+  font-weight: 600;
+}
+
+.wood-group__caret {
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+}
+
+.wood-group__badge {
+  display: inline-block;
+  padding: 1px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  color: var(--ink-soft);
+  font-size: 0.78rem;
+}
+
+/* Membre d'un set déroulé : légèrement décalé pour montrer l'appartenance. */
+.row-nested .cell-name {
+  padding-left: 24px;
+}
+
+.row-nested > td:first-child {
+  border-left: 2px solid var(--line-strong);
+}
+
 .used-badge {
   display: inline-block;
   min-width: 22px;
