@@ -7,6 +7,16 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.22.0] — 2026-07-01
+
+### Changé
+- **Le fichier de partage utilise le format du plugin** (phases + `loot_tables`
+  en bas), pour rester **copier-coller compatible** avec le code du dev : plus
+  de format « interne » séparé. Le site sait relire ce format et **reconstruit
+  le nom d'affichage / l'icône depuis le catalogue** (le fichier ne contient que
+  l'identifiant + weight, et pour les coffres le `loot_table` + `min`/`max`).
+  L'ancien format interne reste lisible en repli.
+
 ## [3.21.0] — 2026-07-01
 
 ### Ajouté

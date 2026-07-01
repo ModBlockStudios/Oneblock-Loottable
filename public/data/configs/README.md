@@ -4,7 +4,11 @@ Dépose ici (drag & drop) les fichiers `.json` de configs **exportées pour le
 partage** depuis le site (bouton **« Exporter (partage) »** dans l'onglet
 Lootable).
 
-- Chaque `.json` = une config complète (tiers, blocs, coffres et leur contenu).
+- Chaque `.json` utilise **le même format que le code du plugin** : un bloc
+  `phases` (identifiant + weight, `blockstobreak` par tier) et, en bas, un bloc
+  `loot_tables` qui liste le contenu des coffres (`min`/`max`). Copier-coller
+  compatible avec le code du dev. Le nom d'affichage et l'icône sont
+  reconstruits depuis le catalogue à l'ouverture.
 - Toutes les configs de ce dossier sont **chargées automatiquement** pour tous
   les visiteurs du site (au chargement / reload).
 - Pas besoin de toucher à `index.json` : il est **régénéré au build**

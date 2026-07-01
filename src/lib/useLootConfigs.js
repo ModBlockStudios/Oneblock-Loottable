@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchSharedConfigs } from './sharedConfigs.js';
 
 const STORAGE_KEY = 'oneblock-loottable:configs:v1';
@@ -92,18 +92,90 @@ function sortConfigByWeight(c) {
   return { ...c, tiers: sortTiersByWeight(c.tiers) };
 }
 
+// Réhydrate les champs d'affichage (nom, icône, catégorie…) depuis le catalogue
+// à partir du seul identifiant. `src` peut déjà les contenir (ancien format) :
+// on les garde alors en repli. `extra` = champs propres à l'entrée/au contenu.
+function enrichFields(src, byName, extra) {
+  const it = byName && byName.get(src.name);
+  return {
+    name: src.name,
+    displayName: src.displayName ?? it?.displayName ?? src.name,
+    icon: src.icon ?? it?.icon ?? null,
+    category: src.category ?? it?.category,
+    tag: src.tag ?? it?.tag,
+    stackSize: src.stackSize ?? it?.stackSize,
+    ...extra,
+  };
+}
+
+function enrichEntry(e, byName) {
+  if (e.kind === 'chest') {
+    return {
+      kind: 'chest',
+      id: e.id || genId('chest'),
+      label: e.label ?? '',
+      weight: e.weight ?? 1,
+      contents: (e.contents || []).map((c) =>
+        enrichFields(c, byName, { min: c.min ?? 1, max: c.max ?? 1 })
+      ),
+    };
+  }
+  return enrichFields(e, byName, { kind: 'item', weight: e.weight ?? 1 });
+}
+
+/* ---- Lecture du format plugin (phases + loot_tables) ---- */
+const stripNs = (n) => (typeof n === 'string' ? n.replace(/^minecraft:/, '') : n);
+const pathToLabel = (p) => (typeof p === 'string' ? p.replace(/^path\/to\//, '') : '');
+
+// Un « block » de phase → entrée interne (item ou coffre), réhydraté du catalogue.
+function blockToEntry(block, lootTables, byName) {
+  const id = stripNs(block.name);
+  if (id === 'chest') {
+    const path = block.loot_table || '';
+    const contents = (lootTables[path] || []).map((c) =>
+      enrichFields({ name: stripNs(c.name) }, byName, { min: c.min ?? 1, max: c.max ?? 1 })
+    );
+    return { kind: 'chest', id: genId('chest'), label: pathToLabel(path), weight: block.weight ?? 1, contents };
+  }
+  return enrichFields({ name: id }, byName, { kind: 'item', weight: block.weight ?? 1 });
+}
+
+// Format plugin { phases, loot_tables } → tiers internes.
+function pluginToTiers(data, byName) {
+  const phases = Array.isArray(data.phases) ? data.phases : [];
+  const lootTables = data.loot_tables && typeof data.loot_tables === 'object' ? data.loot_tables : {};
+  return phases.map((ph, i) => ({
+    id: genId('tier'),
+    unlockAt: i === 0 ? 0 : ph.blockstobreak,
+    entries: (ph.blocks || []).map((b) => blockToEntry(b, lootTables, byName)),
+  }));
+}
+
 // Construit une config « partagée » (lecture depuis GitHub) à partir d'un
 // fichier { file, data }. L'id est dérivé du nom de fichier (stable) et marqué
-// partagé : ces configs ne sont pas persistées dans le localStorage.
-function toSharedConfig({ file, data }) {
+// partagé : ces configs ne sont pas persistées dans le localStorage. Les entrées
+// (id + weight seulement) sont réhydratées depuis le catalogue `byName`.
+function toSharedConfig({ file, data }, byName) {
   const base = file.replace(/\.json$/i, '');
-  const migrated = migrateConfig({
+  let tiers;
+  if (data && Array.isArray(data.phases)) {
+    // Format plugin (celui du dev) : phases + loot_tables.
+    tiers = pluginToTiers(data, byName);
+  } else {
+    // Repli : ancien format interne { tiers | entries }.
+    const rawTiers = (data && (data.tiers || (data.entries ? [{ entries: data.entries }] : []))) || [];
+    tiers = rawTiers.map((t) => ({
+      id: t.id || genId('tier'),
+      unlockAt: t.unlockAt,
+      entries: (t.entries || []).map((e) => enrichEntry(e, byName)),
+    }));
+  }
+  const config = {
     id: SHARED_PREFIX + base,
     name: (data && data.name) || base,
-    tiers: data && data.tiers,
-    entries: data && data.entries,
-  });
-  return { ...sortConfigByWeight(migrated), shared: true, file };
+    tiers: normalizeUnlocks(tiers),
+  };
+  return { ...sortConfigByWeight(config), shared: true, file };
 }
 
 function load() {
@@ -128,9 +200,10 @@ function load() {
  * « tiers » (tableaux de loot), chacun avec ses entrées { ...item, weight }.
  * Le tout est persisté dans le localStorage.
  */
-export function useLootConfigs() {
+export function useLootConfigs(catalogItems) {
   const [state, setState] = useState(load);
   const { configs, currentId } = state;
+  const sharedLoadedRef = useRef(false);
 
   // Persistance : on ne garde QUE les configs perso (non partagées). Les configs
   // partagées viennent de GitHub et sont rechargées à chaque reload.
@@ -143,13 +216,18 @@ export function useLootConfigs() {
     }
   }, [configs, currentId]);
 
-  // Chargement des configs partagées (GitHub) au montage : elles sont ajoutées
-  // en tête, devant les configs perso, et remplacent toute version précédente.
+  // Chargement des configs partagées (GitHub), une seule fois, dès que le
+  // catalogue est disponible (nécessaire pour réhydrater nom/icône depuis l'id).
+  // Elles sont ajoutées en tête, devant les configs perso.
   useEffect(() => {
+    if (sharedLoadedRef.current) return;
+    if (!catalogItems || catalogItems.length === 0) return;
+    sharedLoadedRef.current = true;
     let cancelled = false;
+    const byName = new Map(catalogItems.map((it) => [it.name, it]));
     fetchSharedConfigs(import.meta.env.BASE_URL).then((list) => {
       if (cancelled || list.length === 0) return;
-      const shared = list.map(toSharedConfig);
+      const shared = list.map((f) => toSharedConfig(f, byName));
       setState((s) => {
         const local = s.configs.filter((c) => !c.shared);
         const merged = [...shared, ...local];
@@ -160,7 +238,7 @@ export function useLootConfigs() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [catalogItems]);
 
   const current = useMemo(
     () => configs.find((c) => c.id === currentId) || null,

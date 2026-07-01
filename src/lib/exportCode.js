@@ -69,11 +69,9 @@ export function configToJson(config) {
 }
 
 /*
- * JSON de « partage » : le format INTERNE complet (nom + tiers + entrées avec
- * leurs infos d'affichage/coffres), pour pouvoir recharger et rééditer la config
- * dans le site. À déposer dans public/data/configs/ (≠ export plugin ci-dessus).
+ * Le fichier de « partage » (déposé sur GitHub) utilise EXACTEMENT le même
+ * format que le code du plugin (phases + loot_tables en bas), pour rester
+ * copier-coller compatible avec le code du dev. Le site sait le relire et
+ * reconstruit le nom d'affichage / l'icône depuis le catalogue.
  */
-export function configToShareJson(config) {
-  if (!config) return '';
-  return JSON.stringify({ name: config.name, tiers: config.tiers }, null, 2);
-}
+export const configToShareJson = configToJson;

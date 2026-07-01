@@ -14,7 +14,7 @@ import { copyText } from './lib/copy.js';
 export default function App() {
   const { loading, error, items, edition, version } = useCatalog();
   const [route, navigate] = useHashRoute('table');
-  const configs = useLootConfigs();
+  const configs = useLootConfigs(items);
   const { toast, showToast } = useToast();
 
   const handleCopy = useCallback(

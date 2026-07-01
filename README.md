@@ -106,9 +106,11 @@ haut de `scripts/build-data.js` (`JAVA_TO_BEDROCK`).
 ## 🌐 Configs partagées
 
 Les fichiers `.json` déposés dans **`public/data/configs/`** sont des configs
-exportées depuis le site (bouton **« Exporter (partage) »**, format interne
-complet). Elles sont **chargées automatiquement** pour tous les visiteurs au
-(re)chargement du site.
+exportées depuis le site (bouton **« Exporter (partage) »**). Ils utilisent **le
+même format que le code du plugin** (`phases` + `loot_tables` en bas), donc
+copier-coller compatible avec le code du dev ; le nom d'affichage et l'icône
+sont reconstruits depuis le catalogue à l'ouverture. Elles sont **chargées
+automatiquement** pour tous les visiteurs au (re)chargement du site.
 
 - Pour en ajouter/mettre à jour une : dépose (drag & drop) son `.json` dans ce
   dossier et commite. L'index (`index.json`) est **régénéré au build**
