@@ -7,6 +7,14 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.24.0] — 2026-07-01
+
+### Ajouté
+- **Colonne « Utilisé »** dans la Table (catalogue) : indique dans **combien de
+  configs lootable** chaque bloc/item est utilisé (tiers + contenus des coffres).
+  Le comptage est **+1 par config** — un item présent plusieurs fois dans une
+  même config ne compte que pour 1. Mis à jour en direct.
+
 ## [3.23.0] — 2026-07-01
 
 ### Ajouté

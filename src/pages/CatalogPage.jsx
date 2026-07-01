@@ -5,7 +5,7 @@ import { tagsPresent } from '../lib/tags.js';
 import { makeFilter } from '../lib/search.js';
 
 /* Page « Table » : catalogue filtrable (référence). */
-export default function CatalogPage({ loading, error, items, onCopy }) {
+export default function CatalogPage({ loading, error, items, usage, onCopy }) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('all');
   const [tag, setTag] = useState('all');
@@ -38,7 +38,7 @@ export default function CatalogPage({ loading, error, items, onCopy }) {
       {loading && <div className="loading">Chargement du catalogue…</div>}
       {error && <div className="loading">Impossible de charger les données ({error}).</div>}
       {!loading && !error && (
-        <CatalogTable items={filtered} onCopy={onCopy} onTagClick={setTag} />
+        <CatalogTable items={filtered} usage={usage} onCopy={onCopy} onTagClick={setTag} />
       )}
     </>
   );

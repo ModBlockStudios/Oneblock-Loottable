@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import Header from './components/Header.jsx';
 import Tabs from './components/Tabs.jsx';
 import Toast from './components/Toast.jsx';
@@ -10,6 +10,7 @@ import { useLootConfigs } from './lib/useLootConfigs.js';
 import { useHashRoute } from './lib/useHashRoute.js';
 import { useToast } from './lib/useToast.js';
 import { copyText } from './lib/copy.js';
+import { computeUsage } from './lib/usage.js';
 
 export default function App() {
   const { loading, error, items, edition, version } = useCatalog();
@@ -38,6 +39,9 @@ export default function App() {
     ? configs.current.tiers.reduce((n, t) => n + t.entries.length, 0)
     : 0;
 
+  // Nombre de configs lootable utilisant chaque item (pour la colonne « Utilisé »).
+  const usage = useMemo(() => computeUsage(configs.configs), [configs.configs]);
+
   return (
     <>
       <Header edition={edition} dataVersion={version} />
@@ -54,7 +58,7 @@ export default function App() {
         ) : route === 'visualisation' ? (
           <VisualisationPage items={items} configs={configs} />
         ) : (
-          <CatalogPage loading={loading} error={error} items={items} onCopy={handleCopy} />
+          <CatalogPage loading={loading} error={error} items={items} usage={usage} onCopy={handleCopy} />
         )}
       </main>
 

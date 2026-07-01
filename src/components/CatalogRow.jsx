@@ -4,7 +4,7 @@ import { categoryLabel } from '../lib/categories.js';
 import { formatMineTime } from '../lib/mining.js';
 
 /* Une ligne du catalogue. Clic sur la ligne = copie de l'identifiant Bedrock. */
-function CatalogRow({ item, onCopy, onTagClick }) {
+function CatalogRow({ item, used, onCopy, onTagClick }) {
   const [broken, setBroken] = useState(false);
   const iconSrc = item.icon ? import.meta.env.BASE_URL + 'assets/' + item.icon : null;
 
@@ -51,6 +51,9 @@ function CatalogRow({ item, onCopy, onTagClick }) {
         {formatMineTime(item.mining)}
       </td>
       <td className="col-stack cell-stack">{item.stackSize}</td>
+      <td className="col-used cell-used" title={used > 0 ? used + ' config(s) lootable' : 'Non utilisé'}>
+        {used > 0 ? <span className="used-badge">{used}</span> : <span className="used-zero">—</span>}
+      </td>
     </tr>
   );
 }
