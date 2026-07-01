@@ -7,6 +7,14 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.25.1] — 2026-07-01
+
+### Corrigé
+- **Le coffre se casse plus vite avec une hache** dans le simulateur (il est en
+  bois). Son temps de minage passe par les outils comme les autres blocs :
+  3,75 s à la main → 0,625 s avec une hache en fer. Les autres outils
+  (pioche/pelle) n'accélèrent pas.
+
 ## [3.25.0] — 2026-07-01
 
 ### Ajouté

@@ -75,7 +75,18 @@ export default function VisualisationPage({ items, configs }) {
 
   const mineMs = useMemo(() => {
     if (!currentBlock) return 0;
-    if (currentBlock.kind === 'chest') return (miningByName.get('chest')?.time ?? 3.75) * 1000;
+    // Le coffre est en bois : une hache le casse plus vite (comme dans le jeu).
+    if (currentBlock.kind === 'chest') {
+      const chestMining = miningByName.get('chest') || {
+        hardness: 2.5,
+        requiresTool: false,
+        tool: 'axe',
+        minLevel: null,
+        time: 3.75,
+      };
+      const ms = mineTimeWithTools(chestMining, tools);
+      return ms == null ? 3750 : ms; // repli 3,75 s (temps à la main)
+    }
     const mining = miningByName.get(currentBlock.name);
     const ms = mineTimeWithTools(mining, tools);
     return ms == null ? 1000 : ms; // incassable/inconnu → repli 1 s
