@@ -1,0 +1,607 @@
+{
+  "phases": [
+    {
+      "blocks": [
+        {
+          "name": "minecraft:dirt",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:birch_planks",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:azalea_leaves",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:grass_block",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:gravel",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:sand",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:chest",
+          "loot_table": "path/to/apple_chest",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:chest",
+          "loot_table": "path/to/water_chest",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "blockstobreak": 25,
+      "blocks": [
+        {
+          "name": "minecraft:dirt",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:birch_planks",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:cobblestone",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:azalea_leaves",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:coal_ore",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:grass_block",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:copper_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:birch_log",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:granite",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:diorite",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:gravel",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:sand",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:chest",
+          "loot_table": "path/to/lava_chest",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "blockstobreak": 100,
+      "blocks": [
+        {
+          "name": "minecraft:dirt",
+          "weight": 4
+        },
+        {
+          "name": "minecraft:cobblestone",
+          "weight": 4
+        },
+        {
+          "name": "minecraft:birch_planks",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:azalea_leaves",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:cobbled_deepslate",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:coal_ore",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:birch_log",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:grass_block",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:granite",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:diorite",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:gravel",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:sand",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:copper_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:gold_ore",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "blockstobreak": 200,
+      "blocks": [
+        {
+          "name": "minecraft:cobblestone",
+          "weight": 5
+        },
+        {
+          "name": "minecraft:cobbled_deepslate",
+          "weight": 5
+        },
+        {
+          "name": "minecraft:dirt",
+          "weight": 4
+        },
+        {
+          "name": "minecraft:birch_planks",
+          "weight": 4
+        },
+        {
+          "name": "minecraft:azalea_leaves",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:copper_ore",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:deepslate_coal_ore",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:birch_log",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:grass_block",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:granite",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:diorite",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:gravel",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:sand",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:gold_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:iron_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:coal_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:lapis_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:redstone_ore",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "blockstobreak": 500,
+      "blocks": [
+        {
+          "name": "minecraft:cobblestone",
+          "weight": 5
+        },
+        {
+          "name": "minecraft:cobbled_deepslate",
+          "weight": 5
+        },
+        {
+          "name": "minecraft:dirt",
+          "weight": 4
+        },
+        {
+          "name": "minecraft:birch_planks",
+          "weight": 4
+        },
+        {
+          "name": "minecraft:azalea_leaves",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:copper_ore",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:coal_ore",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:birch_log",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:grass_block",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:iron_ore",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:deepslate_coal_ore",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:granite",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:diorite",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:gravel",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:sand",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:gold_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_copper_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_gold_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_iron_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_lapis_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_redstone_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:redstone_ore",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "blockstobreak": 1000,
+      "blocks": [
+        {
+          "name": "minecraft:cobblestone",
+          "weight": 5
+        },
+        {
+          "name": "minecraft:cobbled_deepslate",
+          "weight": 5
+        },
+        {
+          "name": "minecraft:dirt",
+          "weight": 4
+        },
+        {
+          "name": "minecraft:birch_planks",
+          "weight": 4
+        },
+        {
+          "name": "minecraft:azalea_leaves",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:copper_ore",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:coal_ore",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:birch_log",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:grass_block",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:iron_ore",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:deepslate_coal_ore",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:granite",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:diorite",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:gravel",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:sand",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:gold_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_copper_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_gold_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_iron_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_lapis_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_redstone_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:redstone_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:diamond_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:emerald_ore",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "blockstobreak": 1500,
+      "blocks": [
+        {
+          "name": "minecraft:cobblestone",
+          "weight": 5
+        },
+        {
+          "name": "minecraft:cobbled_deepslate",
+          "weight": 5
+        },
+        {
+          "name": "minecraft:dirt",
+          "weight": 4
+        },
+        {
+          "name": "minecraft:birch_planks",
+          "weight": 4
+        },
+        {
+          "name": "minecraft:azalea_leaves",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:copper_ore",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:coal_ore",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:birch_log",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:grass_block",
+          "weight": 3
+        },
+        {
+          "name": "minecraft:iron_ore",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:deepslate_coal_ore",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:granite",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:diorite",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:gravel",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:sand",
+          "weight": 2
+        },
+        {
+          "name": "minecraft:gold_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_copper_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_gold_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_iron_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_lapis_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_redstone_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:redstone_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:diamond_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_diamond_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:emerald_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:obsidian",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:deepslate_emerald_ore",
+          "weight": 1
+        },
+        {
+          "name": "minecraft:magma",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "loot_tables": {
+    "path/to/apple_chest": [
+      {
+        "name": "minecraft:apple",
+        "min": 1,
+        "max": 3
+      },
+      {
+        "name": "minecraft:oak_sapling",
+        "min": 1,
+        "max": 1
+      }
+    ],
+    "path/to/water_chest": [
+      {
+        "name": "minecraft:water_bucket",
+        "min": 1,
+        "max": 1
+      },
+      {
+        "name": "minecraft:waterlily",
+        "min": 1,
+        "max": 2
+      },
+      {
+        "name": "minecraft:fishing_rod",
+        "min": 1,
+        "max": 1
+      },
+      {
+        "name": "minecraft:salmon",
+        "min": 1,
+        "max": 2
+      }
+    ],
+    "path/to/lava_chest": [
+      {
+        "name": "minecraft:lava_bucket",
+        "min": 1,
+        "max": 1
+      },
+      {
+        "name": "minecraft:flint",
+        "min": 1,
+        "max": 3
+      },
+      {
+        "name": "minecraft:coal",
+        "min": 1,
+        "max": 1
+      },
+      {
+        "name": "minecraft:magma",
+        "min": 1,
+        "max": 2
+      }
+    ]
+  }
+}
