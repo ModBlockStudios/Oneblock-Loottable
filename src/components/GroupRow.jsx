@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import WeightInput from './WeightInput.jsx';
+import PercentInput from './PercentInput.jsx';
 import GroupEditor from './GroupEditor.jsx';
-import { formatChance } from '../lib/chance.js';
 
 /*
  * Un groupe dans un tiers : ligne de résumé (nom éditable, weight du groupe dans
@@ -59,7 +59,9 @@ export default function GroupRow({
         <td className="col-weight" onClick={(e) => e.stopPropagation()}>
           <WeightInput value={entry.weight} onChange={onSetWeight} />
         </td>
-        <td className="col-chance cell-chance">{formatChance(entry.weight, total)}</td>
+        <td className="col-chance">
+          <PercentInput weight={entry.weight} total={total} onChange={onSetWeight} />
+        </td>
         <td className="col-remove">
           <button type="button" className="remove-btn" title="Retirer ce groupe du tiers" onClick={onRemove}>
             ×

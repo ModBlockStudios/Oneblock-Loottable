@@ -24,6 +24,15 @@ versionnage [SemVer](https://semver.org/lang/fr/).
     bas du JSON pour **sauvegarder les groupes** et les partager sur GitHub ; le
     site sait les relire (round-trip complet).
 
+## [3.31.0] — 2026-07-02
+
+### Ajouté
+- **Colonne « Chance » éditable** et **liée au Weight** dans la Loot Table : on
+  peut saisir soit le weight, soit le %, l'autre se met à jour. Éditer un % fixe
+  le weight de l'entrée pour atteindre ce % en laissant les autres inchangées
+  (`w = p × autres / (1 − p)`). Vaut pour les items, coffres, groupes, et les
+  blocs à l'intérieur d'un groupe. Les weights peuvent donc devenir décimaux.
+
 ## [3.30.0] — 2026-07-02
 
 ### Corrigé / Changé (groupes)

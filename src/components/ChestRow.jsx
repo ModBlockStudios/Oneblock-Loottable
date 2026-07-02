@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import WeightInput from './WeightInput.jsx';
+import PercentInput from './PercentInput.jsx';
 import ChestEditor from './ChestEditor.jsx';
-import { formatChance } from '../lib/chance.js';
 
 /*
  * Un chest dans un tiers : ligne de résumé (icône 📦, weight, retrait) +
@@ -55,7 +55,9 @@ export default function ChestRow({
         <td className="col-weight" onClick={(e) => e.stopPropagation()}>
           <WeightInput value={chest.weight} onChange={onSetWeight} />
         </td>
-        <td className="col-chance cell-chance">{formatChance(chest.weight, total)}</td>
+        <td className="col-chance">
+          <PercentInput weight={chest.weight} total={total} onChange={onSetWeight} />
+        </td>
         <td className="col-remove">
           <button type="button" className="remove-btn" title="Retirer ce chest" onClick={onRemove}>
             ×

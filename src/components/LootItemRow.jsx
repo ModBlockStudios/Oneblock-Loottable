@@ -1,6 +1,6 @@
 import WeightInput from './WeightInput.jsx';
+import PercentInput from './PercentInput.jsx';
 import { tagLabel } from '../lib/tags.js';
-import { formatChance } from '../lib/chance.js';
 import { iconUrl } from '../lib/icon.js';
 import { qualify, idParts } from '../lib/ids.js';
 
@@ -33,7 +33,9 @@ export default function LootItemRow({ item, total, onCopy, onRemove, onSetWeight
       <td className="col-weight" onClick={(e) => e.stopPropagation()}>
         <WeightInput value={item.weight} onChange={onSetWeight} />
       </td>
-      <td className="col-chance cell-chance">{formatChance(item.weight, total)}</td>
+      <td className="col-chance">
+        <PercentInput weight={item.weight} total={total} onChange={onSetWeight} />
+      </td>
       <td className="col-remove">
         <button
           type="button"

@@ -921,6 +921,22 @@ th.col-used {
   box-shadow: 0 0 0 3px rgba(31, 30, 28, 0.06);
 }
 
+/* Champ « Chance (%) » éditable (lié au weight). */
+.percent-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.percent-input {
+  width: 58px;
+}
+
+.percent-suffix {
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+}
+
 /* Plage min–max (quantité dans un chest) */
 .col-range {
   width: 150px;

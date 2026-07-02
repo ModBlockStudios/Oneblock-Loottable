@@ -1,9 +1,9 @@
 import ItemPicker from './ItemPicker.jsx';
 import WeightInput from './WeightInput.jsx';
+import PercentInput from './PercentInput.jsx';
 import { entryKey } from '../lib/useLootConfigs.js';
 import { qualify, idParts } from '../lib/ids.js';
 import { iconUrl } from '../lib/icon.js';
-import { formatChance } from '../lib/chance.js';
 
 /*
  * Éditeur du contenu d'un groupe réutilisable : picker (blocs uniquement) +
@@ -76,7 +76,9 @@ export default function GroupEditor({
                   <td className="col-weight" onClick={(e) => e.stopPropagation()}>
                     <WeightInput value={b.weight} onChange={(w) => onSetBlockWeight(b, w)} />
                   </td>
-                  <td className="col-chance cell-chance">{formatChance(b.weight, total)}</td>
+                  <td className="col-chance">
+                    <PercentInput weight={b.weight} total={total} onChange={(w) => onSetBlockWeight(b, w)} />
+                  </td>
                   <td className="col-remove">
                     <button
                       type="button"
