@@ -26,6 +26,19 @@ function chestPath(entry) {
   return 'path/to/' + (entry.label?.trim() || 'Nom_custom');
 }
 
+/*
+ * Poids final d'un bloc issu d'un groupe, APLATI dans une phase.
+ * Sémantique « part » : le weight du groupe est sa part dans le tiers ; à
+ * l'intérieur, les blocs se répartissent au prorata de leur weight interne.
+ *   final = weight_groupe × (weight_bloc / somme_des_weights_du_groupe)
+ * Les autres entrées (items) gardent leur weight tel quel. Peut être décimal
+ * (arrondi à 3 décimales) — c'est voulu, pour ne pas toucher aux autres weights.
+ */
+export function groupBlockWeight(groupTierWeight, blockWeight, groupSum) {
+  if (!groupSum) return 0;
+  return Math.round(((groupTierWeight || 0) * (blockWeight || 0)) / groupSum * 1000) / 1000;
+}
+
 // Noms uniques et lisibles des groupes (clé dans `groups` / `tier_groups`).
 function groupNameMap(config) {
   const byId = new Map();
@@ -50,8 +63,9 @@ export function buildPhases(config) {
       if (e.kind === 'group') {
         const g = groupsById.get(e.groupId);
         if (!g) continue;
+        const sum = g.blocks.reduce((s, b) => s + (b.weight || 0), 0);
         for (const b of g.blocks) {
-          blocks.push({ name: qualify(b.name), weight: (e.weight || 0) * (b.weight || 0) });
+          blocks.push({ name: qualify(b.name), weight: groupBlockWeight(e.weight, b.weight, sum) });
         }
       } else if (e.kind === 'chest') {
         blocks.push({ name: 'minecraft:chest', loot_table: chestPath(e), weight: e.weight });

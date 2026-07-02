@@ -114,7 +114,7 @@ drag & drop). Ses **blocs et items custom** rejoignent le catalogue et peuvent
   `item_texture.json` → PNG du pack. **Sans PNG → pas d'image.**
 - Les identifiants custom gardent leur espace de noms (`mb_ob:cloud_block`).
 - Les **groupes de blocs** (réutilisables entre tiers) sont aplatis dans `phases`
-  (`weight_du_groupe × weight_interne`) et aussi sauvegardés dans deux sections
+  (`weight_groupe × weight_interne / somme_du_groupe`) et aussi sauvegardés dans deux sections
   `groups`/`tier_groups` du JSON (relues par le site, partageables sur GitHub).
 - **Un seul pack à la fois**, **persistant** (IndexedDB) : il reste lié après un
   reload. Une config partagée qui utilise des blocs custom se charge même sans le

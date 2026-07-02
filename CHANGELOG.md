@@ -18,10 +18,21 @@ versionnage [SemVer](https://semver.org/lang/fr/).
     existant ou on en crée un nouveau. Éditer ses blocs met à jour tous les tiers
     qui l'utilisent.
   - à l'**export**, le groupe est **aplati** dans `phases` : chaque bloc reçoit
-    `weight_du_groupe × weight_interne` (le plugin ne change pas). En plus, deux
+    `weight_du_groupe × (weight_interne / somme_du_groupe)` (le plugin ne change
+    pas). En plus, deux
     sections `groups` (définitions) et `tier_groups` (références) sont ajoutées en
     bas du JSON pour **sauvegarder les groupes** et les partager sur GitHub ; le
     site sait les relire (round-trip complet).
+
+## [3.29.1] — 2026-07-02
+
+### Changé
+- **Weight des groupes = part dans le tiers** (au lieu d'un multiplicateur). Le
+  weight du groupe est comparable aux autres entrées ; à l'intérieur, les blocs
+  se répartissent au prorata : `final = weight_groupe × (weight_bloc / somme)`.
+  Ex. groupe *stone* (99) avec stone/diorite 50/50 + un bloc diamant (1) → le
+  diamant **reste à 1**, stone/diorite à 49,5 chacun (groupe 99 %, diamant 1 %).
+  Les weights aplatis peuvent donc être décimaux (arrondis à 3 décimales).
 
 ## [3.28.0] — 2026-07-01
 

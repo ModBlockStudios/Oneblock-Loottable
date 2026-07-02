@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchSharedConfigs } from './sharedConfigs.js';
 import { qualify } from './ids.js';
+import { groupBlockWeight } from './exportCode.js';
 
 const STORAGE_KEY = 'oneblock-loottable:configs:v1';
 
@@ -187,8 +188,9 @@ function pluginToConfig(data, byName) {
     for (const r of refs) {
       const g = groupById.get(r.groupId);
       if (!g) continue;
+      const sum = g.blocks.reduce((s, b) => s + (b.weight || 0), 0);
       for (const b of g.blocks) {
-        const key = qualify(b.name) + '@' + (r.weight || 0) * (b.weight || 0);
+        const key = qualify(b.name) + '@' + groupBlockWeight(r.weight, b.weight, sum);
         derived.set(key, (derived.get(key) || 0) + 1);
       }
     }

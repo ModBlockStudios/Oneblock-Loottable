@@ -42,16 +42,9 @@ export default function TierCard({
 
   const groupsById = new Map((groups || []).map((g) => [g.id, g]));
 
-  // Poids EFFECTIF d'une entrée (un groupe pèse weight × somme des weights internes).
-  const effWeight = (e) => {
-    if (e.kind === 'group') {
-      const g = groupsById.get(e.groupId);
-      const inner = g ? g.blocks.reduce((s, b) => s + (b.weight || 0), 0) : 0;
-      return (e.weight || 0) * inner;
-    }
-    return e.weight || 0;
-  };
-  const totalWeight = tier.entries.reduce((s, e) => s + effWeight(e), 0);
+  // Le weight d'un groupe EST sa part dans le tiers (comme une entrée normale) :
+  // total = simple somme des weights.
+  const totalWeight = tier.entries.reduce((s, e) => s + (e.weight || 0), 0);
   const tierGroupIds = new Set(tier.entries.filter((e) => e.kind === 'group').map((e) => e.groupId));
 
   const submitNewGroup = (e) => {

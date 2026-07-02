@@ -24,10 +24,6 @@ export default function GroupRow({
 }) {
   const [open, setOpen] = useState(false);
 
-  // Poids effectif du groupe dans le tiers = weight du tiers × somme des weights internes.
-  const innerTotal = group ? group.blocks.reduce((s, b) => s + (b.weight || 0), 0) : 0;
-  const effective = (entry.weight || 0) * innerTotal;
-
   if (!group) return null; // référence orpheline (groupe supprimé) : rien à afficher
 
   return (
@@ -63,7 +59,7 @@ export default function GroupRow({
         <td className="col-weight" onClick={(e) => e.stopPropagation()}>
           <WeightInput value={entry.weight} onChange={onSetWeight} />
         </td>
-        <td className="col-chance cell-chance">{formatChance(effective, total)}</td>
+        <td className="col-chance cell-chance">{formatChance(entry.weight, total)}</td>
         <td className="col-remove">
           <button type="button" className="remove-btn" title="Retirer ce groupe du tiers" onClick={onRemove}>
             ×
