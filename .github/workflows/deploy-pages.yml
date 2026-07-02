@@ -16,9 +16,11 @@ permissions:
   pages: write
   id-token: write
 
+# Recommandation GitHub Pages : ne pas annuler un déploiement en cours quand un
+# autre démarre (ils s'enchaînent), pour éviter les « Deployment cancelled ».
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
