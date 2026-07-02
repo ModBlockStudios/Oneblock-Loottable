@@ -7,6 +7,22 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.29.0] — 2026-07-02
+
+### Ajouté
+- **Groupes de blocs réutilisables** dans la Loot Table (bouton « 🧩 Ajouter un
+  groupe », à côté de « Ajouter un Chest ») :
+  - un groupe **nommé** contient des **blocs**, chacun avec un **weight interne** ;
+    le groupe a un **weight dans le tiers**. Repliable comme un coffre.
+  - **réutilisable d'un tiers à l'autre** : à l'ajout, on réutilise un groupe
+    existant ou on en crée un nouveau. Éditer ses blocs met à jour tous les tiers
+    qui l'utilisent.
+  - à l'**export**, le groupe est **aplati** dans `phases` : chaque bloc reçoit
+    `weight_du_groupe × weight_interne` (le plugin ne change pas). En plus, deux
+    sections `groups` (définitions) et `tier_groups` (références) sont ajoutées en
+    bas du JSON pour **sauvegarder les groupes** et les partager sur GitHub ; le
+    site sait les relire (round-trip complet).
+
 ## [3.28.0] — 2026-07-01
 
 ### Ajouté

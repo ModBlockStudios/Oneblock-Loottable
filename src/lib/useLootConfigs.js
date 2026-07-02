@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchSharedConfigs } from './sharedConfigs.js';
+import { qualify } from './ids.js';
 
 const STORAGE_KEY = 'oneblock-loottable:configs:v1';
 
@@ -9,8 +10,9 @@ const SHARED_PREFIX = 'shared:';
 // Clé d'un item (name peut être partagé, ex. banner/bed → on ajoute displayName).
 export const entryKey = (it) => it.name + '|' + it.displayName;
 
-// Identité d'une entrée de tiers : un item OU un chest (conteneur).
-export const entryId = (e) => (e.kind === 'chest' ? 'c:' + e.id : 'i:' + entryKey(e));
+// Identité d'une entrée de tiers : item, chest (conteneur) ou groupe (réutilisable).
+export const entryId = (e) =>
+  e.kind === 'chest' ? 'c:' + e.id : e.kind === 'group' ? 'g:' + e.groupId : 'i:' + entryKey(e);
 
 function genId(prefix) {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) return prefix + '_' + crypto.randomUUID();
@@ -61,6 +63,15 @@ function migrateEntry(e) {
     : e;
 }
 
+// Bibliothèque de groupes réutilisables (blocs + weight interne à chaque bloc).
+function migrateGroup(g) {
+  return {
+    id: g.id || genId('group'),
+    name: g.name ?? '',
+    blocks: (g.blocks || []).map((b) => ({ ...b, weight: b.weight ?? 1 })),
+  };
+}
+
 function migrateConfig(c) {
   const tiers =
     Array.isArray(c.tiers) && c.tiers.length > 0
@@ -69,6 +80,7 @@ function migrateConfig(c) {
   return {
     id: c.id,
     name: c.name,
+    groups: Array.isArray(c.groups) ? c.groups.map(migrateGroup) : [],
     tiers: normalizeUnlocks(
       tiers.map((t) => ({
         id: t.id,
@@ -140,15 +152,68 @@ function blockToEntry(block, lootTables, byName) {
   return enrichFields({ name: id }, byName, { kind: 'item', weight: block.weight ?? 1 });
 }
 
-// Format plugin { phases, loot_tables } → tiers internes.
-function pluginToTiers(data, byName) {
+// Format plugin { phases, loot_tables, groups, tier_groups } → { tiers, groups }.
+// Les groupes sont reconstruits depuis `groups`/`tier_groups` ; les blocs des
+// phases qui proviennent d'un groupe (name @ weight×weight) sont retirés pour ne
+// pas être dupliqués en entrées « item ».
+function pluginToConfig(data, byName) {
   const phases = Array.isArray(data.phases) ? data.phases : [];
   const lootTables = data.loot_tables && typeof data.loot_tables === 'object' ? data.loot_tables : {};
-  return phases.map((ph, i) => ({
-    id: genId('tier'),
-    unlockAt: i === 0 ? 0 : ph.blockstobreak,
-    entries: (ph.blocks || []).map((b) => blockToEntry(b, lootTables, byName)),
-  }));
+
+  const defs = data.groups && typeof data.groups === 'object' ? data.groups : {};
+  const groups = [];
+  const idByName = new Map();
+  for (const [name, blocks] of Object.entries(defs)) {
+    const id = genId('group');
+    idByName.set(name, id);
+    groups.push({
+      id,
+      name,
+      blocks: (Array.isArray(blocks) ? blocks : []).map((b) =>
+        enrichFields({ name: stripNs(b.name) }, byName, { weight: b.weight ?? 1 })
+      ),
+    });
+  }
+  const groupById = new Map(groups.map((g) => [g.id, g]));
+  const tierGroups = Array.isArray(data.tier_groups) ? data.tier_groups : [];
+
+  const tiers = phases.map((ph, i) => {
+    const refs = (tierGroups[i] || [])
+      .filter((r) => idByName.has(r.group))
+      .map((r) => ({ groupId: idByName.get(r.group), weight: r.weight ?? 1 }));
+
+    // Multiset des blocs (name @ poids final) issus des groupes → à soustraire.
+    const derived = new Map();
+    for (const r of refs) {
+      const g = groupById.get(r.groupId);
+      if (!g) continue;
+      for (const b of g.blocks) {
+        const key = qualify(b.name) + '@' + (r.weight || 0) * (b.weight || 0);
+        derived.set(key, (derived.get(key) || 0) + 1);
+      }
+    }
+
+    const entries = [];
+    for (const block of ph.blocks || []) {
+      const id = stripNs(block.name);
+      if (id === 'chest') {
+        entries.push(blockToEntry(block, lootTables, byName));
+        continue;
+      }
+      const key = qualify(id) + '@' + (block.weight ?? 0);
+      const n = derived.get(key) || 0;
+      if (n > 0) {
+        derived.set(key, n - 1); // bloc issu d'un groupe : ignoré côté « item »
+        continue;
+      }
+      entries.push(enrichFields({ name: id }, byName, { kind: 'item', weight: block.weight ?? 1 }));
+    }
+    for (const r of refs) entries.push({ kind: 'group', groupId: r.groupId, weight: r.weight });
+
+    return { id: genId('tier'), unlockAt: i === 0 ? 0 : ph.blockstobreak, entries };
+  });
+
+  return { tiers, groups };
 }
 
 // Construit une config « partagée » (lecture depuis GitHub) à partir d'un
@@ -158,9 +223,12 @@ function pluginToTiers(data, byName) {
 function toSharedConfig({ file, data }, byName) {
   const base = file.replace(/\.json$/i, '');
   let tiers;
+  let groups = [];
   if (data && Array.isArray(data.phases)) {
-    // Format plugin (celui du dev) : phases + loot_tables.
-    tiers = pluginToTiers(data, byName);
+    // Format plugin (celui du dev) : phases + loot_tables + groups/tier_groups.
+    const res = pluginToConfig(data, byName);
+    tiers = res.tiers;
+    groups = res.groups;
   } else {
     // Repli : ancien format interne { tiers | entries }.
     const rawTiers = (data && (data.tiers || (data.entries ? [{ entries: data.entries }] : []))) || [];
@@ -169,10 +237,12 @@ function toSharedConfig({ file, data }, byName) {
       unlockAt: t.unlockAt,
       entries: (t.entries || []).map((e) => enrichEntry(e, byName)),
     }));
+    groups = Array.isArray(data?.groups) ? data.groups.map(migrateGroup) : [];
   }
   const config = {
     id: SHARED_PREFIX + base,
     name: (data && data.name) || base,
+    groups,
     tiers: normalizeUnlocks(tiers),
   };
   return { ...sortConfigByWeight(config), shared: true, file };
@@ -251,7 +321,7 @@ export function useLootConfigs(catalogItems) {
     if (!trimmed) return;
     const id = genId('cfg');
     setState((s) => ({
-      configs: [...s.configs, { id, name: trimmed, tiers: normalizeUnlocks([newTier()]) }],
+      configs: [...s.configs, { id, name: trimmed, groups: [], tiers: normalizeUnlocks([newTier()]) }],
       currentId: id,
     }));
   }, []);
@@ -463,6 +533,123 @@ export function useLootConfigs(catalogItems) {
     [updateTierEntries]
   );
 
+  /* ---------- Groupes réutilisables (bibliothèque de la config) ---------- */
+  // Applique fn(config) à la config courante.
+  const updateCurrent = useCallback((fn) => {
+    setState((s) => ({
+      ...s,
+      configs: s.configs.map((c) => (c.id === s.currentId ? fn(c) : c)),
+    }));
+  }, []);
+
+  const groupRef = (groupId) => ({ kind: 'group', groupId, weight: 1 });
+
+  // Crée un groupe (nommé) et l'ajoute au tiers courant.
+  const createGroupInTier = useCallback(
+    (tierId, name) => {
+      const id = genId('group');
+      updateCurrent((c) => ({
+        ...c,
+        groups: [...(c.groups || []), { id, name: (name || '').trim() || 'Groupe', blocks: [] }],
+        tiers: c.tiers.map((t) =>
+          t.id === tierId ? { ...t, entries: [...t.entries, groupRef(id)] } : t
+        ),
+      }));
+    },
+    [updateCurrent]
+  );
+
+  // Ajoute une référence à un groupe existant au tiers (une seule fois par tiers).
+  const addGroupToTier = useCallback(
+    (tierId, groupId) =>
+      updateCurrent((c) => ({
+        ...c,
+        tiers: c.tiers.map((t) =>
+          t.id === tierId && !t.entries.some((e) => e.kind === 'group' && e.groupId === groupId)
+            ? { ...t, entries: [...t.entries, groupRef(groupId)] }
+            : t
+        ),
+      })),
+    [updateCurrent]
+  );
+
+  const renameGroup = useCallback(
+    (groupId, name) =>
+      updateCurrent((c) => ({
+        ...c,
+        groups: (c.groups || []).map((g) => (g.id === groupId ? { ...g, name } : g)),
+      })),
+    [updateCurrent]
+  );
+
+  // Supprime un groupe de la bibliothèque ET toutes ses références dans les tiers.
+  const deleteGroup = useCallback(
+    (groupId) =>
+      updateCurrent((c) => ({
+        ...c,
+        groups: (c.groups || []).filter((g) => g.id !== groupId),
+        tiers: c.tiers.map((t) => ({
+          ...t,
+          entries: t.entries.filter((e) => !(e.kind === 'group' && e.groupId === groupId)),
+        })),
+      })),
+    [updateCurrent]
+  );
+
+  const updateGroupBlocks = useCallback(
+    (groupId, fn) =>
+      updateCurrent((c) => ({
+        ...c,
+        groups: (c.groups || []).map((g) => (g.id === groupId ? { ...g, blocks: fn(g.blocks) } : g)),
+      })),
+    [updateCurrent]
+  );
+
+  // Ajoute un bloc au groupe (weight interne 1). Uniquement des blocs.
+  const addGroupBlock = useCallback(
+    (groupId, item) =>
+      updateGroupBlocks(groupId, (blocks) =>
+        blocks.some((b) => entryKey(b) === entryKey(item))
+          ? blocks
+          : [
+              ...blocks,
+              {
+                name: item.name,
+                displayName: item.displayName,
+                icon: item.icon,
+                category: item.category,
+                tag: item.tag,
+                stackSize: item.stackSize,
+                weight: 1,
+              },
+            ]
+      ),
+    [updateGroupBlocks]
+  );
+
+  const removeGroupBlock = useCallback(
+    (groupId, item) =>
+      updateGroupBlocks(groupId, (blocks) => blocks.filter((b) => entryKey(b) !== entryKey(item))),
+    [updateGroupBlocks]
+  );
+
+  const setGroupBlockWeight = useCallback(
+    (groupId, item, weight) =>
+      updateGroupBlocks(groupId, (blocks) =>
+        blocks.map((b) => (entryKey(b) === entryKey(item) ? { ...b, weight } : b))
+      ),
+    [updateGroupBlocks]
+  );
+
+  // Cet item est-il déjà dans le groupe ? (pour le picker de l'éditeur de groupe)
+  const hasGroupBlock = useCallback(
+    (groupId, item) => {
+      const g = current?.groups?.find((x) => x.id === groupId);
+      return !!g && g.blocks.some((b) => entryKey(b) === entryKey(item));
+    },
+    [current]
+  );
+
   return {
     configs,
     current,
@@ -486,5 +673,13 @@ export function useLootConfigs(catalogItems) {
     removeChestItem,
     setChestRange,
     setChestLabel,
+    createGroupInTier,
+    addGroupToTier,
+    renameGroup,
+    deleteGroup,
+    addGroupBlock,
+    removeGroupBlock,
+    setGroupBlockWeight,
+    hasGroupBlock,
   };
 }

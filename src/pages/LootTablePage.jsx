@@ -65,6 +65,7 @@ export default function LootTablePage({ items, configs, onCopy, onCopyText }) {
               prevUnlock={i > 0 ? current.tiers[i - 1].unlockAt : 0}
               items={items}
               blockItems={blockItems}
+              groups={current.groups}
               onCopy={onCopy}
               onAddItem={(item) => configs.addItem(tier.id, item)}
               onAddChest={() => configs.addChest(tier.id)}
@@ -75,6 +76,13 @@ export default function LootTablePage({ items, configs, onCopy, onCopyText }) {
               onRemoveChestItem={(chestId, item) => configs.removeChestItem(tier.id, chestId, item)}
               onSetChestRange={(chestId, item, lo, hi) => configs.setChestRange(tier.id, chestId, item, lo, hi)}
               onSetChestLabel={(chestId, label) => configs.setChestLabel(tier.id, chestId, label)}
+              onCreateGroup={(name) => configs.createGroupInTier(tier.id, name)}
+              onAddGroup={(groupId) => configs.addGroupToTier(tier.id, groupId)}
+              onRenameGroup={(groupId, name) => configs.renameGroup(groupId, name)}
+              onAddGroupBlock={(groupId, item) => configs.addGroupBlock(groupId, item)}
+              onRemoveGroupBlock={(groupId, item) => configs.removeGroupBlock(groupId, item)}
+              onSetGroupBlockWeight={(groupId, item, w) => configs.setGroupBlockWeight(groupId, item, w)}
+              onDeleteGroup={(groupId) => configs.deleteGroup(groupId)}
               onClear={() => configs.clearTier(tier.id)}
               onDelete={() => configs.deleteTier(tier.id)}
               has={(item) => configs.hasItem(tier.id, item)}

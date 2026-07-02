@@ -940,6 +940,56 @@ th.col-used {
   color: var(--ink-faint);
 }
 
+/* ---------- Groupes réutilisables ---------- */
+.group-menu {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.group-menu__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.group-menu__label {
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+}
+
+.group-menu__create {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.group-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.group-delete {
+  margin-left: auto;
+  color: #b00020;
+}
+
+.group-summary .chest-icon {
+  font-size: 1rem;
+}
+
 /* ---------- Tiers (page Loot Table) ---------- */
 .tier {
   margin-bottom: 24px;
