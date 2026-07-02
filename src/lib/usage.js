@@ -11,12 +11,17 @@ export function computeUsage(configs) {
   const map = new Map();
 
   for (const cfg of configs || []) {
-    // Items distincts présents dans CETTE config (tiers + contenus des coffres).
+    const groupsById = new Map((cfg.groups || []).map((g) => [g.id, g]));
+    // Items distincts présents dans CETTE config : entrées de tiers, contenus des
+    // coffres, ET blocs des groupes référencés par un tiers.
     const seen = new Set();
     for (const tier of cfg.tiers || []) {
       for (const entry of tier.entries || []) {
         if (entry.kind === 'chest') {
           for (const c of entry.contents || []) seen.add(entryKey(c));
+        } else if (entry.kind === 'group') {
+          const g = groupsById.get(entry.groupId);
+          if (g) for (const b of g.blocks) seen.add(entryKey(b));
         } else {
           seen.add(entryKey(entry));
         }

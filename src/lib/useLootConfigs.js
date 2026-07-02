@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { fetchSharedConfigs } from './sharedConfigs.js';
-import { qualify } from './ids.js';
-import { groupBlockWeight } from './exportCode.js';
 
 const STORAGE_KEY = 'oneblock-loottable:configs:v1';
 
@@ -153,15 +151,17 @@ function blockToEntry(block, lootTables, byName) {
   return enrichFields({ name: id }, byName, { kind: 'item', weight: block.weight ?? 1 });
 }
 
-// Format plugin { phases, loot_tables, groups, tier_groups } → { tiers, groups }.
-// Les groupes sont reconstruits depuis `groups`/`tier_groups` ; les blocs des
-// phases qui proviennent d'un groupe (name @ weight×weight) sont retirés pour ne
-// pas être dupliqués en entrées « item ».
+// Format { phases, loot_tables, groups } → { tiers, groups }.
+// Deux cas gérés par la même lecture :
+//  - format PARTAGE : une entrée { group_name, weight } réfère un groupe défini
+//    dans `groups` ;
+//  - format PLUGIN aplati (ex. ancien fichier) : que des { name, weight } → items.
 function pluginToConfig(data, byName) {
   const phases = Array.isArray(data.phases) ? data.phases : [];
   const lootTables = data.loot_tables && typeof data.loot_tables === 'object' ? data.loot_tables : {};
 
-  const defs = data.groups && typeof data.groups === 'object' ? data.groups : {};
+  const defs =
+    data.groups && typeof data.groups === 'object' && !Array.isArray(data.groups) ? data.groups : {};
   const groups = [];
   const idByName = new Map();
   for (const [name, blocks] of Object.entries(defs)) {
@@ -175,43 +175,22 @@ function pluginToConfig(data, byName) {
       ),
     });
   }
-  const groupById = new Map(groups.map((g) => [g.id, g]));
-  const tierGroups = Array.isArray(data.tier_groups) ? data.tier_groups : [];
 
   const tiers = phases.map((ph, i) => {
-    const refs = (tierGroups[i] || [])
-      .filter((r) => idByName.has(r.group))
-      .map((r) => ({ groupId: idByName.get(r.group), weight: r.weight ?? 1 }));
-
-    // Multiset des blocs (name @ poids final) issus des groupes → à soustraire.
-    const derived = new Map();
-    for (const r of refs) {
-      const g = groupById.get(r.groupId);
-      if (!g) continue;
-      const sum = g.blocks.reduce((s, b) => s + (b.weight || 0), 0);
-      for (const b of g.blocks) {
-        const key = qualify(b.name) + '@' + groupBlockWeight(r.weight, b.weight, sum);
-        derived.set(key, (derived.get(key) || 0) + 1);
-      }
-    }
-
     const entries = [];
     for (const block of ph.blocks || []) {
+      if (block && block.group_name != null) {
+        const gid = idByName.get(block.group_name);
+        if (gid) entries.push({ kind: 'group', groupId: gid, weight: block.weight ?? 1 });
+        continue;
+      }
       const id = stripNs(block.name);
       if (id === 'chest') {
         entries.push(blockToEntry(block, lootTables, byName));
         continue;
       }
-      const key = qualify(id) + '@' + (block.weight ?? 0);
-      const n = derived.get(key) || 0;
-      if (n > 0) {
-        derived.set(key, n - 1); // bloc issu d'un groupe : ignoré côté « item »
-        continue;
-      }
       entries.push(enrichFields({ name: id }, byName, { kind: 'item', weight: block.weight ?? 1 }));
     }
-    for (const r of refs) entries.push({ kind: 'group', groupId: r.groupId, weight: r.weight });
-
     return { id: genId('tier'), unlockAt: i === 0 ? 0 : ph.blockstobreak, entries };
   });
 

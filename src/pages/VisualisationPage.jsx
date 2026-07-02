@@ -5,6 +5,7 @@ import CraftPanel from '../components/CraftPanel.jsx';
 import { pickWeighted, tierIndexFor, rollChest } from '../lib/sim.js';
 import { mineTimeWithTools, canHarvestWith } from '../lib/mining.js';
 import { recipeFor, consumeMaterials, BASE_ITEM } from '../lib/crafting.js';
+import { flattenEntries } from '../lib/exportCode.js';
 
 const NO_TOOLS = { pickaxe: null, shovel: null, axe: null };
 
@@ -34,6 +35,14 @@ export default function VisualisationPage({ items, configs }) {
   configRef.current = config;
   toolsRef.current = tools;
 
+  // Tirage d'un bloc dans un tiers : on aplatit d'abord les groupes en blocs
+  // (mêmes poids qu'à l'export) pour que le simulateur les comprenne.
+  const pickFromTier = (tier, cfg) => {
+    if (!tier) return null;
+    const groupsById = new Map((cfg?.groups || []).map((g) => [g.id, g]));
+    return pickWeighted(flattenEntries(tier.entries, groupsById));
+  };
+
   // Temps de minage à la main, par identifiant Bedrock.
   const miningByName = useMemo(() => {
     const m = new Map();
@@ -55,7 +64,7 @@ export default function VisualisationPage({ items, configs }) {
 
   const reset = useCallback(() => {
     const tiers = configRef.current?.tiers || [];
-    const next = tiers[0] ? pickWeighted(tiers[0].entries) : null;
+    const next = pickFromTier(tiers[0], configRef.current);
     blocksMinedRef.current = 0;
     currentBlockRef.current = next;
     setBlocksMined(0);
@@ -137,7 +146,7 @@ export default function VisualisationPage({ items, configs }) {
 
     const tiers = configRef.current.tiers;
     const idx = tierIndexFor(tiers, newCount);
-    const next = pickWeighted(tiers[idx].entries);
+    const next = pickFromTier(tiers[idx], configRef.current);
     currentBlockRef.current = next;
     setCurrentBlock(next);
   }, [addDrops, miningByName]);

@@ -24,6 +24,21 @@ versionnage [SemVer](https://semver.org/lang/fr/).
     bas du JSON pour **sauvegarder les groupes** et les partager sur GitHub ; le
     site sait les relire (round-trip complet).
 
+## [3.30.0] — 2026-07-02
+
+### Corrigé / Changé (groupes)
+- **Colonne « Utilisé »** : un bloc placé dans un groupe compte désormais comme
+  utilisé dans les configs qui référencent ce groupe.
+- **Simulateur (Visualisation)** : comprend maintenant les groupes — un tiers est
+  aplati (groupes → leurs blocs, mêmes poids qu'à l'export) avant le tirage.
+- **Vue Code = format plugin pur** : plus aucune mention de groupe ; les groupes
+  y sont **aplatis** dans `phases` (ce que lit ton dev). C'est aussi ce que
+  télécharge le bouton « Télécharger » de la vue Code.
+- **Export « partage » repensé** : les phases **référencent** les groupes
+  (`{ "group_name": "stone", "weight": 99 }`) et les définitions sont en bas dans
+  `groups`. Plus de duplication (fini `tier_groups` + blocs aplatis). Le site
+  relit ce format (round-trip), et lit toujours les anciens fichiers aplatis.
+
 ## [3.29.1] — 2026-07-02
 
 ### Changé

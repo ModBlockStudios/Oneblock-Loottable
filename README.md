@@ -113,9 +113,11 @@ drag & drop). Ses **blocs et items custom** rejoignent le catalogue et peuvent
   `minecraft:item`, noms via les `.lang`, icônes via `terrain_texture.json` /
   `item_texture.json` → PNG du pack. **Sans PNG → pas d'image.**
 - Les identifiants custom gardent leur espace de noms (`mb_ob:cloud_block`).
-- Les **groupes de blocs** (réutilisables entre tiers) sont aplatis dans `phases`
-  (`weight_groupe × weight_interne / somme_du_groupe`) et aussi sauvegardés dans deux sections
-  `groups`/`tier_groups` du JSON (relues par le site, partageables sur GitHub).
+- Les **groupes de blocs** : la **vue Code** (format du dev) les **aplatit** dans
+  `phases` (`weight_groupe × weight_interne / somme_du_groupe`). L'**export
+  partage** (fichiers GitHub) les **référence** à la place
+  (`{ "group_name": "stone", "weight": 99 }`) avec une section `groups` en bas ;
+  le site sait relire ce format.
 - **Un seul pack à la fois**, **persistant** (IndexedDB) : il reste lié après un
   reload. Une config partagée qui utilise des blocs custom se charge même sans le
   pack (valeurs conservées, sans nom/image).

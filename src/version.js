@@ -9,6 +9,6 @@
  * ligne est à jour. (Vite hashe déjà les bundles : pas de cache obsolète.)
  * ------------------------------------------------------------------ */
 export const APP_INFO = {
-  version: '3.29.1',
+  version: '3.30.0',
   buildDate: '2026-06-30',
 };
