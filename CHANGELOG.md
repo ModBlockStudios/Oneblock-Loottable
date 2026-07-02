@@ -7,6 +7,13 @@ versionnage [SemVer](https://semver.org/lang/fr/).
 > La version affichée dans l'en-tête du site correspond au champ `version`
 > de `js/version.js`. Vérifie-la pour savoir si la page en ligne est à jour.
 
+## [3.28.0] — 2026-07-01
+
+### Ajouté
+- **Bouton « ×2 weights »** dans la barre de config (à côté de Supprimer) :
+  double d'un coup tous les weights de la config courante (items et coffres,
+  tous les tiers).
+
 ## [3.27.0] — 2026-07-01
 
 ### Ajouté

@@ -34,6 +34,7 @@ export default function LootTablePage({ items, configs, onCopy, onCopyText }) {
         onSelect={configs.selectConfig}
         onCreate={configs.createConfig}
         onRename={configs.renameConfig}
+        onDoubleWeights={configs.doubleWeights}
         onDelete={configs.deleteConfig}
         onShare={() => current && downloadText(jsonFileName(current.name), configToShareJson(current))}
         codeView={codeView}

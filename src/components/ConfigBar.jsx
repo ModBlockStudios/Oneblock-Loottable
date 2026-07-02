@@ -7,6 +7,7 @@ export default function ConfigBar({
   onSelect,
   onCreate,
   onRename,
+  onDoubleWeights,
   onDelete,
   onShare,
   codeView,
@@ -95,6 +96,16 @@ export default function ConfigBar({
                 onClick={startRename}
               >
                 Renommer
+              </button>
+            )}
+            {current && (
+              <button
+                type="button"
+                className="btn-ghost"
+                title="Doubler tous les weights de cette config"
+                onClick={onDoubleWeights}
+              >
+                ×2 weights
               </button>
             )}
             {current && (

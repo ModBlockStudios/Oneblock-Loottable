@@ -295,6 +295,18 @@ export function useLootConfigs(catalogItems) {
     }));
   }, []);
 
+  // Multiplie par 2 tous les weights de la config courante (items et coffres).
+  const doubleWeights = useCallback(
+    () =>
+      updateTiers((tiers) =>
+        tiers.map((t) => ({
+          ...t,
+          entries: t.entries.map((e) => ({ ...e, weight: (e.weight || 0) * 2 })),
+        }))
+      ),
+    [updateTiers]
+  );
+
   // Applique fn() aux entrées d'un tiers donné.
   const updateTierEntries = useCallback(
     (tierId, fn) =>
@@ -458,6 +470,7 @@ export function useLootConfigs(catalogItems) {
     selectConfig,
     sortByWeight,
     renameConfig,
+    doubleWeights,
     deleteConfig,
     addTier,
     duplicateLastTier,
